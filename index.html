@@ -1,0 +1,2723 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>潛航彼此｜尋找亞特蘭提斯的抽牌旅程</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+
+  :root {
+    --abyss: #05121f;
+    --deep: #0a2236;
+    --mid: #0f3a52;
+    --teal: #1d6e7e;
+    --glow: #57c4c9;
+    --foam: #cfeef0;
+    --sand: #e9dcc3;
+    --coral: #e8856b;
+    --warm-glow: #f0a878;
+    --warm-foam: #f7d9b6;
+    --alert: #ff5d5d;
+    --gold: #f2c66b;
+    --ink: #f3f7f7;
+    --muted: #7fa3ab;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body { height: 100%; overscroll-behavior: none; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--abyss);
+    color: var(--ink);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Depth gradient backdrop */
+  .ocean {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, #1a4e74 0%, #134059 35%, #0f3045 70%, #0a2236 100%);
+    z-index: 0;
+  }
+  .ocean::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(87,196,201,0.18), transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Drifting light rays */
+  .ray {
+    position: fixed;
+    top: -20%;
+    width: 2px;
+    height: 140%;
+    background: linear-gradient(180deg, rgba(207,238,240,0.12), transparent 70%);
+    transform: rotate(8deg);
+    filter: blur(2px);
+    z-index: 0;
+    animation: sway 9s ease-in-out infinite;
+  }
+  .ray:nth-child(1){ left: 15%; animation-delay: 0s; }
+  .ray:nth-child(2){ left: 42%; height: 120%; animation-delay: -3s; opacity:.7;}
+  .ray:nth-child(3){ left: 70%; animation-delay: -6s; }
+  .ray:nth-child(4){ left: 88%; height:110%; animation-delay: -1.5s; opacity:.5;}
+  @keyframes sway {
+    0%,100% { transform: rotate(8deg) translateX(0); opacity:.5;}
+    50% { transform: rotate(11deg) translateX(12px); opacity:.9;}
+  }
+
+  /* floating particles */
+  .bubble {
+    position: fixed;
+    bottom: -40px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(207,238,240,0.5), rgba(87,196,201,0.05));
+    z-index: 0;
+    animation: rise linear infinite;
+  }
+  @keyframes rise {
+    to { transform: translateY(-110vh) translateX(20px); opacity: 0; }
+  }
+
+  /* ---------- SPLASH ---------- */
+  .splash {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 35%, rgba(29,110,126,0.35), transparent 65%),
+      linear-gradient(180deg, #1a4e74 0%, #103850 60%, #0a2236 100%);
+    transition: opacity 1s ease, transform 1.1s ease;
+  }
+  .splash.leave {
+    opacity: 0;
+    transform: translateY(-30px) scale(1.04);
+    pointer-events: none;
+  }
+  .splash-inner {
+    text-align: center;
+    animation: splashIn 1.6s cubic-bezier(.2,.8,.25,1);
+  }
+  @keyframes splashIn {
+    from { opacity:0; transform: translateY(24px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  .dedicate {
+    font-family:'Noto Serif TC', serif;
+    font-size: 16px;
+    letter-spacing: 0.7em;
+    text-indent: 0.7em;
+    color: var(--glow);
+    font-weight: 400;
+    margin-bottom: 22px;
+    opacity:0;
+    animation: rise-in .9s ease forwards .3s;
+  }
+  .name {
+    font-family:'Noto Serif TC', serif;
+    font-size: clamp(38px, 12vw, 58px);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--foam);
+    line-height: 1.2;
+    text-shadow: 0 4px 40px rgba(87,196,201,0.4);
+    opacity:0;
+    animation: rise-in 1.1s ease forwards .55s;
+  }
+  .line {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glow), transparent);
+    margin: 26px auto;
+    animation: grow-line 1.4s ease forwards 1s;
+  }
+  @keyframes grow-line { to { width: 180px; } }
+  .splash-sub {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 2.1;
+    font-weight: 300;
+    opacity:0;
+    animation: rise-in 1s ease forwards 1.3s;
+  }
+  @keyframes rise-in {
+    from { opacity:0; transform: translateY(14px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  .enter-btn {
+    margin-top: 38px;
+    border: 1px solid rgba(87,196,201,0.5);
+    background: linear-gradient(135deg, rgba(87,196,201,0.18), rgba(207,238,240,0.06));
+    color: var(--foam);
+    border-radius: 100px;
+    padding: 16px 44px;
+    font-family:'Noto Serif TC', serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-indent: 0.25em;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: transform .2s, box-shadow .3s, background .3s;
+    opacity:0;
+    animation: rise-in 1s ease forwards 1.7s, glow-pulse 3s ease-in-out infinite 2.8s;
+  }
+  .enter-btn:active { transform: scale(0.96); }
+  @keyframes glow-pulse {
+    0%,100% { box-shadow: 0 0 0 rgba(87,196,201,0); }
+    50% { box-shadow: 0 0 30px rgba(87,196,201,0.35); }
+  }
+
+  /* ---------- STORY ---------- */
+  .story .story-inner {
+    text-align: center;
+    max-width: 380px;
+  }
+  .story-chapter {
+    font-family:'Noto Serif TC', serif;
+    font-size: 13px;
+    letter-spacing: 0.5em;
+    text-indent: 0.5em;
+    color: var(--glow);
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+  .story-text {
+    font-family:'Noto Serif TC', serif;
+    font-size: clamp(17px, 4.8vw, 20px);
+    line-height: 2.3;
+    color: var(--foam);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+  }
+  .story-text.swap { animation: storyFade .6s ease; }
+  @keyframes storyFade {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .story-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 30px 0 6px;
+  }
+  .story-dots span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(127,163,171,0.35);
+    transition: background .3s, transform .3s;
+  }
+  .story-dots span.on { background: var(--glow); transform: scale(1.25); }
+  .story .enter-btn { animation: none; opacity: 1; margin-top: 30px; }
+  .story .enter-btn.sail {
+    background: linear-gradient(135deg, var(--glow), var(--foam));
+    color: var(--abyss);
+    border-color: transparent;
+    box-shadow: 0 8px 30px rgba(87,196,201,0.35);
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  .gate-hint {
+    font-family:'Noto Serif TC', serif;
+    font-size: clamp(22px, 6vw, 28px);
+    font-weight: 500;
+    color: var(--foam);
+    margin-bottom: 30px;
+    letter-spacing: 0.05em;
+    opacity:0;
+    animation: rise-in 1s ease forwards .45s;
+  }
+  .name-input {
+    width: min(80vw, 320px);
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid rgba(87,196,201,0.45);
+    color: var(--foam);
+    font-family:'Noto Serif TC', serif;
+    font-size: 26px;
+    font-weight: 500;
+    text-align: center;
+    padding: 12px 6px;
+    letter-spacing: 0.06em;
+    outline: none;
+    transition: border-color .3s, box-shadow .3s;
+    opacity:0;
+    animation: rise-in 1s ease forwards .7s;
+  }
+  .name-input::placeholder { color: rgba(127,163,171,0.55); font-weight:300; font-size:20px; letter-spacing:.1em;}
+  .name-input:focus { border-color: var(--glow); box-shadow: 0 6px 20px -10px rgba(87,196,201,0.6); }
+  #confirmBtn {
+    margin-top: 34px;
+    animation: rise-in 1s ease forwards .95s;
+  }
+  #confirmBtn:disabled { opacity:.3; pointer-events:none; }
+
+  .wrap {
+    position: relative;
+    z-index: 2;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 28px 22px 40px;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- HEADER ---------- */
+  header { text-align: center; padding-top: 12px; }
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.5em;
+    text-indent: 0.5em;
+    color: var(--glow);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 600;
+    font-size: clamp(30px, 9vw, 42px);
+    line-height: 1.25;
+    letter-spacing: 0.04em;
+  }
+  h1 .light { color: var(--glow); }
+  .sub {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.9;
+    font-weight: 300;
+    max-width: 340px;
+    margin-left:auto; margin-right:auto;
+  }
+
+  /* ---------- LAYER PICKER ---------- */
+  .modes {
+    display: flex;
+    gap: 8px;
+    margin-top: 26px;
+    padding: 5px;
+    background: rgba(8,28,44,0.5);
+    border: 1px solid rgba(87,196,201,0.14);
+    border-radius: 100px;
+  }
+  .mode-tab {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family:'Noto Serif TC', serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 11px 6px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: color .25s, background .25s;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+  }
+  .mode-tab.on {
+    color: var(--abyss);
+    background: linear-gradient(135deg, var(--glow), var(--foam));
+  }
+
+  .layers {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chart-label {
+    margin-top: 24px;
+    margin-bottom: -8px;
+    text-align: center;
+    font-family:'Noto Serif TC', serif;
+    font-size: 12.5px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .layer {
+    position: relative;
+    border: 1px solid rgba(87,196,201,0.18);
+    background: linear-gradient(135deg, rgba(28,78,104,0.55), rgba(18,50,72,0.4));
+    border-radius: 18px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: transform .25s ease, border-color .25s ease, background .25s ease;
+    backdrop-filter: blur(4px);
+    overflow: hidden;
+  }
+  .layer:active { transform: scale(0.98); }
+  .layer.on {
+    border-color: var(--glow);
+    background: linear-gradient(135deg, rgba(29,110,126,0.6), rgba(15,58,82,0.4));
+  }
+  .layer .depth {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 13px;
+    color: var(--glow);
+    min-width: 42px;
+    text-align: center;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+  .layer .depth small { display:block; font-size:10px; color:var(--muted); letter-spacing:.1em;}
+  .layer .body h3 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .layer .body p { font-size: 12.5px; color: var(--muted); font-weight: 300; line-height:1.6;}
+  .layer .tick {
+    margin-left: auto;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--muted);
+    flex-shrink: 0;
+    display: grid; place-items: center;
+    transition: .2s;
+  }
+  .layer.on .tick { border-color: var(--glow); background: var(--glow); }
+  .layer.on .tick::after { content:'✓'; color: var(--abyss); font-size: 13px; font-weight: 700;}
+
+  .start-btn {
+    margin-top: 26px;
+    width: 100%;
+    border: none;
+    border-radius: 100px;
+    padding: 18px;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--abyss);
+    background: linear-gradient(135deg, var(--glow), var(--foam));
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s, opacity .2s;
+    box-shadow: 0 8px 30px rgba(87,196,201,0.3);
+  }
+  .start-btn:active { transform: scale(0.97); }
+  .start-btn:disabled { opacity:.35; box-shadow:none; cursor: not-allowed;}
+
+  .hint {
+    text-align:center; margin-top:16px; font-size:12px; color:var(--muted); font-weight:300; line-height:1.8;
+  }
+
+  .rules-btn {
+    display: block;
+    margin: 16px auto 0;
+    background: none;
+    border: none;
+    color: var(--glow);
+    font-family:'Noto Sans TC', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    padding: 8px 14px;
+    border-bottom: 1px solid rgba(87,196,201,0.35);
+    transition: color .2s, border-color .2s;
+  }
+  .rules-btn:active { color: var(--foam); }
+
+  /* ---------- RULES MODAL ---------- */
+  .modal-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(3,11,18,0.7);
+    backdrop-filter: blur(6px);
+  }
+  .modal-mask.show { display: flex; animation: fade .3s; }
+  .modal {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    max-height: 86dvh;
+    overflow-y: auto;
+    background: linear-gradient(165deg, rgba(34,86,112,0.96), rgba(16,44,64,0.97));
+    border: 1px solid rgba(87,196,201,0.3);
+    border-radius: 24px;
+    padding: 30px 26px 28px;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+    animation: surface .45s cubic-bezier(.2,.8,.25,1);
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 18px;
+    background: none; border: none; color: var(--muted);
+    font-size: 28px; line-height: 1; cursor: pointer; font-weight: 300;
+  }
+  .modal-title {
+    font-family:'Noto Serif TC', serif;
+    font-size: 26px; font-weight: 600; color: var(--foam);
+    letter-spacing: 0.08em; margin-bottom: 12px;
+  }
+  .modal-lead {
+    font-size: 14px; color: var(--sand); font-weight: 300; line-height: 1.85; margin-bottom: 20px;
+  }
+  .rule-list {
+    list-style: none; counter-reset: r; display: flex; flex-direction: column; gap: 14px;
+  }
+  .rule-list li {
+    counter-increment: r;
+    position: relative;
+    padding-left: 40px;
+    font-size: 13.5px; color: var(--ink); font-weight: 300; line-height: 1.8;
+  }
+  .rule-list li::before {
+    content: counter(r);
+    position: absolute; left: 0; top: 0;
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--glow), var(--teal));
+    color: var(--abyss); font-family:'Noto Serif TC',serif; font-weight: 700; font-size: 13px;
+  }
+  .rule-list li b { color: var(--glow); font-weight: 500; }
+  .modal-foot {
+    margin-top: 22px; font-size: 13px; color: var(--muted); font-weight: 300;
+    line-height: 1.8; text-align: center;
+  }
+  .modal-ok {
+    margin-top: 22px; width: 100%;
+    border: none; border-radius: 100px; padding: 15px;
+    font-family:'Noto Serif TC', serif; font-size: 16px; font-weight: 600;
+    letter-spacing: 0.15em; color: var(--abyss);
+    background: linear-gradient(135deg, var(--glow), var(--foam));
+    cursor: pointer; transition: transform .2s;
+  }
+  .modal-ok:active { transform: scale(0.97); }
+
+  /* ---------- CARD STAGE ---------- */
+  .stage {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+  }
+  .stage.show { display: flex; }
+
+  .topbar {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom: 8px;
+  }
+  .topbar button {
+    background: none; border:none; color: var(--muted);
+    font-family:'Noto Sans TC',sans-serif; font-size:13px; cursor:pointer;
+    padding:8px; font-weight:300;
+  }
+  .counter { font-size:12px; color:var(--muted); letter-spacing:.1em; font-weight:300;}
+
+  .card-area {
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding: 10px 0 20px;
+  }
+
+  /* ---- timer ---- */
+  .timer {
+    font-family:'Noto Serif TC', serif;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--glow);
+    margin-bottom: 14px;
+    font-variant-numeric: tabular-nums;
+    transition: color .3s;
+  }
+  .timer.warn { color: var(--coral); }
+  .timer.done-flash {
+    color: #ffffff;
+    animation: flash00 1s steps(1) infinite;
+  }
+  @keyframes flash00 {
+    0%,100% { opacity: 1; text-shadow: 0 0 18px rgba(255,255,255,0.8);}
+    50% { opacity: 0.15; text-shadow:none;}
+  }
+  .round-tag {
+    font-size: 12px;
+    color: var(--sand);
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
+    margin-top: -4px;
+    opacity:.85;
+  }
+
+  /* ---- warm water zone (如果) ---- */
+  .layer.warm { border-color: rgba(240,168,120,0.22); }
+  .layer.warm .depth { color: var(--warm-glow); }
+  .layer.warm.on {
+    border-color: var(--warm-glow);
+    background: linear-gradient(135deg, rgba(150,86,52,0.5), rgba(90,48,30,0.4));
+  }
+  .layer.warm.on .tick { border-color: var(--warm-glow); background: var(--warm-glow); }
+
+  .timer.warm { color: var(--warm-glow); }
+
+  .card.warm {
+    background: linear-gradient(160deg, rgba(120,68,44,0.92), rgba(54,28,20,0.96));
+    border-color: rgba(240,168,120,0.34);
+    box-shadow: 0 24px 60px rgba(40,12,4,0.5), inset 0 1px 0 rgba(247,217,182,0.14);
+  }
+  .card.warm::after { background: radial-gradient(circle, rgba(240,168,120,0.18), transparent 70%); }
+  .card.warm .card-cat { color: var(--warm-glow); }
+  .card.warm .card-num { color: rgba(240,168,120,0.16); }
+  .card.warm .card-purpose { border-top-color: rgba(240,168,120,0.22); }
+  .card.warm .card-purpose b { color: var(--warm-glow); }
+  .card.warm .overlay { background: linear-gradient(160deg, rgba(54,28,20,0.84), rgba(36,16,10,0.9)); }
+  .card.warm .ov-btn.swap { border-color: var(--warm-glow); color: var(--warm-glow); }
+  .card.warm .ov-btn.go { background: linear-gradient(135deg, var(--warm-glow), var(--warm-foam)); }
+
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 3 / 4.4;
+    border-radius: 26px;
+    padding: 30px 26px;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(160deg, rgba(34,86,112,0.92), rgba(16,44,64,0.95));
+    border: 1px solid rgba(87,196,201,0.28);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(207,238,240,0.12);
+    overflow: hidden;
+    animation: surface .55s cubic-bezier(.2,.8,.25,1);
+  }
+  @keyframes surface {
+    from { opacity:0; transform: translateY(40px) scale(.92) rotateX(8deg); }
+    to { opacity:1; transform: translateY(0) scale(1) rotateX(0);}
+  }
+  .card.flip { animation: flip .5s cubic-bezier(.4,.1,.2,1); }
+  @keyframes flip {
+    0% { transform: rotateY(0) scale(1);}
+    45% { transform: rotateY(85deg) scale(.94);}
+    55% { transform: rotateY(-85deg) scale(.94);}
+    100% { transform: rotateY(0) scale(1);}
+  }
+  .card::after {
+    content:'';
+    position:absolute; right:-30px; bottom:-30px;
+    width:160px; height:160px; border-radius:50%;
+    background: radial-gradient(circle, rgba(87,196,201,0.14), transparent 70%);
+    pointer-events:none;
+  }
+  .card-cat {
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    text-indent: 0.35em;
+    color: var(--glow);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .card-depth {
+    font-family:'Noto Serif TC',serif;
+    font-size: 12px; color: var(--muted); font-weight:300; letter-spacing:.1em;
+  }
+  .card-q {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 500;
+    font-size: clamp(22px, 6.4vw, 28px);
+    line-height: 1.7;
+    margin: auto 0;
+    letter-spacing: 0.02em;
+  }
+  .card-num {
+    position:absolute; top:24px; right:26px;
+    font-family:'Noto Serif TC',serif; font-size:54px;
+    color: rgba(87,196,201,0.13); font-weight:700; line-height:1;
+  }
+  .card-purpose {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(87,196,201,0.16);
+    font-size: 12.5px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.75;
+    display: none;
+  }
+  .card-purpose.show { display:block; animation: fade .4s; }
+  @keyframes fade { from{opacity:0;transform:translateY(6px);} to{opacity:1;} }
+  .card-purpose b { color: var(--glow); font-weight:500;}
+
+  /* ---- time-up overlay (covers the card) ---- */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px;
+    text-align: center;
+    background: linear-gradient(160deg, rgba(8,28,44,0.82), rgba(5,18,31,0.88));
+    backdrop-filter: blur(8px);
+    border-radius: 26px;
+    z-index: 5;
+  }
+  .overlay.show { display:flex; animation: fade .35s; }
+  .overlay-title {
+    font-family:'Noto Serif TC', serif;
+    font-size: 26px; font-weight:600; color: var(--foam);
+    letter-spacing: 0.12em;
+  }
+  .overlay-sub { font-size: 13px; color: var(--muted); font-weight:300; margin-bottom: 22px;}
+  .overlay-btns { display:flex; gap:12px; width:100%; }
+  .ov-btn {
+    flex:1; border-radius:100px; padding:14px 10px;
+    font-family:'Noto Sans TC',sans-serif; font-size:14px; font-weight:600;
+    cursor:pointer; border:1px solid transparent; transition: transform .18s;
+  }
+  .ov-btn:active { transform: scale(0.95); }
+  .ov-btn.swap { background: transparent; border-color: var(--glow); color: var(--glow); }
+  .ov-btn.go { background: linear-gradient(135deg, var(--glow), var(--foam)); color: var(--abyss); }
+
+  .controls {
+    display:flex; gap:8px; width:100%; max-width:380px; margin-top:22px;
+  }
+  .ctrl {
+    flex:1; border-radius:100px; padding:14px 8px;
+    font-family:'Noto Sans TC',sans-serif; font-size:13px; font-weight:500;
+    cursor:pointer; transition: transform .18s, background .2s, opacity .2s; border:1px solid transparent;
+  }
+  .ctrl:active { transform: scale(0.96);}
+  .ctrl.prev {
+    background: transparent; border-color: rgba(127,163,171,0.35); color: var(--muted); flex: 0.8;
+  }
+  .ctrl.prev:disabled { opacity:.3; pointer-events:none; }
+  .ctrl.peek {
+    background: transparent; border-color: rgba(127,163,171,0.4); color: var(--muted);
+  }
+  .ctrl.peek.active { color: var(--glow); border-color: var(--glow);}
+  .ctrl.next {
+    background: linear-gradient(135deg, var(--glow), var(--foam)); color: var(--abyss); font-weight:700;
+    box-shadow: 0 8px 24px rgba(87,196,201,0.28);
+  }
+
+  .done {
+    text-align:center; padding: 40px 10px;
+  }
+  .done-badge {
+    font-size: 40px;
+    margin-bottom: 14px;
+    filter: drop-shadow(0 0 16px rgba(87,196,201,0.5));
+    animation: surface .6s cubic-bezier(.2,.8,.25,1);
+  }
+  .done h2 { font-family:'Noto Serif TC',serif; font-size:26px; margin-bottom:14px; font-weight:600;}
+  .done p { color:var(--muted); font-size:14px; line-height:1.9; font-weight:300; margin-bottom:26px;}
+
+  .footer-note { text-align:center; font-size:11px; color:rgba(127,163,171,0.6); margin-top:18px; font-weight:300; letter-spacing:.05em;}
+
+  @media (max-height: 700px){
+    .card { padding: 24px 22px; }
+    .card-q { font-size: clamp(20px,5.6vw,25px); line-height:1.55;}
+  }
+
+  /* ---------- RANDOM EVENTS ---------- */
+  .event-layer {
+    position: fixed; inset: 0; z-index: 40;
+    display: none; align-items: center; justify-content: center;
+    padding: 26px;
+  }
+  .event-layer.show { display: flex; }
+  .event-layer.alert {
+    background: rgba(150,10,10,0.7);
+    box-shadow: inset 0 0 180px 50px rgba(255,0,0,0.45);
+    animation: alertFlash .6s steps(1) infinite;
+  }
+  .event-layer.treasure {
+    background: radial-gradient(ellipse 80% 60% at 50% 45%, rgba(90,66,20,0.55), rgba(14,18,24,0.92));
+  }
+  @keyframes alertFlash {
+    0%,100% { background: rgba(165,12,12,0.74); box-shadow: inset 0 0 200px 60px rgba(255,0,0,0.5); }
+    50% { background: rgba(30,0,0,0.32); box-shadow: inset 0 0 90px 20px rgba(255,0,0,0.15); }
+  }
+  .event-card {
+    width: 100%; max-width: 400px;
+    text-align: center;
+    border-radius: 24px;
+    padding: 34px 26px 28px;
+    background: linear-gradient(160deg, rgba(20,68,92,0.96), rgba(8,28,44,0.98));
+    border: 1px solid rgba(87,196,201,0.3);
+    box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+    animation: surface .45s cubic-bezier(.2,.8,.25,1);
+  }
+  .event-card.alert {
+    background: linear-gradient(160deg, rgba(92,28,28,0.96), rgba(40,10,10,0.98));
+    border-color: rgba(255,93,93,0.5);
+  }
+  .event-card.treasure {
+    background: linear-gradient(160deg, rgba(86,64,26,0.96), rgba(40,30,12,0.98));
+    border-color: rgba(242,198,107,0.5);
+  }
+  .event-icon { font-size: 46px; margin-bottom: 8px; filter: drop-shadow(0 0 16px rgba(0,0,0,0.4)); }
+  .event-count {
+    font-family:'Noto Serif TC', serif;
+    font-size: 50px; font-weight: 700; line-height: 1;
+    color: var(--alert); font-variant-numeric: tabular-nums;
+    margin-bottom: 6px;
+  }
+  .event-count.flash { animation: flash00 .6s steps(1) infinite; }
+  .event-title {
+    font-family:'Noto Serif TC', serif;
+    font-size: 24px; font-weight: 600; color: var(--foam);
+    letter-spacing: 0.06em; margin-bottom: 10px;
+  }
+  .event-card.alert .event-title { color: #ffd9d9; }
+  .event-card.treasure .event-title { color: var(--gold); }
+  .event-desc { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.85; margin-bottom: 24px; }
+  .event-card.treasure .event-desc, .event-card.alert .event-desc { color: rgba(255,255,255,0.7); }
+  .event-q {
+    font-family:'Noto Serif TC', serif;
+    font-size: clamp(18px,5vw,21px); line-height: 1.9; color: var(--foam);
+    font-weight: 400; margin-bottom: 26px; text-align: left;
+  }
+  .event-tasklabel {
+    font-size: 12px; letter-spacing: 0.3em; text-indent: 0.3em;
+    color: var(--gold); font-weight: 500; margin-bottom: 12px;
+  }
+  .event-btns { display: flex; gap: 12px; }
+  .event-btn {
+    flex: 1; border: none; border-radius: 100px; padding: 15px 12px;
+    font-family:'Noto Serif TC', serif; font-size: 15px; font-weight: 600;
+    letter-spacing: 0.08em; cursor: pointer; transition: transform .18s;
+    color: var(--abyss); background: linear-gradient(135deg, var(--glow), var(--foam));
+  }
+  .event-btn:active { transform: scale(0.96); }
+  .event-btn.ghost { background: transparent; border: 1px solid rgba(207,238,240,0.4); color: var(--foam); }
+  .event-btn.danger { background: linear-gradient(135deg, #ff6b6b, #ffb199); color: #2a0808; box-shadow: 0 8px 26px rgba(255,93,93,0.4); }
+  .event-btn.gold { background: linear-gradient(135deg, var(--gold), #f7e3b0); color: #3a2c0c; }
+
+  /* ---------- CLUES / JOURNAL ---------- */
+  .locate-btn {
+    display: block; width: 100%; margin: 14px auto 0;
+    border: 1px solid var(--gold); border-radius: 100px; padding: 16px;
+    font-family:'Noto Serif TC', serif; font-size: 16px; font-weight: 600;
+    letter-spacing: 0.1em; color: #3a2c0c;
+    background: linear-gradient(135deg, var(--gold), #f7e3b0);
+    cursor: pointer; box-shadow: 0 8px 28px rgba(242,198,107,0.35);
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+  .locate-btn:active { transform: scale(0.98); }
+
+  .modal.journal { max-width: 460px; }
+  .clue-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+  .clue-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    border: 1px solid rgba(87,196,201,0.18); border-radius: 16px;
+    padding: 14px 16px; background: rgba(10,34,54,0.4);
+  }
+  .clue-item.locked { opacity: 0.55; }
+  .clue-item .glyph {
+    flex-shrink: 0; width: 40px; height: 40px; color: var(--gold);
+    display: grid; place-items: center;
+  }
+  .clue-item.locked .glyph { color: var(--muted); }
+  .clue-item .glyph svg { width: 34px; height: 34px; }
+  .clue-item .ctext h4 {
+    font-family:'Noto Serif TC', serif; font-size: 15px; font-weight: 600;
+    color: var(--foam); margin-bottom: 4px;
+  }
+  .clue-item .ctext .sea { font-size: 11px; color: var(--glow); letter-spacing: 0.1em; margin-bottom: 5px; }
+  .clue-item .ctext p { font-size: 13px; color: var(--sand); font-weight: 300; line-height: 1.75; }
+  .clue-item.locked .ctext p { color: var(--muted); font-style: italic; }
+  .reset-btn {
+    display: block; width: 100%; margin: 16px auto 0;
+    background: none; border: 1px solid rgba(255,93,93,0.35);
+    color: rgba(255,150,150,0.85); border-radius: 100px; padding: 12px;
+    font-family:'Noto Sans TC', sans-serif; font-size: 13px; font-weight: 400;
+    letter-spacing: 0.05em; cursor: pointer; transition: background .2s, color .2s, border-color .2s;
+  }
+  .reset-btn:active { transform: scale(0.98); }
+  .reset-btn.armed { background: rgba(255,93,93,0.15); color: #ffb3b3; border-color: rgba(255,93,93,0.7); }
+  .key-btn {
+    display: block; width: 100%; margin: 16px auto 0;
+    background: none; border: 1px solid rgba(242,198,107,0.4);
+    color: #f2c66b; border-radius: 100px; padding: 12px;
+    font-family:'Noto Sans TC', sans-serif; font-size: 13px; font-weight: 500;
+    letter-spacing: 0.08em; cursor: pointer; transition: background .2s;
+  }
+  .key-btn:active { transform: scale(0.98); }
+  .key-panel { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .key-input {
+    flex: 1; min-width: 0; background: rgba(8,28,44,0.5);
+    border: 1px solid rgba(242,198,107,0.4); border-radius: 100px;
+    color: var(--foam); font-family:'Noto Serif TC', serif; font-size: 15px;
+    text-align: center; padding: 11px 14px; outline: none; letter-spacing: 0.1em;
+  }
+  .key-input:focus { border-color: var(--gold); }
+  .key-submit {
+    border: none; border-radius: 100px; padding: 11px 20px;
+    font-family:'Noto Serif TC', serif; font-size: 14px; font-weight: 600;
+    color: #3a2c0c; background: linear-gradient(135deg, var(--gold), #f7e3b0); cursor: pointer;
+  }
+  .key-submit:active { transform: scale(0.96); }
+  .key-msg { width: 100%; text-align: center; font-size: 12.5px; margin-top: 4px; min-height: 16px; font-weight: 300; }
+  .key-msg.ok { color: var(--gold); }
+  .key-msg.no { color: var(--coral); }
+
+  /* clue reveal on the done page */
+  .clue-reveal {
+    margin: 22px auto 4px; max-width: 340px;
+    border: 1px solid rgba(242,198,107,0.35); border-radius: 18px;
+    padding: 22px 20px; background: linear-gradient(160deg, rgba(86,64,26,0.4), rgba(20,30,40,0.4));
+  }
+  .clue-reveal .clue-glyph { width: 48px; height: 48px; margin: 0 auto 10px; color: var(--gold); }
+  .clue-reveal .clue-glyph svg { width: 48px; height: 48px; }
+  .clue-reveal .clue-kicker { font-size: 12px; letter-spacing: 0.25em; color: var(--gold); margin-bottom: 8px; }
+  .clue-reveal .clue-title { font-family:'Noto Serif TC', serif; font-size: 18px; font-weight: 600; color: var(--foam); margin-bottom: 8px; }
+  .clue-reveal .clue-text { font-size: 13.5px; color: var(--sand); font-weight: 300; line-height: 1.85; }
+
+  /* ---------- LOCATE PUZZLE ---------- */
+  #locateLayer.show {
+    display: flex; align-items: flex-start; justify-content: center;
+    background: linear-gradient(180deg, #1a4e74, #103850 60%, #0a2236);
+    overflow-y: auto; padding: 30px 22px 40px;
+  }
+  .locate-wrap { width: 100%; max-width: 480px; text-align: center; animation: surface .5s cubic-bezier(.2,.8,.25,1); }
+  .locate-wrap .eyebrow { color: var(--gold); }
+  .locate-title { font-family:'Noto Serif TC', serif; font-size: 26px; font-weight: 600; color: var(--foam); margin: 8px 0 6px; letter-spacing: 0.06em; }
+  .locate-sub { font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.85; margin-bottom: 18px; }
+  .sea-map { width: 100%; border-radius: 18px; overflow: hidden; border: 1px solid rgba(242,198,107,0.3); margin-bottom: 18px; background: #07243a; }
+  .locate-opts { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn {
+    border: 1px solid rgba(207,238,240,0.25); border-radius: 14px; padding: 14px 16px;
+    background: rgba(15,58,82,0.4); color: var(--ink); cursor: pointer;
+    font-family:'Noto Sans TC', sans-serif; font-size: 14px; font-weight: 400;
+    text-align: left; transition: border-color .2s, background .2s, transform .15s;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .opt-btn:active { transform: scale(0.98); }
+  .opt-btn .opt-tag { font-family:'Noto Serif TC', serif; font-weight: 700; color: var(--gold); }
+  .opt-btn.wrong { border-color: rgba(255,93,93,0.6); background: rgba(120,20,20,0.3); animation: shake .4s; }
+  .opt-btn.right { border-color: var(--gold); background: rgba(86,64,26,0.5); }
+  @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-7px);} 75%{transform:translateX(7px);} }
+  .locate-hint { margin-top: 14px; font-size: 13px; color: var(--coral); font-weight: 300; min-height: 20px; }
+  .map-pin { cursor: default; }
+
+  /* victory */
+  .victory-card { width: 100%; max-width: 440px; text-align: center; animation: surface .6s cubic-bezier(.2,.8,.25,1); }
+  .victory-card .v-glyph { width: 90px; height: 90px; margin: 0 auto 16px; color: var(--gold); filter: drop-shadow(0 0 24px rgba(242,198,107,0.5)); }
+  .victory-card h2 { font-family:'Noto Serif TC', serif; font-size: 30px; font-weight: 700; color: var(--gold); letter-spacing: 0.08em; margin-bottom: 16px; }
+  .victory-card p { font-size: 14px; color: var(--sand); font-weight: 300; line-height: 2; margin-bottom: 14px; }
+  .victory-card .v-sign { font-family:'Noto Serif TC', serif; font-size: 15px; color: var(--foam); margin: 18px 0 22px; letter-spacing: 0.05em; }
+  .victory-card .v-epilogue {
+    margin: 8px auto 4px; padding: 16px 18px;
+    border-top: 1px solid rgba(242,198,107,0.25);
+    border-bottom: 1px solid rgba(242,198,107,0.25);
+  }
+  .victory-card .v-epilogue p { font-size: 13px; color: var(--muted); line-height: 1.95; margin-bottom: 10px; }
+  .victory-card .v-epilogue p:last-child { margin-bottom: 0; color: var(--sand); }
+
+  /* ---------- STAR MODE (交往後・珊瑚紅) ---------- */
+  .app-toggle {
+    align-self: center;
+    margin: 2px auto 6px; z-index: 6;
+    display: flex; gap: 3px; padding: 4px;
+    background: rgba(8,28,44,0.6); border: 1px solid rgba(87,196,201,0.2);
+    border-radius: 100px; backdrop-filter: blur(6px);
+  }
+  .app-opt {
+    border: none; background: transparent; cursor: pointer;
+    font-family:'Noto Serif TC', serif; font-size: 12px; font-weight: 600;
+    color: var(--muted); padding: 7px 12px; border-radius: 100px;
+    transition: color .2s, background .2s; letter-spacing: 0.03em;
+  }
+  .app-opt.on { color: var(--abyss); background: linear-gradient(135deg, var(--glow), var(--foam)); }
+  .app-opt[data-app="star"].on { background: linear-gradient(135deg, #ff8a6b, #ffc7a3); color: #3a1208; }
+
+  body.star .ocean { background: linear-gradient(180deg, #6e2a3e 0%, #542130 40%, #3a1722 75%, #240e16 100%); }
+  body.star .ocean::before { background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,138,107,0.2), transparent 60%); }
+  body.star .ray { background: linear-gradient(180deg, rgba(255,200,180,0.12), transparent 70%); }
+  body.star .bubble { background: radial-gradient(circle at 30% 30%, rgba(255,200,170,0.45), rgba(255,138,107,0.05)); }
+
+  .star-eye { color: #ff9d7e !important; }
+  .star-light { color: #ff9d7e; }
+
+  .tool-cards { display: flex; flex-direction: column; gap: 14px; margin-top: 34px; }
+  .tool-card {
+    display: flex; align-items: center; gap: 16px; text-align: left;
+    border: 1px solid rgba(255,138,107,0.28); border-radius: 20px; padding: 20px;
+    background: linear-gradient(135deg, rgba(120,50,40,0.4), rgba(70,28,24,0.3));
+    cursor: pointer; transition: transform .2s, border-color .2s, background .2s;
+    backdrop-filter: blur(4px);
+  }
+  .tool-card:active { transform: scale(0.98); }
+  .tool-card:hover { border-color: #ff9d7e; }
+  .tool-card.adult { border-color: rgba(255,90,90,0.3); background: linear-gradient(135deg, rgba(130,40,40,0.42), rgba(80,24,24,0.3)); }
+  .tool-card.adult:hover { border-color: #ff7a7a; }
+  .tool-ico { font-size: 34px; flex-shrink: 0; }
+  .tool-tx h3 { font-family:'Noto Serif TC', serif; font-size: 19px; font-weight: 600; color: var(--foam); margin-bottom: 4px; }
+  .tool-tx p { font-size: 12.5px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+
+  /* star tool overlay */
+  #starTool.show {
+    display: flex; align-items: center; justify-content: center;
+    padding: 26px;
+    background: linear-gradient(180deg, rgba(58,20,34,0.92), rgba(13,3,8,0.96));
+    backdrop-filter: blur(6px);
+  }
+  .star-panel {
+    width: 100%; max-width: 440px; text-align: center;
+    animation: surface .45s cubic-bezier(.2,.8,.25,1);
+  }
+  .star-panel .eyebrow { color: #ff9d7e; }
+  .star-panel h2 { font-family:'Noto Serif TC', serif; font-size: 24px; font-weight: 600; color: var(--foam); margin: 6px 0 18px; letter-spacing: 0.05em; }
+  .star-card {
+    border: 1px solid rgba(255,138,107,0.34); border-radius: 22px; padding: 30px 24px;
+    background: linear-gradient(160deg, rgba(120,52,42,0.55), rgba(50,20,18,0.7));
+    margin-bottom: 20px; min-height: 150px; display: flex; align-items: center; justify-content: center;
+  }
+  .star-q { font-family:'Noto Serif TC', serif; font-size: clamp(19px,5.2vw,23px); line-height: 1.85; color: var(--foam); font-weight: 400; }
+  .star-result { font-family:'Noto Serif TC', serif; font-size: clamp(24px,7vw,32px); font-weight: 700; color: #ffb38f; letter-spacing: 0.04em; animation: storyFade .4s; }
+  .star-result-sub { font-size: 12px; color: var(--muted); margin-top: 10px; letter-spacing: 0.1em; }
+  .star-btn {
+    border: none; border-radius: 100px; padding: 16px 20px;
+    font-family:'Noto Serif TC', serif; font-size: 16px; font-weight: 600; letter-spacing: 0.08em;
+    color: #3a1208; background: linear-gradient(135deg, #ff8a6b, #ffc7a3);
+    cursor: pointer; transition: transform .18s; box-shadow: 0 8px 26px rgba(255,138,107,0.34);
+  }
+  .star-btn:active { transform: scale(0.97); }
+  .star-btn.ghost { background: transparent; border: 1px solid rgba(255,180,150,0.45); color: #ffcdb5; box-shadow: none; }
+  .star-btns { display: flex; gap: 12px; }
+  .star-btns .star-btn { flex: 1; }
+  .filter-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .filter-group { flex: 1; display: flex; gap: 4px; padding: 4px; background: rgba(20,8,8,0.5); border-radius: 100px; border: 1px solid rgba(255,138,107,0.2); }
+  .filter-opt {
+    flex: 1; border: none; background: transparent; cursor: pointer;
+    font-family:'Noto Sans TC', sans-serif; font-size: 13px; font-weight: 500;
+    color: var(--muted); padding: 9px 4px; border-radius: 100px; transition: .2s;
+  }
+  .filter-opt.on { color: #3a1208; background: linear-gradient(135deg, #ff8a6b, #ffc7a3); }
+  .star-close { position: absolute; top: 22px; right: 22px; background: none; border: none; color: var(--muted); font-size: 28px; cursor: pointer; z-index: 2; }
+
+  /* ---------- VISUAL POLISH ---------- */
+  .ocean { box-shadow: inset 0 0 220px 50px rgba(0,0,0,0.45); }
+  .ocean::after {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(42% 30% at 22% 22%, rgba(87,196,201,0.12), transparent 70%),
+      radial-gradient(38% 26% at 80% 30%, rgba(120,180,220,0.09), transparent 70%),
+      radial-gradient(50% 40% at 50% 100%, rgba(29,110,126,0.12), transparent 70%);
+    animation: aurora 18s ease-in-out infinite alternate;
+  }
+  @keyframes aurora {
+    0% { transform: translate(0,0) scale(1); opacity:.65; }
+    100% { transform: translate(18px,26px) scale(1.18); opacity:1; }
+  }
+  body.star .ocean::after {
+    background:
+      radial-gradient(42% 30% at 25% 20%, rgba(255,138,107,0.14), transparent 70%),
+      radial-gradient(38% 26% at 78% 30%, rgba(255,180,150,0.10), transparent 70%),
+      radial-gradient(50% 40% at 50% 100%, rgba(200,80,90,0.12), transparent 70%);
+  }
+  h1 { text-shadow: 0 2px 34px rgba(87,196,201,0.4); }
+  body.star h1 { text-shadow: 0 2px 34px rgba(255,138,107,0.42); }
+  .start-btn, .locate-btn, .star-btn, .modal-ok, .enter-btn { position: relative; overflow: hidden; }
+  .start-btn::after, .locate-btn::after, .star-btn::after, .modal-ok::after {
+    content:''; position:absolute; top:0; left:-70%; width:45%; height:100%; pointer-events:none;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.5), transparent);
+    transform: skewX(-20deg); animation: sheen 5s ease-in-out infinite;
+  }
+  @keyframes sheen { 0%,55% { left:-70%; } 100% { left:140%; } }
+  .layer, .tool-card { transition: transform .25s cubic-bezier(.2,.8,.25,1), border-color .25s, background .25s, box-shadow .25s; }
+  .layer:hover, .tool-card:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(0,0,0,0.35); }
+  .card { box-shadow: 0 30px 70px rgba(0,0,0,0.55), inset 0 1px 0 rgba(207,238,240,0.14), 0 0 0 1px rgba(87,196,201,0.12); }
+  .card-q { text-shadow: 0 1px 20px rgba(0,0,0,0.3); }
+  .layer.on { box-shadow: 0 0 0 1px var(--glow), 0 14px 34px rgba(29,110,126,0.3); }
+
+  /* ---------- ATTACHMENT QUIZ ---------- */
+  #quizLayer.show {
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 30px 22px 40px; overflow-y: auto;
+    background: linear-gradient(180deg, rgba(16,62,90,0.95), rgba(8,28,44,0.97));
+    backdrop-filter: blur(6px);
+  }
+  .quiz-wrap { width: 100%; max-width: 460px; animation: surface .45s cubic-bezier(.2,.8,.25,1); }
+  .quiz-top { text-align: center; margin-bottom: 18px; }
+  .quiz-top .eyebrow { color: #ff9d7e; }
+  .quiz-top h2 { font-family:'Noto Serif TC', serif; font-size: 24px; font-weight: 600; color: var(--foam); margin-top: 6px; letter-spacing: 0.05em; }
+  .quiz-prog { height: 5px; border-radius: 100px; background: rgba(255,255,255,0.12); margin: 14px 0 22px; overflow: hidden; }
+  .quiz-prog i { display: block; height: 100%; border-radius: 100px; background: linear-gradient(90deg, #ff8a6b, #ffc7a3); transition: width .35s ease; }
+  .quiz-q {
+    font-family:'Noto Serif TC', serif; font-size: clamp(19px,5vw,22px); line-height: 1.8;
+    color: var(--foam); text-align: center; min-height: 90px; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; animation: storyFade .4s;
+  }
+  .quiz-opts { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-opt {
+    border: 1px solid rgba(255,138,107,0.28); border-radius: 14px; padding: 14px 18px;
+    background: rgba(120,52,42,0.22); color: var(--ink); cursor: pointer; text-align: left;
+    font-family:'Noto Sans TC', sans-serif; font-size: 14.5px; font-weight: 400;
+    transition: transform .15s, border-color .2s, background .2s;
+  }
+  .quiz-opt:hover { border-color: #ff9d7e; }
+  .quiz-opt:active { transform: scale(0.98); }
+  .quiz-back { display:block; margin: 16px auto 0; background:none; border:none; color:var(--muted); font-size:13px; cursor:pointer; font-family:'Noto Sans TC',sans-serif; }
+
+  .result-card { text-align: center; }
+  .result-type { font-family:'Noto Serif TC', serif; font-size: 30px; font-weight: 700; color: #ffb38f; letter-spacing: 0.06em; margin-bottom: 6px; text-shadow: 0 2px 24px rgba(255,138,107,0.4); }
+  .result-en { font-size: 12px; letter-spacing: 0.3em; color: var(--muted); margin-bottom: 20px; }
+  .result-bars { margin: 20px 0; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .bar-label { width: 64px; font-size: 13px; color: var(--sand); text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 12px; border-radius: 100px; background: rgba(255,255,255,0.1); overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 100px; width: 0; transition: width 1s cubic-bezier(.2,.8,.25,1); }
+  .bar-fill.anx { background: linear-gradient(90deg, #ff7a9c, #ffb38f); }
+  .bar-fill.avo { background: linear-gradient(90deg, #6fb6c9, #9fd6dd); }
+  .bar-val { width: 36px; font-size: 12px; color: var(--muted); flex-shrink: 0; }
+  .result-desc { font-size: 14px; color: var(--sand); font-weight: 300; line-height: 1.95; text-align: left; margin: 18px 0; }
+  .result-desc b { color: #ffb38f; font-weight: 500; }
+  .result-note { font-size: 12px; color: var(--muted); font-weight: 300; line-height: 1.8; margin-bottom: 22px; }
+</style>
+</head>
+<body>
+  <div class="ocean"></div>
+  <div class="ray"></div><div class="ray"></div><div class="ray"></div><div class="ray"></div>
+
+  <!-- ===== NAME GATE ===== -->
+  <div class="splash" id="gate">
+    <div class="splash-inner">
+      <div class="dedicate">致</div>
+      <p class="gate-hint">這趟下潛，想獻給誰？</p>
+      <input type="text" id="nameInput" class="name-input" placeholder="輸入對方的名字" autocomplete="off" maxlength="24">
+      <button class="enter-btn" id="confirmBtn">寫下這個名字</button>
+    </div>
+  </div>
+
+  <!-- ===== SPLASH ===== -->
+  <div class="splash" id="splash" style="opacity:0; pointer-events:none;">
+    <div class="splash-inner">
+      <div class="dedicate">致</div>
+      <div class="name" id="nameDisplay">　</div>
+      <div class="line"></div>
+      <p class="splash-sub">一段慢慢認識彼此的對話<br>不急著定義什麼，<br>只是想更了解你一點。</p>
+      <button class="enter-btn" id="enterBtn">開啟旅程</button>
+    </div>
+  </div>
+
+  <!-- ===== STORY ===== -->
+  <div class="splash story" id="story" style="opacity:0; pointer-events:none;">
+    <div class="story-inner">
+      <div class="story-chapter" id="storyChapter">序章</div>
+      <p class="story-text" id="storyText"></p>
+      <div class="story-dots" id="storyDots"></div>
+      <button class="enter-btn" id="storyNext">下一頁</button>
+    </div>
+  </div>
+
+  <div class="wrap" id="wrap" style="display:none;">
+    <!-- app toggle -->
+    <div class="app-toggle" id="appToggle">
+      <button class="app-opt on" data-app="sea">潛航彼此</button>
+      <button class="app-opt" data-app="star">星際旅程</button>
+    </div>
+    <!-- ===== HOME ===== -->
+    <div id="home">
+      <header>
+        <div class="eyebrow">ATLANTIS EXPEDITION</div>
+        <h1>潛航<span class="light">彼此</span></h1>
+        <p class="sub" id="homeSub">我們奉命駕著潛水艇，潛入世界各地的海域，<br>尋找失落的亞特蘭提斯。<br>而每一片海，都藏著一道關於彼此的線索。</p>
+      </header>
+
+      <div class="modes">
+        <button class="mode-tab on" data-mode="mine">Logan領航員的科技海圖</button>
+        <button class="mode-tab" data-mode="aron">Aron教授的古老六分儀</button>
+        <button class="mode-tab" data-mode="quiz">心理師的依戀羅盤</button>
+      </div>
+
+      <p class="chart-label" id="chartLabel">航海圖・選擇下一片要探索的海域</p>
+      <div class="layers" id="layers"></div>
+
+      <button class="start-btn" id="startBtn" disabled>選擇一片海域啟航</button>
+      <button class="locate-btn" id="locateBtn" style="display:none;">🧭 線索已集滿・標定亞特蘭提斯</button>
+      <button class="rules-btn" id="journalBtn">📜 航海日誌（線索 <span id="clueCount">0</span>/8）</button>
+      <button class="rules-btn" id="rulesBtn">任務說明 ・ 怎麼進行？</button>
+    </div>
+
+    <!-- ===== STAGE ===== -->
+    <div class="stage" id="stage">
+      <div class="topbar">
+        <button id="backBtn">⚓ 提前返航</button>
+        <span class="counter" id="counter"></span>
+      </div>
+      <div class="card-area" id="cardArea"></div>
+    </div>
+
+    <!-- ===== STAR HOME ===== -->
+    <div id="starHome" style="display:none;">
+      <header>
+        <div class="eyebrow star-eye">INTERSTELLAR · 交往後</div>
+        <h1>星際<span class="star-light">旅程</span></h1>
+        <p class="sub">已經在一起的我們，<br>把日子過成一場慢慢同行的旅程。<br>挑一個工具開始吧。</p>
+      </header>
+      <div class="tool-cards">
+        <button class="tool-card" data-tool="qa">
+          <div class="tool-ico">💬</div>
+          <div class="tool-tx"><h3>情侶問答</h3><p>更深入的彼此，36 題慢慢聊</p></div>
+        </button>
+        <button class="tool-card" data-tool="date">
+          <div class="tool-ico">🗺️</div>
+          <div class="tool-tx"><h3>約會選擇器</h3><p>選天氣與室內外，幫你抽一個點子</p></div>
+        </button>
+        <button class="tool-card" data-tool="dinner">
+          <div class="tool-ico">🍜</div>
+          <div class="tool-tx"><h3>晚餐選擇器</h3><p>不知道吃什麼？按「都可以」</p></div>
+        </button>
+        <button class="tool-card adult" data-tool="adult">
+          <div class="tool-ico">🔥</div>
+          <div class="tool-tx"><h3>悄悄話・18+</h3><p>更私密的彼此，需年滿 18 歲</p></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STAR TOOL OVERLAY ===== -->
+  <div class="event-layer" id="starTool"></div>
+
+  <!-- ===== ATTACHMENT QUIZ ===== -->
+  <div class="event-layer" id="quizLayer"></div>
+
+  <!-- ===== RULES MODAL ===== -->
+  <div class="modal-mask" id="rulesModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose" aria-label="關閉">×</button>
+      <h2 class="modal-title">任務說明</h2>
+      <p class="modal-lead">這是一場尋找亞特蘭提斯的潛航。沒有標準答案，每答完一片海域，就離傳說與彼此更近一點。</p>
+      <ol class="rule-list">
+        <li><b>選一片海域</b>　海圖上每片海是不同主題的話題，從輕鬆到深入。想從哪片海啟航都可以。</li>
+        <li><b>輪流抽牌</b>　兩人輪流抽，抽到的人先回答，另一個人也分享自己的版本。</li>
+        <li><b>三分鐘潛航</b>　每題上方有三分鐘倒數，讓回答的人能好好說，不必趕。</li>
+        <li><b>時間到了</b>　數字會閃爍提醒。可以按「換對方」讓另一個人回答同一題，或「換下一題」繼續航行。</li>
+        <li><b>不必每題都答</b>　遇到還沒準備好聊的，跳過也沒關係。舒服比深入更重要。</li>
+      </ol>
+      <p class="modal-foot">慢慢來，重點是更認識彼此，也更認識自己。</p>
+      <button class="modal-ok" id="modalOk">啟航</button>
+    </div>
+  </div>
+
+  <!-- ===== RANDOM EVENT LAYER ===== -->
+  <div class="event-layer" id="eventLayer"></div>
+
+  <!-- ===== JOURNAL (CLUES) ===== -->
+  <div class="modal-mask" id="journalModal">
+    <div class="modal journal">
+      <button class="modal-close" id="journalClose" aria-label="關閉">×</button>
+      <h2 class="modal-title">航海日誌</h2>
+      <p class="modal-lead">每探索完一片海域，就會尋獲一段亞特蘭提斯的線索。集滿八段，就能標定它的座標。</p>
+      <div class="clue-grid" id="clueGrid"></div>
+      <button class="modal-ok" id="journalLocate" style="display:none;">線索已集滿・前往標定座標</button>
+      <button class="key-btn" id="keyBtn">🔑 駕駛台金鑰</button>
+      <div class="key-panel" id="keyPanel" style="display:none;">
+        <input type="text" id="keyInput" class="key-input" placeholder="輸入金鑰" autocomplete="off" maxlength="20">
+        <button class="key-submit" id="keySubmit">解鎖</button>
+        <p class="key-msg" id="keyMsg"></p>
+      </div>
+      <button class="reset-btn" id="resetBtn">🗑 清空所有線索與進度</button>
+    </div>
+  </div>
+
+  <!-- ===== LOCATE PUZZLE ===== -->
+  <div class="event-layer" id="locateLayer"></div>
+
+<script>
+// ====== 線索與進度系統 ======
+const SAVE_KEY = 'qianhang_atlantis_v1';
+let progress = (function(){
+  try { const r = localStorage.getItem(SAVE_KEY); if(r) return JSON.parse(r); } catch(e){}
+  return { clues:{}, solved:false, starUnlocked:false };
+})();
+function saveProgress(){ try { localStorage.setItem(SAVE_KEY, JSON.stringify(progress)); } catch(e){} }
+
+// 八片海域的線索（依 ORDER 順序串成一則完整故事，指向亞特蘭提斯的座標）
+const G = {
+  wave:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 14c4-5 8-5 12 0s8 5 12 0 8-5 10 0"/><path d="M3 22c4-5 8-5 12 0s8 5 12 0 8-5 10 0"/><path d="M3 30c4-5 8-5 12 0s8 5 12 0 8-5 10 0"/></svg>',
+  sun:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><circle cx="20" cy="20" r="7"/><path d="M20 4v4M20 32v4M4 20h4M32 20h4M9 9l3 3M28 28l3 3M31 9l-3 3M12 28l-3 3"/></svg>',
+  amphora:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 7h12M16 7c0 4-4 5-4 10 0 7 3 12 8 12s8-5 8-12c0-5-4-6-4-10"/><path d="M16 7c0 3 2 4 4 4s4-1 4-4"/></svg>',
+  pillars:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 12v18M12 12l-2 3h4zM12 30h-3 6zM28 12v18M28 12l-2 3h4zM28 30h-3 6z"/></svg>',
+  column:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 14h14M13 14l-2-3h18l-2 3M16 14v15M20 14v15M24 14v15M11 32h18"/></svg>',
+  sunset:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 28h32"/><circle cx="20" cy="28" r="8"/><path d="M20 13v3M9 17l2 2M31 17l-2 2"/></svg>',
+  gate:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 32V18a12 12 0 0124 0v14"/><path d="M4 32h32"/></svg>',
+  xmark:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><circle cx="20" cy="20" r="15" stroke-dasharray="3 3"/><path d="M13 13l14 14M27 13L13 27" stroke-width="2.5"/></svg>',
+  city:'<svg viewBox="0 0 100 80" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 74h84"/><path d="M18 74V44l11-9 11 9v30"/><path d="M42 74V26l16-13 16 13v48"/><path d="M72 74V48l9-8 9 8v26"/><path d="M58 13V4"/><circle cx="58" cy="3" r="2.4" fill="currentColor"/><path d="M29 35v-6"/><path d="M81 40v-5"/><path d="M50 40h16M50 52h16"/></svg>'
+};
+const CLUES = {
+  value:  { glyph:G.wave,    title:'第一塊碑文', text:'石板上刻著：亞特蘭提斯不在任何一片內海，而沉睡在真正遼闊的「大洋」深處。' },
+  life:   { glyph:G.sun,     title:'第二塊碑文', text:'礁岩的紋路顯示，那片海域終年溫暖，海水從不結冰。' },
+  scene:  { glyph:G.amphora, title:'第三塊碑文', text:'陶罐裡的殘卷記載，古希臘的水手，曾航行到它的邊界。' },
+  love:   { glyph:G.pillars, title:'第四塊碑文', text:'貝殼裡的低語說，要抵達它，必須先穿過由「兩根巨柱」把守的海峽。' },
+  us:     { glyph:G.column,  title:'第五塊碑文', text:'海圖殘片標明，那兩根巨柱，正是後世所稱的「海克力斯之柱」。' },
+  macro:  { glyph:G.sunset,  title:'第六塊碑文', text:'星象盤指出，它就在那道海峽「之外」，朝著落日的方向，也就是西方。' },
+  career: { glyph:G.gate,    title:'第七塊碑文', text:'航海日誌補充：穿過海峽後不遠，正是那片大洋的入口；它沉在入口之下，並非橫越整片汪洋之外。' },
+  ifs:    { glyph:G.xmark,   title:'最後一塊碑文', text:'最後一片碎片合上了拼圖：柱外、向西、溫暖而遼闊的大洋入口之下，沉睡著亞特蘭提斯。' }
+};
+// 八片海域的固定順序（用於日誌與完成判定）
+const SEA_ORDER = ['value','life','scene','love','us','macro','career','ifs'];
+const COUPLE_Q = ["親密時刻裡，有沒有什麼是你想要、卻還沒說出口的？", "和剛在一起時比，你覺得我們的身體親密有什麼變化？", "怎樣的氛圍或前奏，最能讓你放鬆、有感覺？", "有沒有哪個小舉動，我一做你就會瞬間心動？", "你喜歡我在耳邊怎麼稱呼你、說什麼？", "過去哪一段感情，最深刻地改變了你？", "有沒有哪一次你其實受傷了，卻沒告訴我？", "你心裡有沒有對我還沒完全放下的小心結？", "在我們之間，什麼會讓你覺得「被信任」？", "你會吃醋嗎？通常是因為什麼？", "我們上一次吵架，事後你真正的感受是什麼？", "吵架時，我哪一種反應最讓你受不了？", "有沒有一句話，是你希望我吵架時永遠別說的？", "冷戰時，你其實希望我先做什麼？", "意見不同時，你希望我先聽，還是先一起想辦法？", "我做過哪件小事，你到現在還記得？", "最近我有哪裡，把你照顧得很好？", "有沒有什麼是你想要更多、卻不好意思一直開口的？", "一天之中，你最珍惜我們相處的哪個時刻？", "我怎麼做，會讓平凡的一天變得不一樣？", "你心裡，我們的下一步是什麼？", "你想像中我們的家，是什麼樣子？", "對「結婚」這件事，你現在真實的想法是什麼？", "你希望我們幾年內，一起完成哪件大事？", "如果要設一個共同目標或帳戶，你想先一起存什麼？", "你希望我和你的家人，維持什麼樣的距離？", "我們的錢，你理想中怎麼分配與決定？", "對於生小孩，你現在的想法和一年前比有變嗎？", "逢年過節，你希望我們怎麼安排兩邊家人？", "未來若要照顧長輩，你希望我們怎麼分工？", "有沒有一個夢想，你還沒跟我說過？", "在我們的關係裡，你最怕失去的是什麼？", "五年後，你最希望我們還保有現在的什麼？", "如果可以重來，我們哪一段你會想改變？", "你覺得我們最該一起守護的是什麼？", "到現在為止，你覺得跟我在一起，最大的成長是什麼？"];
+const DATE_ACTS = [{"t": "象山步道看台北夜景", "w": "sun", "v": "out"}, {"t": "虎山步道看夜景", "w": "sun", "v": "out"}, {"t": "河濱騎 YouBike", "w": "sun", "v": "out"}, {"t": "大稻埕碼頭看夕陽", "w": "sun", "v": "out"}, {"t": "陽明山擎天崗散步", "w": "sun", "v": "out"}, {"t": "貓空纜車上山泡茶", "w": "sun", "v": "out"}, {"t": "貓空步道健行", "w": "sun", "v": "out"}, {"t": "淡水漁人碼頭散步", "w": "sun", "v": "out"}, {"t": "淡水老街漫遊", "w": "sun", "v": "out"}, {"t": "九份老街", "w": "sun", "v": "out"}, {"t": "金瓜石黃金博物館園區", "w": "sun", "v": "out"}, {"t": "平溪放天燈", "w": "sun", "v": "out"}, {"t": "十分瀑布", "w": "sun", "v": "out"}, {"t": "大安森林公園野餐", "w": "sun", "v": "out"}, {"t": "北投地熱谷", "w": "sun", "v": "out"}, {"t": "福隆海邊", "w": "sun", "v": "out"}, {"t": "北海岸老梅石槽", "w": "sun", "v": "out"}, {"t": "野柳地質公園", "w": "sun", "v": "out"}, {"t": "建國花市玉市", "w": "sun", "v": "out"}, {"t": "木柵動物園", "w": "sun", "v": "out"}, {"t": "烏來老街", "w": "sun", "v": "out"}, {"t": "烏來內洞森林步道", "w": "sun", "v": "out"}, {"t": "關渡賞鳥", "w": "sun", "v": "out"}, {"t": "內湖採草莓", "w": "sun", "v": "out"}, {"t": "碧潭踩天鵝船", "w": "sun", "v": "out"}, {"t": "碧潭吊橋散步", "w": "sun", "v": "out"}, {"t": "大佳河濱放風箏", "w": "sun", "v": "out"}, {"t": "士林官邸賞花", "w": "sun", "v": "out"}, {"t": "竹子湖海芋季", "w": "sun", "v": "out"}, {"t": "劍潭山看 101", "w": "sun", "v": "out"}, {"t": "福州山公園看夜景", "w": "sun", "v": "out"}, {"t": "仙跡岩看夜景", "w": "sun", "v": "out"}, {"t": "八里左岸騎單車", "w": "sun", "v": "out"}, {"t": "新店溪畔散步", "w": "sun", "v": "out"}, {"t": "寶藏巖聚落看河", "w": "sun", "v": "out"}, {"t": "中正紀念堂自由廣場散步", "w": "sun", "v": "out"}, {"t": "觀音山健行", "w": "sun", "v": "out"}, {"t": "桃源谷草原", "w": "sun", "v": "out"}, {"t": "鼻頭角步道", "w": "sun", "v": "out"}, {"t": "龍洞看海", "w": "sun", "v": "out"}, {"t": "白沙灣戲水", "w": "sun", "v": "out"}, {"t": "基隆和平島公園", "w": "sun", "v": "out"}, {"t": "望幽谷潮境公園", "w": "sun", "v": "out"}, {"t": "草嶺古道健行", "w": "sun", "v": "out"}, {"t": "高級野餐約會", "w": "sun", "v": "out"}, {"t": "一起放風箏", "w": "sun", "v": "out"}, {"t": "海邊打水漂", "w": "sun", "v": "out"}, {"t": "夜衝看海聊天", "w": "sun", "v": "out"}, {"t": "屋頂看星星", "w": "sun", "v": "out"}, {"t": "河濱看煙火", "w": "sun", "v": "out"}, {"t": "四四南村散步", "w": "sun", "v": "out"}, {"t": "信義區街拍", "w": "sun", "v": "out"}, {"t": "軍艦岩步道", "w": "sun", "v": "out"}, {"t": "劍南山看夜景", "w": "sun", "v": "out"}, {"t": "翠湖步道", "w": "sun", "v": "out"}, {"t": "內溝溪步道", "w": "sun", "v": "out"}, {"t": "虎山溪步道", "w": "sun", "v": "out"}, {"t": "茶壺山步道", "w": "sun", "v": "out"}, {"t": "報時山步道", "w": "sun", "v": "out"}, {"t": "不厭亭看山景", "w": "sun", "v": "out"}, {"t": "猴硐貓村", "w": "sun", "v": "out"}, {"t": "菁桐老街", "w": "sun", "v": "out"}, {"t": "十分老街", "w": "sun", "v": "out"}, {"t": "三芝淺水灣", "w": "sun", "v": "out"}, {"t": "石門洞看海", "w": "sun", "v": "out"}, {"t": "富貴角燈塔", "w": "sun", "v": "out"}, {"t": "深澳象鼻岩", "w": "sun", "v": "out"}, {"t": "水湳洞陰陽海", "w": "sun", "v": "out"}, {"t": "南雅奇岩", "w": "sun", "v": "out"}, {"t": "滿月圓森林步道", "w": "sun", "v": "out"}, {"t": "三峽大板根森林", "w": "sun", "v": "out"}, {"t": "林本源園邸", "w": "sun", "v": "out"}, {"t": "石碇千島湖", "w": "sun", "v": "out"}, {"t": "大湖公園散步", "w": "sun", "v": "out"}, {"t": "美堤河濱騎車", "w": "sun", "v": "out"}, {"t": "古亭河濱散步", "w": "sun", "v": "out"}, {"t": "圓山花博公園", "w": "sun", "v": "out"}, {"t": "士林平菁街櫻花", "w": "sun", "v": "out"}, {"t": "花蓮一日來回", "w": "sun", "v": "out"}, {"t": "宜蘭一日小旅行", "w": "sun", "v": "out"}, {"t": "台中一日來回", "w": "sun", "v": "out"}, {"t": "台南一日吃透透", "w": "sun", "v": "out"}, {"t": "嘉義一日", "w": "sun", "v": "out"}, {"t": "九份金瓜石一日", "w": "sun", "v": "out"}, {"t": "平溪線一日鐵道", "w": "sun", "v": "out"}, {"t": "淡水一日", "w": "sun", "v": "out"}, {"t": "鶯歌三峽老街一日", "w": "sun", "v": "out"}, {"t": "大溪老街一日", "w": "sun", "v": "out"}, {"t": "基隆廟口一日", "w": "sun", "v": "out"}, {"t": "南投日月潭一日", "w": "sun", "v": "out"}, {"t": "墾丁海邊一日", "w": "sun", "v": "out"}, {"t": "小琉球一日浮潛", "w": "sun", "v": "out"}, {"t": "旗津台南一日", "w": "sun", "v": "out"}, {"t": "阿里山一日", "w": "sun", "v": "out"}, {"t": "清境武嶺一日", "w": "sun", "v": "out"}, {"t": "太魯閣一日", "w": "sun", "v": "out"}, {"t": "龜山島賞鯨一日", "w": "sun", "v": "out"}, {"t": "東北角海岸一日", "w": "sun", "v": "out"}, {"t": "客家桐花一日", "w": "sun", "v": "out"}, {"t": "宜蘭傳藝中心一日", "w": "sun", "v": "out"}, {"t": "高雄駁二旗津愛河一日", "w": "sun", "v": "out"}, {"t": "苗栗一日", "w": "sun", "v": "out"}, {"t": "北海岸一日", "w": "sun", "v": "out"}, {"t": "金瓜石水湳洞一日", "w": "sun", "v": "out"}, {"t": "集集鐵道一日", "w": "sun", "v": "out"}, {"t": "谷關泡湯一日", "w": "sun", "v": "out"}, {"t": "三義木雕老街一日", "w": "sun", "v": "out"}, {"t": "北投陽明山一日", "w": "sun", "v": "out"}, {"t": "撐傘逛迪化街騎樓", "w": "any", "v": "out"}, {"t": "逛饒河街夜市", "w": "any", "v": "out"}, {"t": "逛士林夜市", "w": "any", "v": "out"}, {"t": "逛寧夏夜市", "w": "any", "v": "out"}, {"t": "逛師大夜市", "w": "any", "v": "out"}, {"t": "逛公館夜市", "w": "any", "v": "out"}, {"t": "北投泡湯", "w": "any", "v": "out"}, {"t": "烏來泡湯", "w": "any", "v": "out"}, {"t": "陽明山泡湯", "w": "any", "v": "out"}, {"t": "金山溫泉", "w": "any", "v": "out"}, {"t": "永康街散步覓食", "w": "any", "v": "out"}, {"t": "赤峰街逛選物店", "w": "any", "v": "out"}, {"t": "富錦街散步", "w": "any", "v": "out"}, {"t": "迪化街選物", "w": "any", "v": "out"}, {"t": "大稻埕碼頭看船", "w": "any", "v": "out"}, {"t": "夜市射氣球套圈圈", "w": "any", "v": "out"}, {"t": "南機場夜市覓食", "w": "any", "v": "out"}, {"t": "景美夜市", "w": "any", "v": "out"}, {"t": "延三夜市", "w": "any", "v": "out"}, {"t": "東門市場覓食", "w": "any", "v": "out"}, {"t": "誠品信義店窩一下午", "w": "any", "v": "in"}, {"t": "華山文創看展", "w": "any", "v": "in"}, {"t": "松山文創看展", "w": "any", "v": "in"}, {"t": "北美館看展", "w": "any", "v": "in"}, {"t": "故宮博物院", "w": "any", "v": "in"}, {"t": "科教館", "w": "any", "v": "in"}, {"t": "天文館", "w": "any", "v": "in"}, {"t": "當代藝術館", "w": "any", "v": "in"}, {"t": "鶯歌陶瓷博物館", "w": "any", "v": "in"}, {"t": "桌遊店玩一下午", "w": "any", "v": "in"}, {"t": "密室逃脫", "w": "any", "v": "in"}, {"t": "VR 體驗館", "w": "any", "v": "in"}, {"t": "保齡球", "w": "any", "v": "in"}, {"t": "撞球館", "w": "any", "v": "in"}, {"t": "夾娃娃機店", "w": "any", "v": "in"}, {"t": "電玩遊樂場", "w": "any", "v": "in"}, {"t": "室內溜冰場", "w": "any", "v": "in"}, {"t": "彈跳床公園", "w": "any", "v": "in"}, {"t": "KTV 唱歌", "w": "any", "v": "in"}, {"t": "live house 聽團", "w": "any", "v": "in"}, {"t": "爵士酒吧", "w": "any", "v": "in"}, {"t": "屋頂酒吧小酌", "w": "any", "v": "in"}, {"t": "調酒吧試酒", "w": "any", "v": "in"}, {"t": "看脫口秀", "w": "any", "v": "in"}, {"t": "開放麥之夜", "w": "any", "v": "in"}, {"t": "看戲或音樂劇", "w": "any", "v": "in"}, {"t": "看現場樂團表演", "w": "any", "v": "in"}, {"t": "水族館幫魚編故事", "w": "any", "v": "in"}, {"t": "二手店試穿最浮誇的衣服", "w": "any", "v": "in"}, {"t": "古董店幫舊物編身世", "w": "any", "v": "in"}, {"t": "大頭貼巡禮", "w": "any", "v": "in"}, {"t": "圖書館用角色聲音念書", "w": "any", "v": "in"}, {"t": "看一部電影", "w": "any", "v": "in"}, {"t": "二輪戲院看片", "w": "any", "v": "in"}, {"t": "IMAX 看大片", "w": "any", "v": "in"}, {"t": "室內攀岩館", "w": "any", "v": "in"}, {"t": "陶藝體驗課", "w": "any", "v": "in"}, {"t": "手沖咖啡課", "w": "any", "v": "in"}, {"t": "調香課", "w": "any", "v": "in"}, {"t": "皮件手作", "w": "any", "v": "in"}, {"t": "烘焙課", "w": "any", "v": "in"}, {"t": "拉花課", "w": "any", "v": "in"}, {"t": "畫室速寫", "w": "any", "v": "in"}, {"t": "漫畫店窩一下午", "w": "any", "v": "in"}, {"t": "唱片行挖黑膠", "w": "any", "v": "in"}, {"t": "百貨美食街吃透透", "w": "any", "v": "in"}, {"t": "超市約會買菜", "w": "any", "v": "in"}, {"t": "飛鏢吧", "w": "any", "v": "in"}, {"t": "室內高爾夫", "w": "any", "v": "in"}, {"t": "美甲一起做", "w": "any", "v": "in"}, {"t": "情侶 SPA 按摩", "w": "any", "v": "in"}, {"t": "三溫暖放鬆", "w": "any", "v": "in"}, {"t": "文創市集逛逛", "w": "any", "v": "in"}, {"t": "看一場展覽", "w": "any", "v": "in"}, {"t": "桌遊咖啡廳", "w": "any", "v": "in"}, {"t": "一起做一道沒做過的甜點", "w": "any", "v": "in"}, {"t": "新食物試吃之夜", "w": "any", "v": "in"}, {"t": "華麗速食盛宴（盛裝吃速食）", "w": "any", "v": "in"}, {"t": "自製莎莎醬配調酒", "w": "any", "v": "in"}, {"t": "在家調酒實驗", "w": "any", "v": "in"}, {"t": "停電燭光之夜", "w": "any", "v": "in"}, {"t": "成人版兒童生日派對", "w": "any", "v": "in"}, {"t": "在客廳蓋枕頭堡", "w": "any", "v": "in"}, {"t": "童年電影馬拉松", "w": "any", "v": "in"}, {"t": "做一件情侶 T 恤", "w": "any", "v": "in"}, {"t": "接力畫一幅畫", "w": "any", "v": "in"}, {"t": "兩句接龍寫一個故事", "w": "any", "v": "in"}, {"t": "列人生願望清單互相分享", "w": "any", "v": "in"}, {"t": "規劃一趟完美假期", "w": "any", "v": "in"}, {"t": "學一個近距離魔術", "w": "any", "v": "in"}, {"t": "學書法", "w": "any", "v": "in"}, {"t": "學摺紙", "w": "any", "v": "in"}];
+const DATE_ACTS_KH = [{"t": "西子灣看夕陽", "w": "sun", "v": "out"}, {"t": "旗津渡輪加海邊散步", "w": "sun", "v": "out"}, {"t": "旗津風車公園", "w": "sun", "v": "out"}, {"t": "蓮池潭龍虎塔", "w": "sun", "v": "out"}, {"t": "愛河畔散步", "w": "sun", "v": "out"}, {"t": "柴山步道看猴子", "w": "sun", "v": "out"}, {"t": "壽山動物園", "w": "sun", "v": "out"}, {"t": "中央公園散步", "w": "sun", "v": "out"}, {"t": "衛武營榕園野餐", "w": "sun", "v": "out"}, {"t": "駁二大義倉庫戶外", "w": "sun", "v": "out"}, {"t": "高雄港搭船遊港", "w": "sun", "v": "out"}, {"t": "鼓山渡輪", "w": "sun", "v": "out"}, {"t": "哈瑪星鐵道園區", "w": "sun", "v": "out"}, {"t": "蚵仔寮漁港", "w": "sun", "v": "out"}, {"t": "興達港情人碼頭", "w": "sun", "v": "out"}, {"t": "茄萣濕地賞鳥", "w": "sun", "v": "out"}, {"t": "田寮月世界", "w": "sun", "v": "out"}, {"t": "佛陀紀念館", "w": "sun", "v": "out"}, {"t": "美濃客家村騎單車", "w": "sun", "v": "out"}, {"t": "美濃湖環湖", "w": "sun", "v": "out"}, {"t": "旗山老街", "w": "sun", "v": "out"}, {"t": "茂林谷瀑布", "w": "sun", "v": "out"}, {"t": "澄清湖環湖", "w": "sun", "v": "out"}, {"t": "永安濕地", "w": "sun", "v": "out"}, {"t": "彌陀漁港看夕陽", "w": "sun", "v": "out"}, {"t": "中都濕地公園", "w": "sun", "v": "out"}, {"t": "旗津燈塔步道", "w": "sun", "v": "out"}, {"t": "中山大學海堤看海", "w": "sun", "v": "out"}, {"t": "壽山忠烈祠看夜景", "w": "sun", "v": "out"}, {"t": "鳳儀書院", "w": "sun", "v": "out"}, {"t": "大東文化藝術中心", "w": "sun", "v": "out"}, {"t": "衛武營戶外草坪", "w": "sun", "v": "out"}, {"t": "蓮池潭騎單車", "w": "sun", "v": "out"}, {"t": "駁二看夕陽", "w": "sun", "v": "out"}, {"t": "旗后砲台", "w": "sun", "v": "out"}, {"t": "高雄流行音樂中心海邊", "w": "sun", "v": "out"}, {"t": "凹子底森林公園", "w": "sun", "v": "out"}, {"t": "原生植物園", "w": "sun", "v": "out"}, {"t": "左營舊城牆", "w": "sun", "v": "out"}, {"t": "橋頭糖廠騎車", "w": "sun", "v": "out"}, {"t": "岡山之眼天空步道", "w": "sun", "v": "out"}, {"t": "阿公店水庫", "w": "sun", "v": "out"}, {"t": "崗山仔登山步道", "w": "sun", "v": "out"}, {"t": "大社觀音山", "w": "sun", "v": "out"}, {"t": "半屏山步道", "w": "sun", "v": "out"}, {"t": "小港淨園農場看飛機", "w": "sun", "v": "out"}, {"t": "紅毛港文化園區", "w": "sun", "v": "out"}, {"t": "旗津貝殼館海邊", "w": "sun", "v": "out"}, {"t": "援中港濕地", "w": "sun", "v": "out"}, {"t": "愛河之心夜景", "w": "sun", "v": "out"}, {"t": "墾丁海邊一日來回", "w": "sun", "v": "out"}, {"t": "台南一日吃透透", "w": "sun", "v": "out"}, {"t": "台東一日來回", "w": "sun", "v": "out"}, {"t": "小琉球一日浮潛", "w": "sun", "v": "out"}, {"t": "嘉義阿里山一日", "w": "sun", "v": "out"}, {"t": "屏東海生館一日", "w": "sun", "v": "out"}, {"t": "恆春古城一日", "w": "sun", "v": "out"}, {"t": "佛光山一日", "w": "sun", "v": "out"}, {"t": "美濃旗山一日", "w": "sun", "v": "out"}, {"t": "台南安平一日", "w": "sun", "v": "out"}, {"t": "四重溪溫泉一日", "w": "sun", "v": "out"}, {"t": "雙流森林一日", "w": "sun", "v": "out"}, {"t": "大鵬灣一日", "w": "sun", "v": "out"}, {"t": "東港漁港一日", "w": "sun", "v": "out"}, {"t": "關子嶺溫泉一日", "w": "sun", "v": "out"}, {"t": "曾文水庫一日", "w": "sun", "v": "out"}, {"t": "奮起湖一日", "w": "sun", "v": "out"}, {"t": "鵝鑾鼻墾丁一日", "w": "sun", "v": "out"}, {"t": "霧台部落一日", "w": "sun", "v": "out"}, {"t": "池上花蓮一日", "w": "sun", "v": "out"}, {"t": "瑞豐夜市", "w": "any", "v": "out"}, {"t": "六合夜市", "w": "any", "v": "out"}, {"t": "凱旋國際觀光夜市", "w": "any", "v": "out"}, {"t": "光華夜市", "w": "any", "v": "out"}, {"t": "南華路商圈逛街", "w": "any", "v": "out"}, {"t": "鹽埕埔老街覓食", "w": "any", "v": "out"}, {"t": "旗津海產街", "w": "any", "v": "out"}, {"t": "鳳山中華街夜市", "w": "any", "v": "out"}, {"t": "興達港觀光漁市", "w": "any", "v": "out"}, {"t": "寶來溫泉", "w": "any", "v": "out"}, {"t": "美濃老街吃粄條", "w": "any", "v": "out"}, {"t": "岡山籃籗會市集", "w": "any", "v": "out"}, {"t": "三民街黃昏市場", "w": "any", "v": "out"}, {"t": "果貿社區拍照", "w": "any", "v": "out"}, {"t": "哈瑪星散步覓食", "w": "any", "v": "out"}, {"t": "駁二藝術特區看展", "w": "any", "v": "in"}, {"t": "高雄市立美術館", "w": "any", "v": "in"}, {"t": "國立科學工藝博物館", "w": "any", "v": "in"}, {"t": "衛武營看一場表演", "w": "any", "v": "in"}, {"t": "大東藝術中心看展", "w": "any", "v": "in"}, {"t": "高雄市立圖書館總館", "w": "any", "v": "in"}, {"t": "棧貳庫 KW2", "w": "any", "v": "in"}, {"t": "MLD 台鋁影城加市集", "w": "any", "v": "in"}, {"t": "大魯閣草衙道", "w": "any", "v": "in"}, {"t": "義享天地逛街", "w": "any", "v": "in"}, {"t": "夢時代逛街", "w": "any", "v": "in"}, {"t": "漢神巨蛋", "w": "any", "v": "in"}, {"t": "SKM Park outlets", "w": "any", "v": "in"}, {"t": "KTV 唱歌", "w": "any", "v": "in"}, {"t": "桌遊店玩一下午", "w": "any", "v": "in"}, {"t": "密室逃脫", "w": "any", "v": "in"}, {"t": "保齡球", "w": "any", "v": "in"}, {"t": "撞球館", "w": "any", "v": "in"}, {"t": "看一部電影", "w": "any", "v": "in"}, {"t": "live house 聽團", "w": "any", "v": "in"}, {"t": "駁二電影館", "w": "any", "v": "in"}, {"t": "高雄電影館", "w": "any", "v": "in"}, {"t": "金馬賓館當代美術館", "w": "any", "v": "in"}, {"t": "內惟藝術中心", "w": "any", "v": "in"}, {"t": "愛河旁咖啡廳跑店", "w": "any", "v": "in"}, {"t": "鹽埕第一公有市場咖啡", "w": "any", "v": "in"}, {"t": "美術館特區咖啡店", "w": "any", "v": "in"}, {"t": "室內攀岩館", "w": "any", "v": "in"}, {"t": "陶藝體驗課", "w": "any", "v": "in"}, {"t": "手沖咖啡課", "w": "any", "v": "in"}, {"t": "一起做一道沒做過的甜點", "w": "any", "v": "in"}, {"t": "新食物試吃之夜", "w": "any", "v": "in"}, {"t": "華麗速食盛宴（盛裝吃速食）", "w": "any", "v": "in"}, {"t": "自製莎莎醬配調酒", "w": "any", "v": "in"}, {"t": "在家調酒實驗", "w": "any", "v": "in"}, {"t": "停電燭光之夜", "w": "any", "v": "in"}, {"t": "在客廳蓋枕頭堡", "w": "any", "v": "in"}, {"t": "童年電影馬拉松", "w": "any", "v": "in"}, {"t": "做一件情侶 T 恤", "w": "any", "v": "in"}, {"t": "接力畫一幅畫", "w": "any", "v": "in"}, {"t": "兩句接龍寫一個故事", "w": "any", "v": "in"}, {"t": "列人生願望清單互相分享", "w": "any", "v": "in"}, {"t": "規劃一趟完美假期", "w": "any", "v": "in"}, {"t": "學一個近距離魔術", "w": "any", "v": "in"}, {"t": "用 Canva 做假電影海報", "w": "any", "v": "in"}, {"t": "一起破關雙人遊戲", "w": "any", "v": "in"}, {"t": "做專屬你們的情侶節日", "w": "any", "v": "in"}, {"t": "外國主題之夜", "w": "any", "v": "in"}, {"t": "在家煮一桌菜", "w": "any", "v": "in"}, {"t": "一起烘焙", "w": "any", "v": "in"}, {"t": "玩一千片拼圖", "w": "any", "v": "in"}, {"t": "翻老照片互相編故事", "w": "any", "v": "in"}, {"t": "一起寫一首歌", "w": "any", "v": "in"}, {"t": "互相畫對方的肖像", "w": "any", "v": "in"}, {"t": "跟著影片一起運動", "w": "any", "v": "in"}, {"t": "在家泡腳放鬆夜", "w": "any", "v": "in"}, {"t": "一起做一頓早午餐", "w": "any", "v": "in"}, {"t": "規劃存錢旅行計畫", "w": "any", "v": "in"}, {"t": "看紀錄片之夜", "w": "any", "v": "in"}, {"t": "一起學一道家鄉菜", "w": "any", "v": "in"}, {"t": "卡丁車競速", "w": "sun", "v": "out"}, {"t": "漆彈對戰", "w": "any", "v": "out"}, {"t": "雷射槍戰", "w": "any", "v": "in"}, {"t": "射箭場", "w": "any", "v": "in"}, {"t": "擲斧體驗", "w": "any", "v": "in"}, {"t": "水槍水球大戰", "w": "sun", "v": "out"}, {"t": "舞蹈體驗課", "w": "any", "v": "in"}, {"t": "試上一堂健身課", "w": "any", "v": "in"}, {"t": "旗津 SUP 立槳", "w": "sun", "v": "out"}, {"t": "獨木舟體驗", "w": "sun", "v": "out"}, {"t": "墾丁浮潛", "w": "sun", "v": "out"}, {"t": "墾丁衝浪課", "w": "sun", "v": "out"}, {"t": "無人機海邊試飛", "w": "sun", "v": "out"}, {"t": "攀樹體驗", "w": "sun", "v": "out"}, {"t": "重機沿海一段", "w": "sun", "v": "out"}, {"t": "飛行傘體驗", "w": "sun", "v": "out"}, {"t": "情侶按摩", "w": "any", "v": "in"}, {"t": "包場看一部電影", "w": "any", "v": "in"}, {"t": "雙人下午茶", "w": "any", "v": "in"}, {"t": "挑一家沒吃過的異國餐廳", "w": "any", "v": "in"}, {"t": "輪流放彼此最愛的歌", "w": "any", "v": "in"}, {"t": "自己煮一頓燭光晚餐", "w": "any", "v": "in"}, {"t": "旗津沙灘看星", "w": "sun", "v": "out"}, {"t": "扮陌生人在酒吧重新搭訕對方", "w": "any", "v": "in"}, {"t": "駁二河岸夜遊", "w": "sun", "v": "out"}, {"t": "西子灣堤防夜聊", "w": "sun", "v": "out"}];
+const DINNERS = ["三媽臭臭鍋", "臭豆腐", "大埔鐵板燒", "小籠包", "麻辣鍋", "海底撈", "蚵仔煎", "蚵仔麵線", "夜市牛排", "肯德基", "麥當勞", "摩斯漢堡", "滷肉飯", "雞肉飯", "池上便當", "排骨便當", "雞腿便當", "牛肉麵", "餛飩麵", "刀削麵", "鍋燒意麵", "炒飯", "炒麵", "燴飯", "咖哩飯", "火雞肉飯", "爌肉飯", "滷味", "鹽酥雞", "鹹水雞", "雞排", "水煎包", "鍋貼", "煎餃", "生煎包", "蔥油餅", "蛋餅", "壽司", "生魚片", "日式定食", "親子丼", "拉麵", "烏龍麵", "天婦羅", "串燒居酒屋", "燒肉", "韓式烤肉", "部隊鍋", "石鍋拌飯", "泰式料理", "打拋豬飯", "綠咖哩", "越南河粉", "義大利麵", "披薩", "燉飯", "美式漢堡", "潛艇堡", "涮涮鍋", "薑母鴨", "羊肉爐", "麻油雞", "藥燉排骨", "酸菜白肉鍋", "肉羹", "魷魚羹", "土魠魚羹", "生炒花枝", "海產攤", "熱炒一百", "客家小炒", "三杯雞", "宮保雞丁", "麻婆豆腐", "糖醋排骨", "烤鴨", "港式燒臘", "叉燒飯", "廣東粥", "清粥小菜", "港式飲茶", "自助餐", "素食自助餐", "鐵板麵", "大腸包小腸", "潤餅", "肉圓", "四神湯", "筒仔米糕", "油飯", "擔仔麵", "米粉湯", "貢丸湯", "牛肉湯", "虱目魚粥", "咖哩烏龍", "鼎泰豐", "沙茶羊肉", "薑絲大腸", "白菜滷", "海產粥", "皮蛋瘦肉粥", "廣式煲仔飯", "臘味飯", "鴨肉飯", "鵝肉飯", "肉燥飯", "香菇赤肉羹飯", "咖哩豬排飯", "日式炸雞定食", "鰻魚飯", "海鮮丼", "牛丼", "海南雞飯", "椰漿飯", "左宗棠雞飯", "鱔魚意麵", "米苔目", "客家粄條", "麵疙瘩", "大腸麵線", "麵線糊", "炸醬麵", "麻醬麵", "擔擔麵", "星洲炒米粉", "叻沙", "越式乾拌麵", "炒泡麵", "鍋燒烏龍", "燒酒雞", "香菇雞湯", "蛤蜊雞湯", "竹筍排骨湯", "苦瓜排骨湯", "酸辣湯餃", "佛跳牆", "起司年糕鍋", "三杯中卷", "椒鹽中卷", "魚香肉絲", "回鍋肉", "蒼蠅頭", "塔香茄子", "菜脯蛋", "番茄炒蛋", "鳳梨蝦球", "清蒸魚", "糖醋魚", "東坡肉", "梅干扣肉", "蒜泥白肉", "胡椒餅", "蔥抓餅", "蚵嗲", "刈包", "碗粿", "蘿蔔糕", "關東煮", "甜不辣", "淡水阿給", "韓式炸雞", "辣炒年糕", "沙威瑪", "墨西哥捲餅", "塔可餅", "雙層牛肉堡", "炸雞桶", "牛肉燴飯", "咖哩雞飯", "泡菜鍋", "壽喜燒", "牛排館", "鐵板燒", "焗烤飯", "焗烤義大利麵", "千層麵", "墨魚麵", "青醬義大利麵", "白醬義大利麵", "拿坡里義大利麵", "牛肉漢堡排", "豬排丼", "唐揚雞定食", "天丼", "握壽司", "手卷", "稻荷壽司", "散壽司", "茶碗蒸", "味噌湯定食", "泰式打拋飯", "綠咖哩雞", "泰式炒河粉", "月亮蝦餅", "涼拌青木瓜", "越式春捲", "海鮮煎餅", "韓式拌飯", "辣牛肉湯飯"];
+const ADULT_Q = ["你最喜歡用什麼方式被挑起慾望？", "高潮的時候，你喜歡安靜，還是放開聲音？", "做的時候，你喜歡慢磨，還是用力的節奏？", "一次裡你想要幾次高潮，還是更在乎過程？", "你喜歡先讓對方高潮，還是想一起？", "哪種體位最容易讓你高潮？", "你喜歡正面看著對方，還是從後面來？", "你比較享受被溫柔疼愛，還是被狠一點地要？", "早晨的慾望和深夜的慾望，對你哪個更強？", "你喜歡計畫好的，還是被突然壓上來的衝動？", "你比較喜歡為對方口，還是被口？", "被口的時候，你喜歡什麼樣的力道和節奏？", "只用手，你喜歡被怎麼愛撫到高潮？", "有沒有一種觸碰方式，能讓你最快有感覺？", "一邊用手、一邊親你其他地方，你會喜歡嗎？", "你喜歡被慢慢挑逗到受不了，還是直接一點？", "你想不想試只用口和手、不進入的一晚？", "在高潮邊緣被停下來、再被推上去，你受得了嗎？", "你最想試、卻還沒試過的體位是哪個？", "你喜歡在上面主導，還是在下面被帶？", "站著、坐著、躺著，哪種讓你最有感覺？", "你想試試在鏡子前看著我們嗎？", "你喜歡綿長的一場，還是激烈快速的一次？", "換地點（沙發、淋浴間、地板）會讓你更興奮嗎？", "你想不想試被抱起來的那種？", "你喜歡中途換姿勢，還是一個節奏到最後？", "你藏最深的一個性幻想是什麼？", "在彼此同意下，你想被強勢一點地對待過嗎？", "你會幻想在有一點被發現風險的地方做嗎？", "一方被矇眼、完全交給對方擺布，你想試嗎？", "你偷偷想過哪個角色扮演的劇本？", "特定的穿著或制服，會挑起你的興致嗎？", "你想不想拍幾張、或錄一段只有我們看的？", "被綁起來、動不了的感覺，你會幻想嗎？", "有沒有一個情境，光想就會讓你有反應？", "如果今晚你能對我下任何命令，你會要我做什麼？", "支配與被支配，你比較被哪一邊吸引？", "打屁股對你是加分嗎？你想要多重的力道？", "你想試被綁住手腳的束縛嗎？", "你喜歡下命令，還是被命令？", "「求饒」或「讓對方求你」這種拉扯，你享受嗎？", "拉頭髮、輕掐脖子、咬，這些你想試哪個？", "一段「主奴」設定的時間，你想當哪一邊？", "懲罰與獎勵的遊戲，你想怎麼玩？", "被當成「只屬於我」的佔有感，你喜歡嗎？", "被支配的時候，什麼最讓你興奮？", "有沒有一樣情趣道具，你一直想一起試？", "你想試震動類的小玩具嗎？想用在哪？", "束縛道具（手銬、眼罩、繩）你對哪個最好奇？", "潤滑或按摩油那種滑順的觸感，你想試嗎？", "你想一起看情慾影片、邊看邊做嗎？", "情趣內衣，你想穿給我看，還是想看我穿？", "冰塊、溫熱、羽毛這類感官玩法，你想試哪個？", "想不想設一個「我們的抽屜」放這些？", "過程中，你最喜歡聽到我說什麼？", "你喜歡被稱讚身體，還是聽更直接露骨的話？", "把你想要的說出口，你會興奮還是害羞？", "有沒有一句很色的話，你其實想聽我對你說？", "你喜歡彼此安靜，還是都很有聲音？", "被要求「說出你想要什麼」，會讓你更興奮嗎？", "你想不想傳一些大膽的訊息或照片給對方？", "哪一種言語上的調情最能撩到你？", "有沒有什麼是你絕對不要、希望我永遠別碰的？", "我們的安全詞要用哪個字？", "嘗試新東西前，你希望我們先講好哪些事？", "想喊停的時候，你會用什麼方式讓我知道？", "說出真實慾望後，你會怕被評價嗎？我想讓你安心。", "結束後，你最想要的擁抱或照顧是什麼？", "有沒有哪次你其實不舒服、卻沒說？我想知道。", "此刻，你最想要我為你做的一件事是什麼？", "你想看我穿哪種風格的情趣內衣？蕾絲、皮革，還是純真款？", "有沒有一種顏色或款式，穿在對方身上會讓你瞬間失守？", "你喜歡若隱若現的，還是更大膽外露的？", "比起全脫，留著薄薄一件，哪種更挑起你？", "高跟鞋、絲襪、吊帶襪，哪個對你最有殺傷力？", "你想不想我們各挑一套，約一個晚上穿給對方看？", "你想要我穿著它從頭到尾，還是中途幫你脫下來？", "你自己想不想穿一套，讓我慢慢解開？", "你想不想一起上網或去店裡，挑一套屬於我們的？", "想不想試試只穿一件襯衫、或我的衣服那種感覺？", "你最想試的一個角色扮演劇本是什麼？", "扮演時，你想當主導的角色，還是被擺布的那個？", "陌生人初遇、在酒吧被搭訕的劇本，你想演嗎？", "上司與下屬、醫生與病人這類設定，哪個吸引你？", "制服類（護士、秘書、學生風等），你想看我扮哪一種？", "你想試試「假裝是第一次」那種青澀的扮演嗎？", "你喜歡有台詞、有劇情，還是有個身份設定就好？", "主人與寵物、馴服與被馴服，你想當哪一邊？", "在彼此同意下，你想試「被俘虜」那種有張力的劇情嗎？", "有沒有一個影視角色，你想我扮成他或她？", "扮演時，你喜歡全程入戲，還是笑場也沒關係？", "你想不想我們各寫一個劇本，輪流實現？"];
+
+
+
+const DECK = {
+  love: {
+    name: '戀愛',
+    depth: '夏威夷',
+    blurb: '我們在愛裡的樣子',
+    cards: [
+      {q:'喜歡一個人的時候，你會主動靠近，還是習慣等對方先來？', note:'看追求時的主動性。主動的人關係推進快但容易累；被動的人安全卻可能錯過。兩個都被動，關係常停在原地。'},
+      {q:'你表達好感的方式，是直接說出口，還是藏在行動裡？', note:'看愛的語言。語言型重視言語肯定，行動型重視默默付出。錯頻的兩人會一直覺得「對方不夠愛我」。'},
+      {q:'剛在一起時，你會想黏在一起，還是需要保留自己的空間？', note:'看親密與獨立的需求落點。黏度差太多，一方覺得被冷落、一方覺得被綁住。'},
+      {q:'沒有安全感的時候，你會變得更黏，還是悄悄退開？', note:'依附風格的關鍵題。焦慮型會追，逃避型會躲。若一追一躲，吵架會變成惡性循環。'},
+      {q:'吵架之後，你希望對方怎麼對待你？', note:'看修復方式。有人要立刻被哄、有人要先冷靜。知道對方的需求，才不會在和好時又踩雷。'},
+      {q:'什麼樣的舉動，會讓你瞬間覺得「這個人懂我」？', note:'直接問出對方的情感開關。這題的答案就是讓他心動的具體說明書。'},
+      {q:'你在關係裡，是穩定對方的那一方，還是需要被安定的那一方？', note:'看情緒角色分工。兩個都需要被安定時，遇到風浪沒人撐得住；要留意誰在承接誰。'},
+      {q:'你最想在一段感情裡，成為對方的什麼？', note:'看他對自己在愛裡的定位與期待。是想當依靠、夥伴、還是被照顧的人？這決定他會怎麼經營關係。'},
+      {q:'你怎麼分辨自己是「喜歡」，還是「只是被吸引」？', note:'看他的感情成熟度。分得清衝動與真心的人，比較不會把心動當愛情。'},
+      {q:'對你來說，被愛最具體的樣子是什麼？舉一個你會記很久的小細節。', note:'直接問出他的愛之語。他記住的那個小細節，就是讓他感到被愛的鑰匙。'},
+      {q:'你比較容易因為什麼而心動？一個眼神、一句話，還是一件被記住的小事？', note:'看他的心動開關落在哪，知道了就知道怎麼讓他在意你。'},
+      {q:'在關係裡，你最需要對方做到、卻最難開口要求的是什麼？', note:'問出他藏起來的需求。難開口的那件事，往往是他最在乎卻最怕被拒絕的。'},
+      {q:'你欣賞一個人時，通常先被外在吸引，還是先被某種特質打動？', note:'看他重視的是表象還是內在，也透露他選人的順序。'},
+      {q:'喜歡上一個人後，你會先觀察很久，還是憑直覺就投入？', note:'看他投入的節奏。觀察型需要時間累積信任，直覺型熱得快也需要被穩住。'},
+      {q:'你覺得自己在感情裡，最大的優點和最需要被包容的地方各是什麼？', note:'看他的自我覺察。答得出自己的盲點，代表他願意一起經營，而不是只要被包容。'},
+      {q:'收到怎樣的關心，會讓你覺得「被放在心上」，而不只是客套？', note:'幫你分辨他要的是形式還是用心，避免你做了一堆白工。'},
+      {q:'你習慣把情緒說清楚，還是希望對方自己讀懂？', note:'看溝通風格。期待被讀懂的人，遇到直球型容易委屈，這題先講開很重要。'},
+      {q:'你的安全感，比較來自承諾，還是來自日常的穩定？', note:'看他要的是言語保證還是行動累積，餵錯了再多也不夠。'},
+      {q:'你會因為對方哪一種小習慣或細節，而默默加分？', note:'問出他的隱形評分表，這些細節往往比大禮物更打動他。'},
+      {q:'如果對方做錯事但誠懇道歉，你需要多久、需要什麼才能真正放下？', note:'看他的原諒機制與消化時間，避免你以為和好了其實還沒。'},
+      {q:'在感情裡，你比較怕被冷落，還是比較怕被綁住？', note:'依附風格的另一面。怕冷落偏焦慮、怕被綁偏逃避，決定他遇到壓力時往哪走。'},
+      {q:'你理想的「被在乎」，是頻繁的陪伴，還是恰到好處的距離？', note:'看他要的親密濃度，黏度對不上是很多關係的隱形殺手。'},
+      {q:'你會怎麼讓一個你喜歡的人，知道你在乎他？', note:'看他主動付出的方式，也讓你預習他喜歡你時會是什麼樣子。'},
+      {q:'到目前為止，你覺得我哪一點，和你原本想像的不太一樣？', note:'直接邀請他談對你的印象，順便聽出他一直在觀察你哪些地方。'}
+    ]
+  },
+  life: {
+    name: '生活',
+    depth: '馬爾地夫',
+    blurb: '真的住在一起會怎樣',
+    cards: [
+      {q:'假日的理想狀態，是出門跑行程，還是窩在家充電？', note:'看能量補充方式。一個想出門、一個想耍廢，假日會變成拉鋸。重點是能不能各自充電又有交集。'},
+      {q:'家裡的整潔程度，你的底線在哪？', note:'同居最常見的引爆點。乾淨標準差距太大，會天天為了同一件事煩躁。'},
+      {q:'你是把行程排好的人，還是走一步算一步？', note:'看計畫傾向。計畫型遇上隨興型，旅行和日常都容易摩擦，但也可能互補。'},
+      {q:'兩個人的錢，你傾向各自獨立、共同管理、還是混合？', note:'看金錢觀與信任邊界。錢的處理方式沒有對錯，但事先講清楚能避免日後最傷感情的爭執。'},
+      {q:'一個人的獨處時間，對你有多重要？', note:'看親密與喘息的平衡。獨處需求高的人不是不愛你，而是需要空間才能維持狀態。'},
+      {q:'你睡前和起床的習慣，理想中希望另一半怎麼配合？', note:'作息題。日夜顛倒或睡眠習慣衝突，長期會悄悄磨損親密感。'},
+      {q:'生病或低潮的時候，你希望被照顧，還是希望被留空間？', note:'看脆弱時的需求。照顧錯方式反而會讓對方更難受，這題先講好，將來少踩雷。'},
+      {q:'家事分工，你心裡理想的版本是什麼樣子？', note:'看公平感與期待。家事分配不均是隱形殺手；先攤開期待，才知道落差在哪。'},
+      {q:'廚房誰負責？你是想下廚的人，還是想負責洗碗的人？', note:'用一個具體分工，看他對家庭協作的想像，也順便聊聊一起吃飯的畫面。'},
+      {q:'你對「家」的想像，是整齊有秩序，還是溫暖一點亂也沒關係？', note:'看他對居家秩序的標準，差太多的兩人會天天為了同一件事煩。'},
+      {q:'早晨的你，是需要時間慢慢醒，還是一起床就能聊天？', note:'看晨間節奏。一個要安靜、一個想互動，同住後最容易在早上摩擦。'},
+      {q:'採買日用品時，你是列清單按表操課，還是想到才買？', note:'看他做事的條理程度，也預告你們一起生活的步調合不合。'},
+      {q:'你能接受另一半哪些生活習慣，又對哪一種完全沒辦法？', note:'直接問出他的容忍邊界，把雷區先標出來最實際。'},
+      {q:'假期你偏好排好的行程，還是留白讓它自然發生？', note:'計畫型與隨興型的旅行觀，常在第一次出遊就見真章。'},
+      {q:'你理財的風格，是仔細記帳，還是大概有數就好？', note:'看金錢管理的習慣，這會直接影響你們的共同決定與安全感。'},
+      {q:'家裡的決定，大到搬家小到買鍋子，你習慣一起討論，還是各自負責不同領域？', note:'看他對共同決策的期待，是凡事商量還是分工授權。'},
+      {q:'一天結束後，你需要多少「不被打擾」的時間才會放鬆？', note:'看他的回血方式，獨處需求高不代表不愛你，只是需要空間。'},
+      {q:'你對另一半的工作時間和應酬，能接受的界線在哪？', note:'看他對陪伴與信任的底線，避免日後因為加班應酬累積誤會。'},
+      {q:'意見不同時，你要當下講清楚，還是需要時間整理再談？', note:'看衝突節奏。逼一個需要冷靜的人當下說，只會把事情弄僵。'},
+      {q:'你心裡「被照顧得剛剛好」的感覺，是什麼樣子？', note:'問出他要的照顧濃度，太多會悶、太少會冷，剛好最難也最重要。'},
+      {q:'如果同住，哪些事你希望有明確分工，哪些寧願彈性處理？', note:'看他對秩序與彈性的拿捏，這決定同居的摩擦會出現在哪。'},
+      {q:'你怎麼看待把另一半介紹進自己原本的生活圈？', note:'看他願不願意把你放進他的世界，這是關係深度的訊號。'},
+      {q:'把生活整理得有條理，對你是放鬆，還是壓力？', note:'看他和「秩序」的關係，有人靠整理紓壓，有人被整理綁架。'},
+      {q:'你理想中的週末早晨，畫面是什麼樣子？', note:'一個溫柔的具體題，從他描述的畫面，看出他嚮往的日常與你的位置。'}
+    ]
+  },
+  value: {
+    name: '價值觀',
+    depth: '貝加爾湖',
+    blurb: '我們的組成',
+    cards: [
+      {q:'對你來說，「人生過得好」的標準是什麼？', note:'看人生底層的價值排序。兩人對「好生活」的定義若南轅北轍，走著走著會發現要去的不是同個方向。'},
+      {q:'工作和生活，你現階段怎麼排優先順序？', note:'看重心。一方拚事業、一方重生活，需要看彼此能不能接受對方的選擇。'},
+      {q:'你怎麼看待和家人之間的距離與責任？', note:'看原生家庭的牽引力。對家庭的責任感差距大，婚後常變成兩家人的拉扯。'},
+      {q:'對你而言，「承諾」代表什麼？', note:'看他對長期關係的重量感。把承諾看得多重，往往決定他遇到困難時會留還是會走。'},
+      {q:'有沒有一件事，是你絕對不會妥協的價值？', note:'直接問出對方的核心底線。這題的答案是判斷你們合不合的關鍵分水嶺。'},
+      {q:'你覺得金錢應該拿來換取什麼？安全感、體驗，還是自由？', note:'看金錢的深層意義。存錢派與體驗派的消費觀，會反映在每一次的共同決定上。'},
+      {q:'你希望另一半在你的人生目標裡，扮演什麼角色？', note:'看他要的是夥伴、後盾、還是各自獨立。這決定你在他的未來藍圖裡站在哪。'},
+      {q:'十年後，你最不希望自己變成什麼樣的人？', note:'從反面看價值觀。他最抗拒的樣子，藏著他最在乎的東西。'},
+      {q:'做重要決定時，你比較相信理性分析，還是內心的感覺？', note:'看他的決策模式，也預告你們遇到大事時會怎麼一起拿主意。'},
+      {q:'誠實和體貼如果衝突，你會選哪一個？', note:'看他在真話與溫柔之間的偏好，這會反映在他怎麼對你說話。'},
+      {q:'你欣賞一個人，最看重能力、人品，還是價值觀一致？', note:'看他選人的核心標準，也順便聽聽他看上你的可能是哪一塊。'},
+      {q:'你怎麼定義「成熟」？你覺得自己算成熟嗎？', note:'看他的自我要求與自我認識，答得誠實的人通常比較踏實。'},
+      {q:'你願意為所愛的人改變到什麼程度？哪些是底線？', note:'看他在付出與自我之間的平衡，完全不讓或完全犧牲都是警訊。'},
+      {q:'把一件事做到位，和把很多事做完，哪個對你更重要？', note:'看他重質還是重量，這會反映在他對生活與關係的態度上。'},
+      {q:'你怎麼看待「上進」這件事？是必要，還是看人？', note:'看他對成長的價值觀，兩人對上進的期待差太多會慢慢消磨彼此。'},
+      {q:'遇到價值觀差很多的人，你會想理解，還是本能地保持距離？', note:'看他的包容度與好奇心，這影響你們能不能容下彼此的不同。'},
+      {q:'你心裡「理想的另一半」，最重要的三個特質是什麼？', note:'直接問出他的擇偶座標，順便對照你符合幾項。'},
+      {q:'你覺得一段關係要長久，靠的是相似，還是互補？', note:'看他對關係的底層理論，也透露他希望你們是同類還是互補。'},
+      {q:'對你來說，堅持原則重要，還是看情況彈性重要？', note:'看他是原則派還是彈性派，這在共同生活裡會不斷被考驗。'},
+      {q:'你怎麼拿捏「面子」和「把話說清楚」之間的取捨？', note:'看他重面子還是重溝通，這直接影響你們吵架時能不能談開。'},
+      {q:'你欣賞的生活方式，是穩定踏實，還是不斷挑戰新事物？', note:'看他要的人生節奏，安穩派與冒險派得先確認彼此能不能同行。'},
+      {q:'你覺得自己最珍貴、卻常被忽略的特質是什麼？', note:'溫柔地讓他談自己，被看見這一面，往往是他最渴望的。'},
+      {q:'意見不同時，你比較在乎「誰對」，還是「怎麼一起解決」？', note:'看他吵架的心態，在乎輸贏還是在乎關係，差很多。'},
+      {q:'有沒有一個你一直默默堅持、別人卻覺得小題大作的原則？', note:'看他不肯妥協的小堅持，那裡藏著他最真實的價值觀。'}
+    ]
+  },
+  scene: {
+    name: '情境',
+    depth: '大堡礁',
+    blurb: '真實的選擇題',
+    cards: [
+      {q:'如果有個很好的機會要去外地一兩年，但會分隔兩地，你會怎麼想？', note:'看關係與自我發展的權衡。會怎麼在「我的前途」和「我們」之間拿捏，洩漏他把關係放多前面。'},
+      {q:'兩個人都累爆的一天回到家，你希望我們怎麼度過那個晚上？', note:'看疲憊時的相處模式。低電量狀態下的需求，比熱戀時更接近真實的日常。'},
+      {q:'如果我們意見嚴重不合，你習慣當下解決，還是先各自冷靜？', note:'看衝突風格。當下解決派遇上冷靜派，會誤以為對方在逃避或在逼迫。先知道節奏差異很重要。'},
+      {q:'假設要在「你的理想生活」和「遷就對方」之間取捨，你會怎麼拿捏？', note:'看自我與關係的邊界。完全犧牲自己或完全不讓步，都是危險訊號；健康的是有彈性的平衡。'},
+      {q:'如果有一天熱戀感淡了，你覺得是什麼能讓兩個人繼續走下去？', note:'看他對長期關係的成熟度。答得出激情之外的東西（承諾、習慣、共同目標），代表他懂得愛會變質。'},
+      {q:'若你的家人和我處不來，你會怎麼面對這個夾在中間的位置？', note:'看他會不會把你獨自留在風口。處理婆媳/家庭夾層的態度，常是關係能不能撐住的試金石。'},
+      {q:'如果我犯了一個讓你很受傷、但不是不能原諒的錯，你會怎麼處理？', note:'看原諒與修復的能力。是會溝通修復、冷戰、還是翻舊帳？這預告了你們未來怎麼度過低谷。'},
+      {q:'當另一半的夢想需要你犧牲一部分自己的計畫，你願意到什麼程度？', note:'看付出的上限與條件。願意支持到什麼份上，又在哪裡會喊停，畫出他在關係裡的真實邊界。'},
+      {q:'如果有一個對你很有好感的人出現，而你正在這段關係裡，你會怎麼做？', note:'看忠誠觀與誘惑下的選擇。重點不是有沒有人喜歡他，而是他怎麼處理界線。'},
+      {q:'錢不夠用的那個月，你希望我們怎麼一起面對？', note:'看壓力下的團隊感。是「我們一起想辦法」還是各自為政，預示了你們是不是真的一隊。'},
+      {q:'如果我們對「要不要小孩」想法不同，你覺得這該怎麼談？', note:'看人生重大分歧的處理。生育觀是少數無法各退一步的議題，越早攤開越好。'},
+      {q:'當我陷入低潮、變得很難相處的時候，你會怎麼陪我？', note:'看愛在最不可愛時的樣子。會不會在你最糟的狀態留下來，是關係深度的真正考驗。'},
+      {q:'如果我答應你的事一再做不到，但每次都有理由，你會怎麼處理？', note:'看他面對失望的方式，是溝通、忍耐還是默默扣分。'},
+      {q:'如果你發現我對某件事的標準比你低很多，你會直接說，還是默默承受？', note:'看他怎麼處理落差，悶著不說的人往往累積到爆才一次算總帳。'},
+      {q:'同居後你發現我有個你受不了的小毛病，你會怎麼開口？', note:'看他提出不滿的方式，溫柔直說還是冷處理，預告你們的相處品質。'},
+      {q:'你工作遇到大挫折時，希望我給建議，還是只要安靜陪著？', note:'看他低潮時要的支持型態，給錯了反而幫倒忙。'},
+      {q:'如果我的家人對你太熱情、邊界感不足，你希望我怎麼幫你擋？', note:'看他對界線的需求，也測你願不願意在家庭裡保護他。'},
+      {q:'你需要我，而我正忙到焦頭爛額時，你希望我怎麼回應你？', note:'看他在被冷落與體諒之間的拿捏，避免你們在忙碌時互相受傷。'},
+      {q:'如果一個人的事業要起飛、另一個得退一步配合，你覺得該怎麼決定？', note:'看他對犧牲與公平的想法，這是長期關係遲早要面對的難題。'},
+      {q:'如果發現我們在某件大事上一直沒共識，你會先處理，還是先擱著？', note:'看他面對分歧的策略，逃避型容易把問題愈拖愈大。'},
+      {q:'如果我做了一桌菜但其實不太好吃，你會老實說，還是先吃完再說？', note:'用一個小情境看他的誠實與體貼怎麼拿捏，輕鬆但很準。'},
+      {q:'心裡有不滿時，你會找時間好好講，還是等我自己發現？', note:'看他的溝通主動性，期待對方「自己懂」常是誤會的開端。'},
+      {q:'約好的計畫被我臨時取消，你會體諒，還是需要我做點補償？', note:'看他對承諾與彈性的標準，也讓你知道失約時該怎麼修補。'},
+      {q:'如果有一天你覺得自己付出比較多，你會說出來，還是默默調整？', note:'看他怎麼處理付出失衡，默默吞下的人最後容易心累退場。'}
+    ]
+  },
+  us: {
+    name: '我們',
+    depth: '愛琴海',
+    blurb: '想像未來',
+    cards: [
+      {q:'你理想中的兩個人，是越來越像，還是各自精彩再交會？', note:'看親密的想像。融合型與獨立型對「我們」的期待不同，需要看彼此能不能接受對方的距離感。'},
+      {q:'到現在為止，你會想像我在你的生活裡，是什麼角色？', note:'直接探對方此刻把你放在哪。答案的具體程度，透露他想得有多認真。'},
+      {q:'一段關係裡，哪些事對你是底線、不能妥協的？', note:'看紅線在哪。提早知道彼此的不可踩之處，是長久關係最實際的保險。'},
+      {q:'你希望我們五年後，過著什麼樣的日子？', note:'看未來藍圖能不能對上。五年後的畫面若完全沒交集，現在的甜蜜也難掩方向不同。'},
+      {q:'如果今晚是我們的起點，你希望未來回頭看，會怎麼形容此刻？', note:'看他怎麼為「我們」定錨。願意鄭重看待這個當下，本身就是一種承諾的姿態。'},
+      {q:'你心裡「我們很適合」的證據，會是哪些具體的瞬間？', note:'看他用什麼判斷適不適合，那些瞬間就是他重視的相處品質。'},
+      {q:'你希望我們之間，有哪些只屬於彼此的習慣或默契？', note:'看他對親密儀式的嚮往，這些小默契是關係的黏著劑。'},
+      {q:'你想像中我們一起生活的城市和房子，是什麼樣子？', note:'把未來具象化，看他有沒有真的把你放進那個畫面。'},
+      {q:'你覺得我們最可能因為什麼吵架？又會因為什麼和好？', note:'看他對你們衝突點的觀察，也看他相不相信你們和得回來。'},
+      {q:'如果要訂一個共同目標，你想先一起完成什麼？', note:'看他願意和你並肩做什麼，共同目標是「我們感」的引擎。'},
+      {q:'你希望我們在彼此家人朋友眼中，是什麼樣的一對？', note:'看他在意的外在形象，也透露他想對外怎麼定位你們。'},
+      {q:'你想要的相處節奏，是天天黏在一起，還是各自忙再好好相聚？', note:'看他要的親密頻率，節奏對得上，關係才不會一方累一方空。'},
+      {q:'你覺得我哪些特質，會在長期相處裡越來越加分？', note:'讓他說出他看好你的地方，這些是他願意走長遠的理由。'},
+      {q:'遇到困難時，你希望是誰先伸手，還是輪流撐住對方？', note:'看他對患難分工的想像，是想被靠、想當靠山，還是想輪流。'},
+      {q:'我們各自都有理想要追，你覺得怎麼安排才不會委屈任何一方？', note:'看他怎麼平衡兩個人的夢想，這是雙強組合最關鍵的智慧。'},
+      {q:'十年後回頭看現在，你會最感謝彼此的哪件事？', note:'把時間拉遠，看他覺得你們此刻最珍貴的是什麼。'},
+      {q:'你希望未來的我，繼續保有現在的哪一面？', note:'聽他最珍惜你的哪一部分，那是他真正被吸引的核心。'},
+      {q:'對你來說，「我們是一隊」最具體的表現是什麼？', note:'看他心中的團隊感長什麼樣，是並肩、分工，還是無條件相挺。'},
+      {q:'你願意和我一起養成哪個好習慣，或一起改掉哪個壞習慣？', note:'看他願不願意為了你們一起成長，共同改變是承諾的行動版。'},
+      {q:'在你心裡，怎樣才算把一段關係「經營得好」？', note:'看他對好關係的定義，也對照你們現在差在哪裡。'},
+      {q:'你希望我們之間，哪些話永遠都能坦白說？', note:'看他對坦誠的重視程度，能說真話的關係才走得遠。'},
+      {q:'如果用一個畫面代表我們的未來，你腦中浮現什麼？', note:'用一個意象，捕捉他對你們最深層、最直覺的想像。'},
+      {q:'你覺得我們最該一起守護的，是什麼？', note:'看他認為你們關係裡最珍貴、最該保護的核心是什麼。'},
+      {q:'走到最後，你希望別人怎麼形容我們這段關係？', note:'看他心裡你們的理想結局，那是他願意努力的方向。'}
+    ]
+  },
+  macro: {
+    name: '宏觀議題',
+    depth: '白令海峽',
+    blurb: '我們怎麼看世界',
+    cards: [
+      {q:'面對像以巴衝突這種複雜又長期的國際問題，你習慣怎麼去理解它？會特地看不同立場的說法嗎？', note:'看他面對複雜議題的態度，願意聽多方說法的人，通常思考也比較有彈性。'},
+      {q:'這幾年的國際局勢，例如美中之間的競爭，你會關注嗎？你怎麼看這種大國角力？', note:'看他對世界的關注度與分析角度，不必有標準答案，重點是怎麼想。'},
+      {q:'你怎麼看台灣現在在國際上的處境？這件事會影響你的生活選擇嗎？', note:'看他把大環境和個人生活連結的程度，也透露他的不安與盼望。'},
+      {q:'你對台灣和對岸之間的關係，抱持什麼樣的心情？', note:'看他面對敏感議題時的情緒與立場，重點是理解而非評判。'},
+      {q:'你會擔心自己的專業有一天被 AI 取代嗎？你打算怎麼面對這種變化？', note:'看他對未來的危機感與應變心態，是焦慮、樂觀，還是主動準備。'},
+      {q:'你能和政治立場跟你差很多的人當好朋友嗎？對你來說，界線會在哪裡？', note:'看他的包容度，以及他心中「可以不同」和「不能接受」的分界。'},
+      {q:'你怎麼看死刑這個議題？你覺得台灣社會準備好好好討論它了嗎？', note:'看他面對爭議題的思辨方式，能談灰色地帶的人通常更成熟。'},
+      {q:'看到不公平的社會新聞時，你通常會有什麼反應？會放在心上很久嗎？', note:'看他的正義感與同理心，也看這些情緒會不會影響他很久。'},
+      {q:'改善治安，你比較相信嚴刑峻法，還是從教育和制度根本著手？或者兩者都需要？', note:'看他偏向結果導向還是根本解決，這反映他看問題的層次。'},
+      {q:'當各方說法差很多、又難查證時，你會怎麼判斷一則國際新聞該不該相信？', note:'看他的媒體識讀與獨立思考能力，這比立場本身更重要。'},
+      {q:'面對遠方發生的人權議題，你覺得一個普通人能做什麼，或該做什麼嗎？', note:'看他的世界公民意識，以及把關心化為行動的傾向。'},
+      {q:'像花東交通建設這種「發展與環境」拉扯的議題，你會怎麼權衡？', note:'看他怎麼在發展與保育、效率與公義之間取捨。'},
+      {q:'你覺得台灣社會現在最需要面對的問題是什麼？', note:'看他真正關心的公共議題，那往往和他的生活經驗有關。'},
+      {q:'你有想過離開台灣、到別的地方生活嗎？什麼會讓你想走，什麼會讓你想留？', note:'看他對土地的情感與人生規劃，也順便聊到你們未來可能的落腳處。'},
+      {q:'旅遊時，你會把政治或安全因素考慮進去嗎？有沒有哪裡是你會猶豫的？', note:'看他的風險意識與價值取捨，輕鬆切入沉重議題。'},
+      {q:'你覺得這個世界整體是越來越好，還是越來越糟？為什麼？', note:'看他底層的樂觀或悲觀，這會悄悄影響他怎麼過日子。'},
+      {q:'面對氣候變遷，你是悲觀、樂觀，還是覺得這不該全由個人扛？', note:'看他對集體議題的責任感，以及行動與無力感之間的位置。'},
+      {q:'你怎麼看台灣的高房價，和年輕世代的處境？', note:'看他對世代公平的感受，這常和他自己的人生壓力相連。'},
+      {q:'對於貧富差距，你覺得比較是努力的差別，還是制度的問題？', note:'看他怎麼歸因社會現象，這反映他的世界觀與同理方向。'},
+      {q:'你怎麼看待「言論自由」的界線？什麼話該被保護，什麼話不該？', note:'看他在自由與責任之間的拿捏，能談界線的人思考較細緻。'},
+      {q:'你關心性別平等嗎？你覺得台灣現在做得如何？', note:'看他對性別議題的敏感度，也直接關係到你們相處的觀念基礎。'},
+      {q:'面對少子化，你會把它當成個人選擇，還是社會該一起面對的問題？', note:'看他把私領域與公共議題連結的方式，也悄悄碰到生育觀。'},
+      {q:'你平常從哪裡看新聞？你會怎麼確認自己看到的不是同溫層？', note:'看他的資訊習慣與自省能力，願意走出同溫層的人比較不偏執。'},
+      {q:'你覺得自己算關心公共議題的人嗎？還是更想把心力放在身邊的生活？', note:'看他把注意力放在世界還是生活，沒有對錯，但會影響你們的話題。'},
+      {q:'如果一個你原本很有定見的議題，後來遇到很有道理的反方論點，你會願意改變想法嗎？', note:'看他的思想彈性，肯被說服的人通常更好溝通。'},
+      {q:'你怎麼看待移工和新住民在台灣的處境？', note:'看他對弱勢與多元的態度，這是價值觀很真實的一面。'},
+      {q:'對你來說，「愛一個地方」是什麼意思？會包含批評它嗎？', note:'看他怎麼理解認同與反思，成熟的愛通常容得下批評。'},
+      {q:'你有沒有為某個公共議題實際做過什麼？例如連署、捐款、當志工？', note:'看他把理念化為行動的程度，說和做之間的距離很說明一個人。'},
+      {q:'你比較相信制度能改變社會，還是個人的選擇累積起來才會？', note:'看他改變世界的信念落在哪，宏觀派與微觀派各有風景。'},
+      {q:'面對立場兩極、吵得很兇的議題，你會選擇表態，還是傾向先聽再說？', note:'看他在衝突場域的姿態，急著表態還是先理解，差很多。'},
+      {q:'你相信宇宙中有人類以外的高等生命嗎？這種想法會不會影響你看待人類自己的方式？', note:'一個輕盈又遼闊的題，看他的想像力與謙卑，也聊得很開心。'}
+    ]
+  },
+  career: {
+    name: '職涯發展',
+    depth: '馬六甲海峽',
+    blurb: '我們怎麼工作、怎麼成就',
+    cards: [
+      {q:'對你來說，工作主要是養活生活的方式，還是自我實現的一部分？', note:'看他和工作的關係，這決定他願意為事業投入多少，也影響生活重心。'},
+      {q:'你怎麼定義自己的「成功」？是頭銜、收入、影響力，還是把事情做好的踏實感？', note:'看他的成就座標，也對照你們對「過得好」的想像合不合。'},
+      {q:'你做事時，是追求把每個細節做到位，還是先求完成再慢慢修？', note:'看他的工作風格，完美派與效率派合作時要先互相理解。'},
+      {q:'遇到很難的任務，你會先規劃好步驟，還是邊做邊調整？', note:'看他面對挑戰的方法，計畫型與即興型各有強項。'},
+      {q:'你比較享受獨立完成工作，還是和一群人協作？', note:'看他的協作偏好，也透露他在關係裡是想各做各的還是並肩作戰。'},
+      {q:'工作上被批評時，你的第一反應通常是什麼？事後會怎麼消化？', note:'看他的抗壓與自省能力，怎麼接住批評往往決定他能走多遠。'},
+      {q:'你心目中理想的工作環境和主管，是什麼樣子？', note:'看他重視的職場價值，自由、肯定、成長還是穩定。'},
+      {q:'五年、十年後，你希望自己在專業上走到哪裡？', note:'看他的企圖心與規劃感，也對照你們的人生節奏對不對得上。'},
+      {q:'你願意為了事業，犧牲多少生活或感情的時間？界線在哪？', note:'看他工作與生活的天平，界線講清楚才不會日後互相埋怨。'},
+      {q:'到目前為止，哪一件完成的事，讓你最有成就感？', note:'從他最驕傲的事，看出他真正在乎與擅長的是什麼。'},
+      {q:'你是會主動爭取機會的人，還是把事情做好、等別人看見的人？', note:'看他的進取風格，主動型衝得快，內斂型穩但可能吃虧。'},
+      {q:'工作和感情如果衝突，你會怎麼排優先順序？', note:'看他在事業與你之間的權衡，誠實的答案比漂亮話更值得聽。'},
+      {q:'你能接受另一半比你更成功、賺得更多嗎？反過來呢？', note:'看他面對地位與收入落差的安全感，這常是雙強關係的暗礁。'},
+      {q:'你覺得情侶或夫妻在同一間公司上班，是加分還是麻煩？', note:'看他對工作與感情界線的想法，也悄悄想像你們黏在一起的日常。'},
+      {q:'如果我們做的是完全不同的領域，你覺得會少了共鳴，還是反而更有空間？', note:'看他怎麼看待差異，是覺得有距離，還是覺得各自精彩更好。'},
+      {q:'你願意為了另一半的工作，搬到別的城市或國家嗎？', note:'看他為關係調整人生的彈性，這在你們其中一人有機會時很關鍵。'},
+      {q:'下班後，你想跟另一半聊工作的事，還是希望把工作完全關在門外？', note:'看他回家後的需求，是想被聽見，還是想徹底切換。'},
+      {q:'你欣賞另一半在工作上展現的哪一面，會讓你特別有好感？', note:'看他被什麼樣的專業魅力吸引，順便聽出他欣賞你哪一塊。'},
+      {q:'如果有一天你想轉換跑道、甚至砍掉重練，你希望另一半怎麼支持你？', note:'看他面對冒險時要的支持型態，也測你願不願意當他的後盾。'},
+      {q:'你是會把工作壓力帶回家的人嗎？低潮時你希望被怎麼對待？', note:'看他怎麼處理職場情緒，以及在你面前會不會卸下武裝。'},
+      {q:'對你來說，一份工作最不能少的是什麼？成長、穩定、自由，還是意義？', note:'看他的職涯核心需求，缺了這一塊他再高薪也待不久。'},
+      {q:'你怎麼看「斜槓」或同時經營很多事？是充實，還是分心？', note:'看他對專注與多元的偏好，也反映他安排人生的方式。'},
+      {q:'如果財務自由了，你還會想工作嗎？會想做什麼？', note:'拿掉錢的因素，看他真正熱愛、想投入的是什麼。'},
+      {q:'你希望我們各自在事業上，是彼此的戰友、後盾，還是互不干涉？', note:'看他對你們事業關係的想像，這決定你們是並肩、互挺還是各走各的。'}
+    ]
+  },
+  ifs: {
+    name: '如果',
+    depth: '亞得里亞海',
+    blurb: '那些關於我們的異想',
+    cards: [
+      {q:'殭屍末日爆發，你只能帶走一樣家當逃命。你會選它，還是選我？', note:'用末日當幌子的吃醋測試。他答得多快、多猶豫，藏著你在他心裡的排名。'},
+      {q:'如果我們一夜之間都有了超能力，你想要哪一種？又會怎麼偷偷用在我們倆身上？', note:'看他的想像力與玩心，也看他第一個念頭會不會把你算進去。'},
+      {q:'在一個讚美會產生魔法的世界裡，你會對我說哪一句話，來施展最強的那種魔法？', note:'這題會直接讓他對你說出一句讚美。重點不只是內容，還有他敢不敢說。'},
+      {q:'老實說，第一次見到我的時候，你心裡默默打了幾分？', note:'勾他回憶第一印象，順便讓他承認對你有過那麼一點心動。'},
+      {q:'如果你最喜歡的名人突然向你告白，說願意給你永恆的愛，你會離開我嗎？', note:'經典吃醋題。他怎麼回答這題，常常比答案本身更有趣。'},
+      {q:'如果我們某天醒來能讀懂彼此的想法，你最想先知道我心裡的哪件事？', note:'看他對你最大的好奇在哪，那往往就是他最在意你的地方。'},
+      {q:'如果我不小心叫錯了你的名字，你打算怎麼罰我？', note:'一句玩笑話，看他撩人的功力與接話的默契。'},
+      {q:'如果我們一起進了霍格華茲，你覺得我們會被分到哪一個學院？', note:'看他怎麼形容你們的「我們感」，順便看他是不是個浪漫的書迷。'},
+      {q:'如果我們一起困在荒島上，你覺得我們各自會負責什麼？誰生火，誰負責放棄求生？', note:'用荒島看分工默契，幽默裡藏著你們適不適合當隊友。'},
+      {q:'如果明天我們一起中了樂透，你最想先做的第一件事是什麼？', note:'中樂透的第一件事，洩漏他心裡真正想和你一起做的事。'},
+      {q:'如果可以重來我們的第一次見面，你會想加上什麼，讓它更難忘？', note:'讓他回到你們的開始，順便聽他偷偷在意哪些細節。'},
+      {q:'如果有人願意付一大筆錢，請我們去外太空生活，但從此只剩你我兩個人，你願意嗎？', note:'把世界縮小到只剩你們兩個，看他願不願意點頭。'},
+      {q:'如果你能讓我身上的某一件事，變得讓你絕對無法抗拒，你會選哪一件？', note:'這題會逼他想像你最迷人的樣子，剩下的氣氛就交給他自己升溫。'},
+      {q:'如果有一天要求婚，你心中最理想的時間和地點，會是什麼樣子？', note:'悄悄把婚禮畫面放進他腦海，看他有沒有偷偷想過。'},
+      {q:'如果我們有一台時光機，你最想帶我們倆去哪個時代，或哪個地方？', note:'看他想和你共享哪個時空，浪漫值直接拉滿。'},
+      {q:'如果你能永久消除世上一種小麻煩，你會選哪個？前提是不能選「我的壞習慣」。', note:'看他覺得生活裡最礙眼的是什麼，順便逼他承認你的壞習慣其實還行。'},
+      {q:'在一個笑聲能當錢花的世界，你覺得靠我的冷笑話，我們會變有錢還是破產？', note:'看他怎麼評價你的幽默感，笑著吐槽其實是好感的訊號。'},
+      {q:'如果我們能交換身體一天，你最怕我發現你的哪個秘密？', note:'交換身體的玩笑，會讓他想到自己藏了哪些只想對你保留的小秘密。'},
+      {q:'如果世界只能用藝術表達愛意，你會用什麼形式對我表白？畫畫、跳舞，還是唱歌？', note:'看他想用什麼方式對你表白，浪漫的人這題會露餡。'},
+      {q:'如果可以選，你想要一場盛大的婚禮，還是兩個人偷偷私奔？', note:'盛大或私奔，看他骨子裡是儀式感派，還是只在乎你這個人。'},
+      {q:'如果你能抹去我過去的一個煩惱，你會選哪一個？', note:'看他有沒有在注意你的煩惱，願意替你抹去的那件事最動人。'},
+      {q:'如果有科技能讓我們進入彼此的夢境，你願意讓我看你的夢嗎？', note:'夢境是最私密的地方，他願不願意讓你進去，是信任的溫度計。'},
+      {q:'如果你能餘生偷吃一種食物都不會胖，你會選什麼？我可以負責幫你吃另一半。', note:'一句「我幫你吃另一半」就把兩人綁在同一張餐桌，看他接不接。'},
+      {q:'你最尷尬的一次酒後傳訊或打電話，是傳給誰？', note:'尷尬黑歷史最拉近距離，他肯說，代表把你當自己人。'},
+      {q:'如果有一張「做任何事都不用負責」的免費通行證，你會用嗎？會拿來做什麼？', note:'看他心裡最想做卻不敢做的事，答案越誠實越有趣。'},
+      {q:'如果可以邀一位名人加入我們的約會一天，你會選誰？為什麼？', note:'看他的品味與玩心，記得留意他會不會說「其實有你就夠了」。'},
+      {q:'如果世界只能用跳舞溝通，你覺得我們吵架會變成什麼樣子？', note:'用荒謬情境看你們的相處默契，笑點對得上就是好兆頭。'},
+      {q:'如果有個遙控器能倒帶或快轉我們的關係，你最想重溫哪一刻？', note:'他最想重溫的那一刻，就是你們之間他最珍惜的片段。'},
+      {q:'如果我有了能讓你生活更好的超能力，但代價是我會變得有點醜，你還要我嗎？', note:'換個方式問「你愛的是不是我這個人」，看他怎麼接這個球。'},
+      {q:'在一個人人都有一個願望的平行宇宙，你的願望會跟我有關嗎？', note:'願望跟你有關與否，藏著他此刻把你放多前面。'},
+      {q:'如果要你和一隻可怕的怪物同床一晚就能拯救世界，你做得到嗎？別擔心，那不是我。', note:'純粹好玩的膽量題，順便聽他怎麼把你從怪物名單裡撇清。'},
+      {q:'如果只能在「跟我在一起但我長得很抱歉」和「單身一輩子」之間選，你選哪個？', note:'又一個「你愛的是外表還是我」的變化題，看他答得多快。'},
+      {q:'如果看脫口秀時，演員拿我們的關係開玩笑，你會跟著笑，還是護著我？', note:'看他在外人面前會不會護著你們，這比私下甜言更實在。'},
+      {q:'如果發現我是某個歷史暴君的後代，你會緊張嗎？', note:'荒謬假設下的反應，看他的幽默感與接梗能力。'},
+      {q:'如果有天我失去了關於我們的所有記憶，你會怎麼讓我重新愛上你？', note:'浪漫滿分的假設，他若認真回答，代表他在乎你們的開始。'},
+      {q:'如果要用一首歌代表我們，你會選哪一首？', note:'一首歌就能聽出他心裡你們是什麼調性，甜的、酷的，還是鬧的。'},
+      {q:'如果我們合開一家店，你覺得會是什麼店？誰當老闆，誰負責偷懶？', note:'合夥開店的想像，把未來放進同一個畫面，看他怎麼分工。'},
+      {q:'如果只能用三個字形容我，你會選哪三個字？', note:'三個字的形容，是他眼中最濃縮的你，值得記下來。'},
+      {q:'如果我們一起養一隻寵物，你想養什麼？牠的名字交給你取。', note:'一起養寵物是隱形的同居預演，看他多自然地接受這個「我們」。'},
+      {q:'如果今晚不用睡覺也不會累，你想跟我做什麼到天亮？', note:'看他想和你共度長夜的方式，答案會洩漏他心裡的浪漫程度。'}
+    ]
+  }
+};
+
+const ORDER = ['value','life','scene','love','us','macro','career','ifs'];
+
+// ---- Arthur Aron 的 36 題（人際親密感產生試驗）----
+const ARON = {
+  zone1: {
+    name: '領海',
+    depth: '第一組',
+    blurb: '靠近彼此的海岸線',
+    cards: [
+      {q:'如果可以選任何人當你的晚餐嘉賓，你會選誰？', note:'看他崇拜或嚮往的對象，從中透露他重視的特質與價值。'},
+      {q:'你希望自己出名嗎？希望以什麼方式出名？', note:'看他對成就與被看見的渴望，以及希望被世界記住的方式。'},
+      {q:'打電話之前，你會先預演要說什麼嗎？為什麼？', note:'看他在社交上的焦慮程度與控制感，輕鬆帶出真實的個性。'},
+      {q:'對你來說，一個「完美」的一天必須具備什麼？', note:'從理想的一天，看他真正快樂的來源是什麼。'},
+      {q:'你上一次唱歌給自己聽是什麼時候？上一次唱給別人聽呢？', note:'看他獨處與在人前的差別，以及願不願意展現放鬆的一面。'},
+      {q:'如果能活到九十歲，你想保有三十歲的身體，還是三十歲的心靈活力？', note:'看他更看重身體還是心智，藏著他對老去與生命的態度。'},
+      {q:'關於自己將如何死去，你是否曾有過神秘的預感？', note:'第一次輕輕碰觸死亡，看他願不願意聊更深的話題。'},
+      {q:'說出三個你和對方的共同點。', note:'刻意尋找連結。被找出共同點本身就會拉近兩人距離。'},
+      {q:'在人生中，你最感激的事情是什麼？', note:'看他的感恩對象，透露什麼人事物對他最重要。'},
+      {q:'如果能改變成長過程中的任何一件事，你會想改變什麼？', note:'看他成長中的遺憾或傷口，第一次觸及較私人的領域。'},
+      {q:'用四分鐘，盡可能詳細地告訴對方你的人生故事。', note:'大段自我揭露。他選擇講哪些、略過哪些，就是他如何理解自己的人生。'},
+      {q:'如果明天醒來能多一個技能或能力，你希望是什麼？', note:'看他渴望補足的部分，反映他覺得自己缺少什麼。'}
+    ]
+  },
+  zone2: {
+    name: '經濟海域',
+    depth: '第二組',
+    blurb: '駛入更私人的水域',
+    cards: [
+      {q:'如果有個水晶球能告訴你關於人生或未來的一切，你最想知道什麼？', note:'看他內心最大的不確定與牽掛，問題本身就洩漏他在焦慮什麼。'},
+      {q:'有沒有什麼事是你夢寐以求想做、卻還沒做的？為什麼？', note:'看他的夢想，以及攔住他的是什麼：恐懼、現實，還是藉口。'},
+      {q:'你人生最大的成就是什麼？', note:'看他用什麼定義成功，是外在成就還是內在的東西。'},
+      {q:'在友情中，你最重視的是什麼？', note:'看他對親密關係的核心要求，這往往也適用於愛情。'},
+      {q:'你人生中最珍惜的，是哪一段回憶？', note:'看什麼讓他真正幸福，那是他想一再回到的時刻。'},
+      {q:'你人生中最糟糕的，是哪一段回憶？', note:'第一次主動分享傷痛，是建立信任的重要一步，看他願意敞開到哪。'},
+      {q:'如果知道一年後會死，你會改變現在的生活方式嗎？為什麼？', note:'看他現在的生活和真心想要的，距離有多遠。'},
+      {q:'友情對你的意義是什麼？', note:'看他如何看待人與人的連結，反映他在關係裡的付出方式。'},
+      {q:'愛與喜歡，在你人生中扮演著什麼樣的角色？', note:'直接探他的愛情觀，看他把感情放在人生的什麼位置。'},
+      {q:'輪流說出對方的五個正向特質。', note:'正向肯定。被欣賞地看見，會快速升溫彼此的好感與安全感。'},
+      {q:'你的家庭關係如何？你覺得自己的童年比別人更幸福嗎？', note:'看原生家庭對他的形塑，這常是他依附風格的根源。'},
+      {q:'你和母親的關係如何？', note:'看他最早的情感連結。與母親的關係常投射到日後的親密關係上。'}
+    ]
+  },
+  zone3: {
+    name: '公海',
+    depth: '第三組',
+    blurb: '潛入最脆弱的深處',
+    cards: [
+      {q:'造三個以「我們」開頭的句子。例如「我們都在這個房間裡感到⋯⋯」', note:'刻意製造「我們感」。把兩人綁進同一句話，潛意識裡就拉近了距離。'},
+      {q:'完成這個句子：「我希望有人能與我共享⋯⋯」', note:'看他內心渴望被分享、被陪伴的是什麼，洩漏深層的需求。'},
+      {q:'若你們將成為親密的朋友，分享一件對方該知道的事。', note:'看他主動交付的脆弱，這是他願意把你當自己人的訊號。'},
+      {q:'誠實告訴對方，你喜歡他的地方（誠實到不可能對初次見面的人說）。', note:'直接的當面欣賞。說與被說的當下，親密感會明顯上升。'},
+      {q:'和對方分享你人生中最尷尬的片刻。', note:'願意自曝其短，是信任的展現，也讓兩人更平等、更靠近。'},
+      {q:'你上一次在別人面前哭是什麼時候？還是你通常一個人哭？', note:'看他怎麼處理脆弱情緒，是允許被看見，還是習慣獨自消化。'},
+      {q:'告訴對方，你已經開始喜歡他的某個特質。', note:'即時的好感回饋。在這個深度說出口，份量遠比一開始更重。'},
+      {q:'對你而言，有哪些事是開不得玩笑的？', note:'看他的敏感地帶與底線，知道了才不會在親密後不小心傷到他。'},
+      {q:'如果今晚就會死、且來不及再與任何人說話，你會最後悔沒對誰說什麼？為什麼還沒說？', note:'逼出他心裡最重要卻未說出口的話，觸及最深的遺憾。'},
+      {q:'家裡失火，你只能救出一樣東西，你會救什麼？', note:'看他最珍視的有形之物，以及背後的情感與記憶。'},
+      {q:'家族成員中，誰的離世會讓你最傷心？為什麼？', note:'看他最深的情感依附對象，碰觸關於失去的恐懼。'},
+      {q:'分享一個你的私人困擾，並請對方給你建議。', note:'主動求助是高度信任的表現。把自己的難題交給對方，是把兩人放進同一條船。'}
+    ]
+  }
+};
+const ARON_ORDER = ['zone1','zone2','zone3'];
+
+// active deck (swappable)
+let MODE = 'mine';
+function activeDeck(){ return MODE === 'mine' ? DECK : ARON; }
+function activeOrder(){ return MODE === 'mine' ? ORDER : ARON_ORDER; }
+
+// name gate → dedication splash
+const nameInput = document.getElementById('nameInput');
+const confirmBtn = document.getElementById('confirmBtn');
+
+function refreshConfirm(){ confirmBtn.disabled = nameInput.value.trim() === ''; }
+nameInput.addEventListener('input', refreshConfirm);
+refreshConfirm();
+
+function revealDedication(){
+  const name = nameInput.value.trim();
+  if(!name) return;
+  document.getElementById('nameDisplay').textContent = name;
+  const gate = document.getElementById('gate');
+  const splash = document.getElementById('splash');
+  gate.classList.add('leave');
+  setTimeout(()=>{
+    gate.style.display = 'none';
+    splash.style.opacity = '1';
+    splash.style.pointerEvents = 'auto';
+    // restart entrance animations on the dedication elements
+    splash.querySelectorAll('.dedicate,.name,.line,.splash-sub,.enter-btn').forEach(el=>{
+      el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
+    });
+  }, 1000);
+}
+confirmBtn.addEventListener('click', revealDedication);
+nameInput.addEventListener('keydown', e=>{ if(e.key==='Enter') revealDedication(); });
+
+// splash → story
+document.getElementById('enterBtn').addEventListener('click', () => {
+  const s = document.getElementById('splash');
+  s.classList.add('leave');
+  setTimeout(()=> { s.style.display='none'; startStory(); }, 1100);
+});
+
+// ---- Atlantis story ----
+const STORY = [
+  { ch:'序章・傳說', t:'很久很久以前，海平面之下有一座國度，名叫亞特蘭提斯。那裡的人懂得愛，也懂得理解彼此，據說是世上最幸福的文明。' },
+  { ch:'第一章・覆滅', t:'然而一夜之間，海水吞沒了整座王國。有人說，是因為他們太晚才學會傾聽；也有人說，亞特蘭提斯從未真正消失，只是沉入了某個無人抵達的深處。' },
+  { ch:'第二章・委託', t:'西元二〇二六年，中山大學國際金融研究學院收到一筆龐大到花不完的研究經費。在用盡所有正當理由之後，院方做了一個大膽的決定：出資，尋找亞特蘭提斯。' },
+  { ch:'第三章・潛艇', t:'於是，他們打造了一艘全世界最先進的潛水艇，並指派了一組特別的隊員，你，和我。任務只有一個，一起潛入世界各地的海域，找回那座懂得相愛的失落王國。' },
+  { ch:'第四章・航線', t:'我們的航線會經過夏威夷的暖流、馬爾地夫的礁湖、貝加爾湖的深淵、大堡礁的珊瑚，最後抵達愛琴海。每一片海，都藏著一道關於彼此的線索。' },
+  { ch:'啟航', t:'沒有人知道亞特蘭提斯是否真的存在。但也許在一題一題的對話裡，我們會先找到的，是另一個人心裡的那座王國。潛水艇已經就緒，準備好了嗎？' }
+];
+let storyIdx = 0;
+
+function startStory(){
+  storyIdx = 0;
+  const story = document.getElementById('story');
+  // build dots
+  const dots = document.getElementById('storyDots');
+  dots.innerHTML = STORY.map(()=>'<span></span>').join('');
+  story.style.display = 'flex';
+  story.style.opacity = '1';
+  story.style.pointerEvents = 'auto';
+  story.classList.remove('leave');
+  renderStory();
+}
+
+function renderStory(){
+  const page = STORY[storyIdx];
+  document.getElementById('storyChapter').textContent = page.ch;
+  const txt = document.getElementById('storyText');
+  txt.classList.remove('swap'); void txt.offsetWidth; txt.classList.add('swap');
+  txt.textContent = page.t;
+  // dots
+  document.querySelectorAll('#storyDots span').forEach((d,i)=>{
+    d.classList.toggle('on', i===storyIdx);
+  });
+  // button
+  const btn = document.getElementById('storyNext');
+  const isLast = storyIdx === STORY.length-1;
+  btn.textContent = isLast ? '啟　航' : '下一頁';
+  btn.classList.toggle('sail', isLast);
+}
+
+document.getElementById('storyNext').addEventListener('click', ()=>{
+  if(storyIdx < STORY.length-1){
+    storyIdx++;
+    renderStory();
+  } else {
+    const story = document.getElementById('story');
+    story.classList.add('leave');
+    document.getElementById('wrap').style.display = 'flex';
+    setTimeout(()=> story.style.display='none', 1100);
+  }
+});
+
+// build layer picker
+const layersEl = document.getElementById('layers');
+let selected = null;
+
+function buildLayers(){
+  const deck = activeDeck();
+  const order = activeOrder();
+  layersEl.innerHTML = '';
+  selected = null;
+  const btn = document.getElementById('startBtn');
+  btn.disabled = true;
+  btn.textContent = '選擇一片海域啟航';
+  order.forEach(key => {
+    const d = deck[key];
+    const el = document.createElement('div');
+    el.className = 'layer' + (key === 'ifs' ? ' warm' : '');
+    el.dataset.key = key;
+    el.innerHTML = `
+      <div class="depth">${d.depth}<small>${d.cards.length} 題</small></div>
+      <div class="body"><h3>${d.name}</h3><p>${d.blurb}</p></div>
+      <div class="tick"></div>`;
+    el.addEventListener('click', () => {
+      layersEl.querySelectorAll('.layer').forEach(l=>l.classList.remove('on'));
+      el.classList.add('on');
+      selected = key;
+      btn.disabled = false;
+      btn.textContent = `航向 ${d.depth}・潛入「${d.name}」`;
+    });
+    layersEl.appendChild(el);
+  });
+}
+buildLayers();
+
+// mode tabs
+const subText = {
+  mine: '我們奉命駕著潛水艇，潛入世界各地的海域，<br>尋找失落的亞特蘭提斯。<br>而每一片海，都藏著一道關於彼此的線索。',
+  aron: 'Aron 教授留下的古老六分儀，<br>指向三片更深的海域。<br>循著它，我們慢慢靠近彼此，也靠近傳說。'
+};
+document.querySelectorAll('.mode-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    if(tab.dataset.mode === 'quiz'){ openQuiz(); return; }
+    if(tab.classList.contains('on')) return;
+    document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('on'));
+    tab.classList.add('on');
+    MODE = tab.dataset.mode;
+    document.getElementById('homeSub').innerHTML = subText[MODE];
+    buildLayers();
+  });
+});
+
+// rules modal
+const rulesModal = document.getElementById('rulesModal');
+function openRules(){ rulesModal.classList.add('show'); }
+function closeRules(){ rulesModal.classList.remove('show'); }
+document.getElementById('rulesBtn').addEventListener('click', openRules);
+document.getElementById('modalClose').addEventListener('click', closeRules);
+document.getElementById('modalOk').addEventListener('click', closeRules);
+rulesModal.addEventListener('click', e=>{ if(e.target===rulesModal) closeRules(); });
+
+// ---- 線索數量 / 標定鈕 ----
+function cluesFound(){ return SEA_ORDER.filter(k=>progress.clues[k]).length; }
+function allCluesFound(){ return cluesFound() === SEA_ORDER.length; }
+function refreshHomeProgress(){
+  document.getElementById('clueCount').textContent = cluesFound();
+  document.getElementById('locateBtn').style.display = allCluesFound() ? 'block' : 'none';
+  if(typeof refreshStarToggle === 'function') refreshStarToggle();
+}
+refreshHomeProgress();
+
+// ---- 航海日誌 ----
+const journalModal = document.getElementById('journalModal');
+function renderJournal(){
+  const grid = document.getElementById('clueGrid');
+  grid.innerHTML = SEA_ORDER.map(k=>{
+    const c = CLUES[k];
+    const got = !!progress.clues[k];
+    const seaName = DECK[k].depth + '・' + DECK[k].name;
+    return `<div class="clue-item ${got?'':'locked'}">
+      <div class="glyph">${got ? c.glyph : G.xmark}</div>
+      <div class="ctext">
+        <div class="sea">${seaName}</div>
+        <h4>${got ? c.title : '尚未尋獲的線索'}</h4>
+        <p>${got ? c.text : '完成這片海域，即可拾回這段碑文。'}</p>
+      </div>
+    </div>`;
+  }).join('');
+  const loc = document.getElementById('journalLocate');
+  loc.style.display = allCluesFound() ? 'block' : 'none';
+}
+function openJournal(){ renderJournal(); journalModal.classList.add('show'); }
+function closeJournal(){ journalModal.classList.remove('show'); }
+document.getElementById('journalBtn').addEventListener('click', openJournal);
+document.getElementById('journalClose').addEventListener('click', closeJournal);
+journalModal.addEventListener('click', e=>{ if(e.target===journalModal) closeJournal(); });
+document.getElementById('journalLocate').addEventListener('click', ()=>{ closeJournal(); openLocate(); });
+document.getElementById('locateBtn').addEventListener('click', openLocate);
+
+// 駕駛台金鑰
+const keyBtn = document.getElementById('keyBtn');
+const keyPanel = document.getElementById('keyPanel');
+const keyInput = document.getElementById('keyInput');
+const keyMsg = document.getElementById('keyMsg');
+keyBtn.addEventListener('click', ()=>{
+  if(starIsUnlocked()){
+    keyPanel.style.display = 'flex';
+    keyMsg.textContent = '星際旅程已經是開啟狀態。';
+    keyMsg.className = 'key-msg ok';
+    return;
+  }
+  keyPanel.style.display = keyPanel.style.display === 'none' ? 'flex' : 'none';
+  if(keyPanel.style.display === 'flex') keyInput.focus();
+});
+function trySubmitKey(){
+  const code = keyInput.value.trim().toLowerCase();
+  if(code === 'logan'){
+    progress.starUnlocked = true; saveProgress();
+    refreshStarToggle();
+    keyMsg.textContent = '駕駛台已解鎖，星際旅程開放。';
+    keyMsg.className = 'key-msg ok';
+    keyInput.value = '';
+  } else {
+    keyMsg.textContent = '金鑰不正確。';
+    keyMsg.className = 'key-msg no';
+  }
+}
+document.getElementById('keySubmit').addEventListener('click', trySubmitKey);
+keyInput.addEventListener('keydown', e=>{ if(e.key==='Enter') trySubmitKey(); });
+const resetBtn = document.getElementById('resetBtn');
+function resetIdle(){ resetArmed=false; resetBtn.textContent='🗑 清空所有線索與進度'; resetBtn.classList.remove('armed'); }
+resetBtn.addEventListener('click', ()=>{
+  if(!resetArmed){
+    resetArmed = true;
+    resetBtn.textContent = '⚠ 再按一次以確認清空';
+    resetBtn.classList.add('armed');
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(resetIdle, 3000);
+    return;
+  }
+  clearTimeout(resetTimer);
+  progress = { clues:{}, solved:false, starUnlocked:false };
+  saveProgress();
+  refreshHomeProgress();
+  renderJournal();
+  resetArmed = false;
+  resetBtn.textContent = '已清空，航海日誌重新開始';
+  resetBtn.classList.remove('armed');
+  setTimeout(resetIdle, 1600);
+});
+
+// ---- 標定亞特蘭提斯（最終解謎）----
+const LOCATE_OPTIONS = [
+  { tag:'A', name:'愛琴海・聖托里尼火山口', correct:false },
+  { tag:'B', name:'海克力斯之柱（直布羅陀海峽）之外的大西洋', correct:true },
+  { tag:'C', name:'百慕達三角海域', correct:false },
+  { tag:'D', name:'南極冰層之下', correct:false }
+];
+const SEA_MAP_SVG = `
+<svg viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0e3e5a"/><stop offset="1" stop-color="#061c2c"/>
+    </linearGradient>
+    <pattern id="ice" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="11" height="11" fill="#9fc2d2" opacity="0.22"/>
+      <line x1="0" y1="0" x2="0" y2="11" stroke="#dff2f8" stroke-width="1" opacity="0.35"/>
+    </pattern>
+  </defs>
+  <rect width="480" height="300" fill="url(#seaG)"/>
+  <g stroke="#1d6e7e" stroke-width="1" opacity="0.22" fill="none">
+    <path d="M0 75h480M0 150h480M0 225h480M120 0v300M240 0v300M360 0v300"/>
+  </g>
+
+  <!-- Antarctica -->
+  <rect x="0" y="262" width="480" height="38" fill="url(#ice)"/>
+  <text x="240" y="286" text-anchor="middle" font-family="Noto Serif TC,serif" font-size="12" fill="#dff2f8" opacity="0.85" letter-spacing="3">南　極　冰　原</text>
+
+  <!-- Europe -->
+  <path d="M212 70 Q300 56 400 64 Q455 70 470 92 L470 132 Q410 142 340 134 Q272 128 228 132 Q212 120 208 104 Q206 86 212 70 Z" fill="#33503f" stroke="#5d8a6e" stroke-width="1.5"/>
+  <text x="352" y="104" text-anchor="middle" font-family="Noto Serif TC,serif" font-size="12" fill="#bfe0cf" opacity="0.85">歐　洲</text>
+  <!-- Africa -->
+  <path d="M228 176 Q312 166 400 172 Q455 176 470 196 L470 250 Q390 258 300 252 Q246 250 226 244 Q212 232 216 208 Q220 188 228 176 Z" fill="#33503f" stroke="#5d8a6e" stroke-width="1.5"/>
+  <text x="352" y="218" text-anchor="middle" font-family="Noto Serif TC,serif" font-size="12" fill="#bfe0cf" opacity="0.85">非　洲</text>
+
+  <!-- sea labels -->
+  <text x="78" y="118" text-anchor="middle" font-family="Noto Serif TC,serif" font-size="13" fill="#9fd6dd" opacity="0.9">大　西　洋</text>
+  <text x="322" y="158" text-anchor="middle" font-family="Noto Serif TC,serif" font-size="12" fill="#9fd6dd" opacity="0.9">地　中　海</text>
+  <text x="446" y="178" text-anchor="middle" font-family="Noto Serif TC,serif" font-size="10" fill="#9fd6dd" opacity="0.9">愛琴海</text>
+
+  <!-- Pillars of Hercules / strait -->
+  <rect x="184" y="138" width="7" height="15" rx="2" fill="#f2c66b"/>
+  <rect x="199" y="149" width="7" height="15" rx="2" fill="#f2c66b"/>
+  <text x="176" y="134" text-anchor="end" font-family="Noto Serif TC,serif" font-size="10" fill="#f2c66b">海克力斯之柱（兩柱）</text>
+
+  <!-- compass -->
+  <g transform="translate(46,48)" font-family="Noto Serif TC,serif" font-size="9" fill="#cfeef0">
+    <circle r="18" fill="none" stroke="#cfeef0" stroke-width="1" opacity="0.55"/>
+    <path d="M0 -15 L4 0 L0 15 L-4 0 Z" fill="#cfeef0" opacity="0.45"/>
+    <text x="0" y="-21" text-anchor="middle">北</text>
+    <text x="24" y="3" text-anchor="middle">東</text>
+    <text x="0" y="30" text-anchor="middle">南</text>
+    <text x="-24" y="3" text-anchor="middle">西</text>
+  </g>
+
+  <!-- markers -->
+  <g font-family="Noto Serif TC,serif" font-size="13" font-weight="700">
+    <g><circle cx="432" cy="152" r="11" fill="#0d2233" stroke="#f2c66b" stroke-width="2"/><text x="432" y="157" text-anchor="middle" fill="#f2c66b">A</text></g>
+    <g><circle cx="150" cy="152" r="11" fill="#0d2233" stroke="#f2c66b" stroke-width="2"/><text x="150" y="157" text-anchor="middle" fill="#f2c66b">B</text></g>
+    <g><circle cx="58" cy="92" r="11" fill="#0d2233" stroke="#f2c66b" stroke-width="2"/><text x="58" y="97" text-anchor="middle" fill="#f2c66b">C</text></g>
+    <g><circle cx="240" cy="278" r="11" fill="#0d2233" stroke="#f2c66b" stroke-width="2"/><text x="240" y="283" text-anchor="middle" fill="#f2c66b">D</text></g>
+  </g>
+</svg>`;
+const locateLayer = document.getElementById('locateLayer');
+function openLocate(){
+  locateLayer.className = 'event-layer show';
+  locateLayer.innerHTML = `
+    <div class="locate-wrap">
+      <div class="eyebrow">FINAL FIX · 標定座標</div>
+      <h2 class="locate-title">亞特蘭提斯在哪裡？</h2>
+      <p class="locate-sub">攤開八塊碑文拼成的海圖，循著線索，選出你們認為正確的位置。</p>
+      <div class="sea-map">${SEA_MAP_SVG}</div>
+      <div class="locate-opts" id="locateOpts"></div>
+      <p class="locate-hint" id="locateHint"></p>
+      <button class="event-btn ghost" id="locateBack" style="margin-top:16px;">先回海圖</button>
+    </div>`;
+  const opts = document.getElementById('locateOpts');
+  LOCATE_OPTIONS.forEach((o,i)=>{
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.innerHTML = `<span class="opt-tag">${o.tag}</span><span>${o.name}</span>`;
+    b.addEventListener('click', ()=>{
+      if(o.correct){
+        b.classList.add('right');
+        setTimeout(showVictory, 500);
+      } else {
+        b.classList.add('wrong');
+        setTimeout(showFail, 450);
+      }
+    });
+    opts.appendChild(b);
+  });
+  document.getElementById('locateBack').addEventListener('click', ()=>{ locateLayer.className='event-layer'; locateLayer.innerHTML=''; });
+}
+const FAIL_NARRATION = [
+  '潛水艇朝著你們選定的座標，緩緩下潛。',
+  '越潛越深，水色由藍轉黑。就在儀表開始失靈的那一刻，探照燈下浮現了一道輪廓。'
+];
+function showFail(){
+  let fi = 0;
+  function draw(){
+    if(fi < FAIL_NARRATION.length){
+      locateLayer.className = 'event-layer show';
+      locateLayer.innerHTML = `
+        <div class="locate-wrap" style="max-width:400px;">
+          <div class="eyebrow" style="color:var(--coral)">下潛中・標定座標</div>
+          <p class="story-text" style="min-height:190px;">${FAIL_NARRATION[fi]}</p>
+          <div class="story-dots">${FAIL_NARRATION.map((_,i)=>'<span class="'+(i===fi?'on':'')+'"></span>').join('')}</div>
+          <button class="event-btn ghost" id="fNext" style="margin-top:24px;max-width:220px;">繼續下潛</button>
+        </div>`;
+      document.getElementById('fNext').addEventListener('click', ()=>{ fi++; draw(); });
+    } else {
+      locateLayer.className = 'event-layer show';
+      locateLayer.innerHTML = `
+        <div class="victory-card">
+          <div class="v-glyph" style="color:var(--muted)">${G.xmark}</div>
+          <h2 style="color:var(--foam)">一無所獲</h2>
+          <p>探照燈來回掃過，那裡只有沉默的海溝，<br>沒有半點金色城市的影子。<br>看來，這不是亞特蘭提斯沉睡的地方。</p>
+          <div class="v-epilogue">
+            <p>正當燃料告急、準備返航時，學院傳來一則消息：<br>原訂的德國參訪臨時取消了。</p>
+            <p>省下的那筆經費，剛好夠我們再加滿一次油箱。<br>也就是說，我們還能再選一次。</p>
+          </div>
+          <button class="event-btn gold" id="fRetry">再選一次座標</button>
+        </div>`;
+      document.getElementById('fRetry').addEventListener('click', openLocate);
+    }
+  }
+  draw();
+}
+const VICTORY_PAGES = [
+  '你們選定了座標。潛水艇調轉船首，朝海克力斯之柱外的大洋，緩緩下潛。',
+  '越潛越深，水色由藍轉黑。就在儀表開始失靈的那一刻，探照燈下浮現了一道輪廓。',
+  '一座沉睡千年的城市。金色的尖塔，在水光裡一盞一盞，重新亮了起來。',
+  '你們相視而笑。原來真正的寶藏，不是這座城，而是這一路上，在每一片海域裡，慢慢拼湊出來的彼此。'
+];
+function showVictory(){
+  progress.solved = true; saveProgress();
+  let vi = 0;
+  function draw(){
+    if(vi < VICTORY_PAGES.length){
+      locateLayer.className = 'event-layer show';
+      locateLayer.innerHTML = `
+        <div class="locate-wrap" style="max-width:400px;">
+          <div class="eyebrow" style="color:var(--gold)">最終章・浮上傳說</div>
+          <p class="story-text" style="min-height:190px;">${VICTORY_PAGES[vi]}</p>
+          <div class="story-dots">${VICTORY_PAGES.map((_,i)=>'<span class="'+(i===vi?'on':'')+'"></span>').join('')}</div>
+          <button class="event-btn gold" id="vNext" style="margin-top:24px;max-width:220px;">${vi===VICTORY_PAGES.length-1?'抵達':'繼續下潛'}</button>
+        </div>`;
+      document.getElementById('vNext').addEventListener('click', ()=>{ vi++; draw(); });
+    } else {
+      locateLayer.className = 'event-layer show';
+      locateLayer.innerHTML = `
+        <div class="victory-card">
+          <div class="v-glyph">${G.city}</div>
+          <h2>找到了</h2>
+          <p>金色之城在水光裡重新亮起。<br>而你們也終於明白，真正的寶藏，<br>是這一路上慢慢拼湊出來的彼此。</p>
+          <div class="v-epilogue">
+            <p>三個月後，中山大學國際金融研究學院收到了這份結案報告。<br>國發會看完，非常滿意，當場又批了一筆更大的預算。</p>
+            <p>於是，下一個任務已經派下來了：<br>這次，要尋找的是外星文明。<br>編制依然只有兩個人，你，和我。</p>
+          </div>
+          <p class="v-sign">亞特蘭提斯遠征隊・航行日誌・完</p>
+          <button class="event-btn gold" id="vBack">返回海圖</button>
+        </div>`;
+      document.getElementById('vBack').addEventListener('click', ()=>{ locateLayer.className='event-layer'; locateLayer.innerHTML=''; });
+    }
+  }
+  draw();
+}
+
+// ====== 星際旅程（交往後）======
+const appToggle = document.getElementById('appToggle');
+const starTool = document.getElementById('starTool');
+appToggle.querySelectorAll('.app-opt').forEach(opt=>{
+  opt.addEventListener('click', ()=>{
+    if(opt.classList.contains('on')) return;
+    const app = opt.dataset.app;
+    if(app === 'star' && !starIsUnlocked()){ showStarLocked(); return; }
+    appToggle.querySelectorAll('.app-opt').forEach(o=>o.classList.remove('on'));
+    opt.classList.add('on');
+    if(app === 'star'){
+      document.body.classList.add('star');
+      document.getElementById('home').style.display = 'none';
+      document.getElementById('stage').classList.remove('show');
+      document.getElementById('starHome').style.display = 'block';
+    } else {
+      document.body.classList.remove('star');
+      document.getElementById('starHome').style.display = 'none';
+      starTool.className = 'event-layer'; starTool.innerHTML = '';
+      document.getElementById('home').style.display = 'block';
+    }
+  });
+});
+function closeStarTool(){ starTool.className='event-layer'; starTool.innerHTML=''; }
+function starIsUnlocked(){ return allCluesFound() || !!progress.starUnlocked; }
+function refreshStarToggle(){
+  const starOpt = document.querySelector('.app-opt[data-app="star"]');
+  if(starOpt) starOpt.textContent = starIsUnlocked() ? '星際旅程' : '星際旅程 🔒';
+}
+function showStarLocked(){
+  starTool.className = 'event-layer show';
+  starTool.innerHTML = `
+    <button class="star-close" id="starX">×</button>
+    <div class="star-panel">
+      <div class="eyebrow" style="color:#ff9d7e">尚未解鎖</div>
+      <h2>星際旅程還在休眠</h2>
+      <div class="star-card">
+        <p class="star-q">完成「潛航彼此」的八片海域，集滿所有碑文，星際旅程就會開啟。<br><br>或者，如果你有駕駛台金鑰，也可以在航海日誌直接解鎖。</p>
+      </div>
+      <div class="star-btns">
+        <button class="star-btn ghost" id="lkBack">先返回</button>
+        <button class="star-btn" id="lkJournal">打開航海日誌</button>
+      </div>
+    </div>`;
+  document.getElementById('starX').addEventListener('click', closeStarTool);
+  document.getElementById('lkBack').addEventListener('click', closeStarTool);
+  document.getElementById('lkJournal').addEventListener('click', ()=>{ closeStarTool(); openJournal(); });
+}
+
+document.querySelectorAll('.tool-card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    const tool = card.dataset.tool;
+    if(tool==='qa') openQA();
+    else if(tool==='date') openDatePicker();
+    else if(tool==='dinner') openDinnerPicker();
+    else if(tool==='adult') openAdultGate();
+  });
+});
+
+function pickStar(a){ return a[Math.floor(Math.random()*a.length)]; }
+
+// ---- 情侶問答 ----
+let qaPool = [];
+function openQA(){
+  qaPool = [];
+  drawQA();
+}
+function drawQA(){
+  if(qaPool.length === 0) qaPool = [...COUPLE_Q].sort(()=>Math.random()-0.5);
+  const q = qaPool.pop();
+  starTool.className = 'event-layer show';
+  starTool.innerHTML = `
+    <button class="star-close" id="starX">×</button>
+    <div class="star-panel">
+      <div class="eyebrow">情侶問答・交往後</div>
+      <h2>慢慢聊一題</h2>
+      <div class="star-card"><p class="star-q">${q}</p></div>
+      <div class="star-btns">
+        <button class="star-btn ghost" id="qaBack">回工具</button>
+        <button class="star-btn" id="qaNext">下一題</button>
+      </div>
+    </div>`;
+  document.getElementById('starX').addEventListener('click', closeStarTool);
+  document.getElementById('qaBack').addEventListener('click', closeStarTool);
+  document.getElementById('qaNext').addEventListener('click', drawQA);
+}
+
+// ---- 18+ 悄悄話 ----
+let adultOK = false, adultPool = [];
+function openAdultGate(){
+  if(adultOK){ drawAdult(); return; }
+  starTool.className = 'event-layer show';
+  starTool.innerHTML = `
+    <button class="star-close" id="starX">×</button>
+    <div class="star-panel">
+      <div class="eyebrow" style="color:#ff7a7a">悄悄話・18+</div>
+      <h2>進入前，先確認</h2>
+      <div class="star-card" style="border-color:rgba(255,90,90,0.4)">
+        <p class="star-q">這個區塊包含成人親密內容，僅供兩位都年滿 18 歲、互相同意的伴侶之間使用。沒有對錯，任何題目都能跳過，舒服比深入更重要。</p>
+      </div>
+      <div class="star-btns">
+        <button class="star-btn ghost" id="adultNo">返回</button>
+        <button class="star-btn" id="adultYes" style="background:linear-gradient(135deg,#ff5d5d,#ff9d7e)">我們都已滿 18 歲，進入</button>
+      </div>
+    </div>`;
+  document.getElementById('starX').addEventListener('click', closeStarTool);
+  document.getElementById('adultNo').addEventListener('click', closeStarTool);
+  document.getElementById('adultYes').addEventListener('click', ()=>{ adultOK = true; drawAdult(); });
+}
+function drawAdult(){
+  if(adultPool.length === 0) adultPool = [...ADULT_Q].sort(()=>Math.random()-0.5);
+  const q = adultPool.pop();
+  starTool.className = 'event-layer show';
+  starTool.innerHTML = `
+    <button class="star-close" id="starX">×</button>
+    <div class="star-panel">
+      <div class="eyebrow" style="color:#ff7a7a">悄悄話・18+</div>
+      <h2>輪流抽一題</h2>
+      <div class="star-card" style="border-color:rgba(255,90,90,0.4)"><p class="star-q">${q}</p></div>
+      <div class="star-btns">
+        <button class="star-btn ghost" id="adBack">回工具</button>
+        <button class="star-btn" id="adSkip" style="flex:0.7">跳過</button>
+        <button class="star-btn" id="adNext" style="background:linear-gradient(135deg,#ff5d5d,#ff9d7e)">下一題</button>
+      </div>
+    </div>`;
+  document.getElementById('starX').addEventListener('click', closeStarTool);
+  document.getElementById('adBack').addEventListener('click', closeStarTool);
+  document.getElementById('adSkip').addEventListener('click', drawAdult);
+  document.getElementById('adNext').addEventListener('click', drawAdult);
+}
+
+// ====== 戀愛依戀類型測驗（原創題目）======
+// type 'likert': 同意程度量表; d='anx'/'avo'; rev=true 為反向題（同意代表低分）
+// type 'scenario': 情境題; opts 各自帶 anx/avo 分數
+const ATTACH_Q = [
+  // 直述・焦慮
+  {type:'likert', t:"對方比較慢回訊息時，我很容易開始胡思亂想。", d:"anx"},
+  {type:'likert', t:"我常需要對方明確說在乎我，心裡才會踏實。", d:"anx"},
+  {type:'likert', t:"在一段關係裡，我會擔心自己愛得比對方多。", d:"anx"},
+  {type:'likert', t:"我常隱隱擔心，如果不夠好，對方總有一天會離開。", d:"anx"},
+  // 直述・逃避
+  {type:'likert', t:"當關係變得太親密，我會莫名想拉開一點距離。", d:"avo"},
+  {type:'likert', t:"我習慣自己消化情緒，不太想把心事丟給別人。", d:"avo"},
+  {type:'likert', t:"比起依賴另一半，我更相信凡事靠自己。", d:"avo"},
+  {type:'likert', t:"太多情感上的需索，會讓我本能地想往後退。", d:"avo"},
+  // 反測題（同意代表更安全）
+  {type:'likert', t:"就算對方一時忙、聯絡變少，我也不太會因此焦慮。", d:"anx", rev:true},
+  {type:'likert', t:"即使很愛一個人，我也能自在地保有自己的生活。", d:"anx", rev:true},
+  {type:'likert', t:"我能自在地把脆弱和需要，告訴我信任的人。", d:"avo", rev:true},
+  {type:'likert', t:"親密和獨立，對我來說可以同時存在，不太衝突。", d:"avo", rev:true},
+  {type:'likert', t:"衝突發生時，我能留在現場，好好把話講開。", d:"avo", rev:true},
+  {type:'likert', t:"對方表達需要我時，我感到的是溫暖，而不是壓力。", d:"avo", rev:true},
+  // 情境題
+  {type:'scenario', t:"你傳了訊息給喜歡的人，已讀很久卻沒回。你的第一反應比較接近？", opts:[
+     {label:"應該在忙吧，晚點就會回。", anx:0, avo:0},
+     {label:"開始想，是不是我哪句話說錯了。", anx:3, avo:0},
+     {label:"算了，那我也收起來，不要太主動。", anx:1, avo:2},
+     {label:"無所謂，我本來就不太黏。", anx:0, avo:3},
+  ]},
+  {type:'scenario', t:"交往後，對方想花更多時間黏在一起。你心裡比較像？", opts:[
+     {label:"很開心，正合我意。", anx:0, avo:0},
+     {label:"太好了，但又怕自己變得太依賴。", anx:2, avo:0},
+     {label:"有點透不過氣，想保留一些自己的空間。", anx:0, avo:3},
+     {label:"又想要又怕，心情很矛盾。", anx:2, avo:2},
+  ]},
+  {type:'scenario', t:"你們大吵一架之後，你通常會？", opts:[
+     {label:"想盡快坐下來，把話講開。", anx:0, avo:0},
+     {label:"一直想聯絡，確認對方是不是還愛我。", anx:3, avo:0},
+     {label:"需要先一個人靜一靜，不想被找。", anx:0, avo:3},
+     {label:"既想被安慰，又想躲起來。", anx:2, avo:2},
+  ]},
+  {type:'scenario', t:"對方今天看起來心情很差、有點冷淡。你會？", opts:[
+     {label:"直接關心，問他怎麼了。", anx:0, avo:0},
+     {label:"反覆想，是不是我害的。", anx:3, avo:0},
+     {label:"給彼此空間，不太想介入。", anx:0, avo:2},
+     {label:"表面沒事，心裡其實很不安。", anx:2, avo:1},
+  ]},
+  {type:'scenario', t:"關係越來越穩定、越來越認真，你的感覺是？", opts:[
+     {label:"踏實，又有點期待。", anx:0, avo:0},
+     {label:"開心，但也更怕失去。", anx:3, avo:0},
+     {label:"隱隱有一種被綁住的感覺。", anx:0, avo:3},
+     {label:"又安心又想逃，自己也說不清。", anx:2, avo:2},
+  ]},
+];
+const QUIZ_OPTS = [
+  {label:"很不像我", v:0},
+  {label:"有點不像我", v:1},
+  {label:"有點像我", v:2},
+  {label:"很像我", v:3},
+];
+// 計算各維度最大可能分（用於正規化）
+const QUIZ_MAX = (()=>{
+  let a=0, v=0;
+  ATTACH_Q.forEach(q=>{
+    if(q.type==='likert'){ if(q.d==='anx') a+=3; else v+=3; }
+    else { a += Math.max(...q.opts.map(o=>o.anx)); v += Math.max(...q.opts.map(o=>o.avo)); }
+  });
+  return {anx:a, avo:v};
+})();
+let quizIdx = 0, quizAnx = 0, quizAvo = 0, quizAnswers = [];
+const quizLayer = document.getElementById('quizLayer');
+function openQuiz(){
+  quizIdx = 0; quizAnx = 0; quizAvo = 0; quizAnswers = [];
+  renderQuiz();
+}
+function closeQuiz(){ quizLayer.className='event-layer'; quizLayer.innerHTML=''; }
+function applyAnswer(q, choice){
+  // choice: for likert = {v}; for scenario = {anx,avo}
+  let da=0, dv=0;
+  if(q.type==='likert'){
+    const val = q.rev ? (3 - choice.v) : choice.v;
+    if(q.d==='anx') da = val; else dv = val;
+  } else { da = choice.anx; dv = choice.avo; }
+  return {da, dv};
+}
+function renderQuiz(){
+  if(quizIdx >= ATTACH_Q.length){ renderQuizResult(); return; }
+  const q = ATTACH_Q[quizIdx];
+  const pct = Math.round(quizIdx / ATTACH_Q.length * 100);
+  const isScenario = q.type==='scenario';
+  quizLayer.className = 'event-layer show';
+  quizLayer.innerHTML = `
+    <div class="quiz-wrap">
+      <div class="quiz-top">
+        <div class="eyebrow">ATTACHMENT · 依戀羅盤</div>
+        <h2>${quizIdx+1} / ${ATTACH_Q.length}${isScenario?'　情境題':''}</h2>
+      </div>
+      <div class="quiz-prog"><i style="width:${pct}%"></i></div>
+      <p class="quiz-q">${q.t}</p>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <button class="quiz-back" id="quizBack">${quizIdx===0 ? '離開測驗' : '← 上一題'}</button>
+    </div>`;
+  const opts = document.getElementById('quizOpts');
+  const list = isScenario ? q.opts : QUIZ_OPTS;
+  list.forEach(o=>{
+    const b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = o.label;
+    b.addEventListener('click', ()=>{
+      const {da, dv} = applyAnswer(q, o);
+      quizAnswers[quizIdx] = {da, dv};
+      quizAnx += da; quizAvo += dv;
+      quizIdx++;
+      renderQuiz();
+    });
+    opts.appendChild(b);
+  });
+  document.getElementById('quizBack').addEventListener('click', ()=>{
+    if(quizIdx===0){ closeQuiz(); return; }
+    quizIdx--;
+    const prev = quizAnswers[quizIdx];
+    if(prev){ quizAnx -= prev.da; quizAvo -= prev.dv; }
+    renderQuiz();
+  });
+}
+function renderQuizResult(){
+  const anxPct = Math.round(quizAnx / QUIZ_MAX.anx * 100);
+  const avoPct = Math.round(quizAvo / QUIZ_MAX.avo * 100);
+  const anxHigh = anxPct > 50;
+  const avoHigh = avoPct > 50;
+  let type, en, desc;
+  if(!anxHigh && !avoHigh){
+    type='安全型'; en='SECURE';
+    desc='你在關係裡相對自在，能靠近、也能保有自己，遇到問題傾向直接溝通。和你相處的人，通常會覺得安心。可以繼續保持的是這份穩定，並學著體諒依戀風格和你不同的伴侶。';
+  } else if(anxHigh && !avoHigh){
+    type='焦慮型'; en='ANXIOUS';
+    desc='你很重視連結，也很敏感於對方的情緒，容易因為一點疏遠而不安。你的好，是投入而真誠。可以練習的是：不安時先安頓自己，把需求<b>直接說清楚</b>，而不是用試探或猜測。';
+  } else if(!anxHigh && avoHigh){
+    type='逃避型'; en='AVOIDANT';
+    desc='你重視獨立，習慣靠自己，太親密時會本能地想保留空間。你的好，是穩定、不情緒勒索。可以練習的是：讓信任的人靠近一點，把「我需要一點空間」<b>說出來</b>，而不是默默拉開距離。';
+  } else {
+    type='矛盾型'; en='FEARFUL-AVOIDANT';
+    desc='你同時渴望親密、又害怕受傷，靠近與逃開常常在心裡拉扯，這往往和過去的經驗有關。你的好，是情感豐富、能同理。可以練習的是：辨識自己的<b>觸發點</b>，和伴侶一起建立明確、可預期的安全感。';
+  }
+  quizLayer.className='event-layer show';
+  quizLayer.innerHTML = `
+    <div class="quiz-wrap result-card">
+      <div class="quiz-top"><div class="eyebrow">你的依戀傾向</div></div>
+      <div class="result-type">${type}</div>
+      <div class="result-en">${en}</div>
+      <div class="result-bars">
+        <div class="bar-row"><span class="bar-label">焦慮</span><div class="bar-track"><div class="bar-fill anx" data-w="${anxPct}"></div></div><span class="bar-val">${anxPct}%</span></div>
+        <div class="bar-row"><span class="bar-label">逃避</span><div class="bar-track"><div class="bar-fill avo" data-w="${avoPct}"></div></div><span class="bar-val">${avoPct}%</span></div>
+      </div>
+      <p class="result-desc">${desc}</p>
+      <p class="result-note">這只是一面輕鬆的鏡子，不是診斷。依戀風格會隨關係與經驗慢慢改變，真正重要的是兩個人願意一起練習。</p>
+      <div class="star-btns">
+        <button class="star-btn ghost" id="quizClose2" style="background:transparent;border:1px solid rgba(255,180,150,0.45);color:#ffcdb5">完成</button>
+        <button class="star-btn" id="quizRetry" style="background:linear-gradient(135deg,#ff8a6b,#ffc7a3);color:#3a1208">再測一次</button>
+      </div>
+    </div>`;
+  setTimeout(()=>{ quizLayer.querySelectorAll('.bar-fill').forEach(f=>{ f.style.width = f.dataset.w + '%'; }); }, 60);
+  document.getElementById('quizClose2').addEventListener('click', closeQuiz);
+  document.getElementById('quizRetry').addEventListener('click', openQuiz);
+}
+
+// ---- 約會選擇器 ----
+let dateRegion = 'tp', dateWeather = 'sun', dateVenue = 'out';
+function dateDataset(){ return dateRegion === 'kh' ? DATE_ACTS_KH : DATE_ACTS; }
+function openDatePicker(){ renderDatePicker(); }
+function renderDatePicker(resultText){
+  starTool.className = 'event-layer show';
+  starTool.innerHTML = `
+    <button class="star-close" id="starX">×</button>
+    <div class="star-panel">
+      <div class="eyebrow">約會選擇器</div>
+      <h2>今天想去哪？</h2>
+      <div class="filter-group" id="fRegion" style="margin-bottom:10px">
+        <button class="filter-opt ${dateRegion==='tp'?'on':''}" data-r="tp">🏙️ 台北出發</button>
+        <button class="filter-opt ${dateRegion==='kh'?'on':''}" data-r="kh">🌴 高雄出發</button>
+      </div>
+      <div class="filter-row">
+        <div class="filter-group" id="fWeather">
+          <button class="filter-opt ${dateWeather==='sun'?'on':''}" data-w="sun">☀️ 晴天</button>
+          <button class="filter-opt ${dateWeather==='rain'?'on':''}" data-w="rain">🌧️ 雨天</button>
+        </div>
+        <div class="filter-group" id="fVenue">
+          <button class="filter-opt ${dateVenue==='out'?'on':''}" data-v="out">🌳 室外</button>
+          <button class="filter-opt ${dateVenue==='in'?'on':''}" data-v="in">🏠 室內</button>
+        </div>
+      </div>
+      <div class="star-card">${ resultText
+          ? `<div><div class="star-result">${resultText}</div><div class="star-result-sub">不喜歡就再抽一次</div></div>`
+          : `<p class="star-q" style="color:var(--muted)">選好條件，按下面抽一個點子</p>` }</div>
+      <div class="star-btns">
+        <button class="star-btn ghost" id="dBack">回工具</button>
+        <button class="star-btn" id="dRoll">抽一個約會點子</button>
+      </div>
+    </div>`;
+  document.getElementById('starX').addEventListener('click', closeStarTool);
+  document.getElementById('dBack').addEventListener('click', closeStarTool);
+  document.querySelectorAll('#fRegion .filter-opt').forEach(b=>b.addEventListener('click', ()=>{ dateRegion=b.dataset.r; renderDatePicker(resultText); }));
+  document.querySelectorAll('#fWeather .filter-opt').forEach(b=>b.addEventListener('click', ()=>{ dateWeather=b.dataset.w; renderDatePicker(resultText); }));
+  document.querySelectorAll('#fVenue .filter-opt').forEach(b=>b.addEventListener('click', ()=>{ dateVenue=b.dataset.v; renderDatePicker(resultText); }));
+  document.getElementById('dRoll').addEventListener('click', rollDate);
+}
+function rollDate(){
+  const data = dateDataset();
+  let pool = data.filter(d => d.v === dateVenue && (dateWeather==='sun' ? true : d.w==='any'));
+  if(pool.length === 0) pool = data.filter(d => d.w==='any');
+  const pick = pickStar(pool);
+  const card = document.querySelector('#starTool .star-card');
+  if(card){
+    let n = 0;
+    const spin = setInterval(()=>{
+      card.innerHTML = `<div class="star-result">${pickStar(pool).t}</div>`;
+      if(++n > 8){ clearInterval(spin); renderDatePicker(pick.t); }
+    }, 70);
+  } else { renderDatePicker(pick.t); }
+}
+
+// ---- 晚餐選擇器 ----
+function openDinnerPicker(){ renderDinner(); }
+function renderDinner(resultText){
+  starTool.className = 'event-layer show';
+  starTool.innerHTML = `
+    <button class="star-close" id="starX">×</button>
+    <div class="star-panel">
+      <div class="eyebrow">晚餐選擇器</div>
+      <h2>晚餐吃什麼？</h2>
+      <div class="star-card">${ resultText
+          ? `<div><div class="star-result">${resultText}</div><div class="star-result-sub">就決定是它了，還是再抽？</div></div>`
+          : `<p class="star-q" style="color:var(--muted)">真的不知道吃什麼？<br>按「都可以」幫你決定</p>` }</div>
+      <div class="star-btns">
+        <button class="star-btn ghost" id="dnBack">回工具</button>
+        <button class="star-btn" id="dnRoll">都可以</button>
+      </div>
+    </div>`;
+  document.getElementById('starX').addEventListener('click', closeStarTool);
+  document.getElementById('dnBack').addEventListener('click', closeStarTool);
+  document.getElementById('dnRoll').addEventListener('click', rollDinner);
+}
+function rollDinner(){
+  const pick = pickStar(DINNERS);
+  const card = document.querySelector('#starTool .star-card');
+  if(card){
+    let n = 0;
+    const spin = setInterval(()=>{
+      card.innerHTML = `<div class="star-result">${pickStar(DINNERS)}</div>`;
+      if(++n > 10){ clearInterval(spin); renderDinner(pick); }
+    }, 65);
+  } else { renderDinner(pick); }
+}
+
+// state
+let queue = [], idx = 0, curKey = null, sessionDeck = null;
+let timerId = null;
+const ROUND_SECONDS = 180; // 三分鐘
+
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+document.getElementById('startBtn').addEventListener('click', startDeck);
+document.getElementById('backBtn').addEventListener('click', () => {
+  clearTimer();
+  if(typeof hideEvent === 'function') hideEvent();
+  document.getElementById('stage').classList.remove('show');
+  document.getElementById('home').style.display='block';
+});
+
+function clearTimer(){ if(timerId){ clearInterval(timerId); timerId = null; } }
+
+function startDeck(){
+  curKey = selected;
+  sessionDeck = activeDeck();
+  queue = shuffle(sessionDeck[curKey].cards.map((c,i)=>({q:c.q, note:c.note, n:i+1}))).slice(0, 12);
+  idx = 0;
+  document.getElementById('home').style.display='none';
+  document.getElementById('stage').classList.add('show');
+  render();
+}
+
+function fmt(s){ const m=Math.floor(s/60), x=s%60; return `${String(m).padStart(2,'0')}:${String(x).padStart(2,'0')}`; }
+
+// secondRound = false → 第一次，倒數結束彈出遮罩；true → 換對方後，倒數結束只閃爍
+function render(secondRound){
+  clearTimer();
+  const d = sessionDeck[curKey];
+  document.getElementById('counter').textContent = `${d.depth}・${d.name}　${idx+1} / ${queue.length}`;
+  const area = document.getElementById('cardArea');
+
+  if(idx >= queue.length){
+    let clueHtml = '';
+    if(MODE === 'mine' && CLUES[curKey]){
+      const newly = !progress.clues[curKey];
+      if(newly){ progress.clues[curKey] = true; saveProgress(); refreshHomeProgress(); }
+      const c2 = CLUES[curKey];
+      clueHtml = `
+        <div class="clue-reveal">
+          <div class="clue-glyph">${c2.glyph}</div>
+          <p class="clue-kicker">${newly ? '尋獲一塊碑文' : '這塊碑文你已尋獲'}</p>
+          <p class="clue-title">${c2.title}</p>
+          <p class="clue-text">${c2.text}</p>
+        </div>`;
+    }
+    const done8 = allCluesFound();
+    area.innerHTML = `
+      <div class="done">
+        <div class="done-badge">⚓</div>
+        <h2>${d.depth}・探索完畢</h2>
+        <p>我們在這片海域，打撈起一塊刻著彼此的亞特蘭提斯碑文。</p>
+        ${clueHtml}
+        ${done8 ? '<button class="locate-btn" id="doneLocate" style="margin-top:18px;">🧭 八塊碑文已集滿・標定亞特蘭提斯</button>' : ''}
+        <button class="start-btn" id="againBtn" style="margin-top:14px;">返回海圖，繼續尋找</button>
+        <p class="footer-note">每一次潛航，抽牌的順序都不一樣</p>
+      </div>`;
+    document.getElementById('againBtn').addEventListener('click', () => {
+      document.getElementById('stage').classList.remove('show');
+      document.getElementById('home').style.display='block';
+    });
+    const dl = document.getElementById('doneLocate');
+    if(dl) dl.addEventListener('click', ()=>{
+      document.getElementById('stage').classList.remove('show');
+      document.getElementById('home').style.display='block';
+      openLocate();
+    });
+    return;
+  }
+
+  const c = queue[idx];
+  const isLast = idx === queue.length-1;
+  const showPeek = (MODE === 'mine');
+  const warm = (curKey === 'ifs') ? ' warm' : '';
+  area.innerHTML = `
+    <div class="timer${warm}" id="timer">${fmt(ROUND_SECONDS)}</div>
+    ${secondRound ? '<div class="round-tag">換對方回答中</div>' : ''}
+    <div class="card${warm}" id="card">
+      <div class="card-num">${String(c.n).padStart(2,'0')}</div>
+      <div class="card-cat">${d.name}</div>
+      <div class="card-depth">${d.depth}</div>
+      <div class="card-q">${c.q}</div>
+      ${showPeek ? `<div class="card-purpose" id="purpose">
+        <b>這題在看什麼：</b>${c.note}
+      </div>` : ''}
+      <div class="overlay" id="overlay">
+        <p class="overlay-title">時間到</p>
+        <p class="overlay-sub">輪到對方了，還是往下潛？</p>
+        <div class="overlay-btns">
+          <button class="ov-btn swap" id="swapBtn">換對方</button>
+          <button class="ov-btn go" id="goBtn">${isLast?'完成':'換下一題'}</button>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="ctrl prev" id="prevBtn" ${idx===0?'disabled':''}>← 上一張</button>
+      ${showPeek ? '<button class="ctrl peek" id="peekBtn">這題在問什麼</button>' : ''}
+      <button class="ctrl next" id="nextBtn">${isLast?'完成':'下一張'}</button>
+    </div>`;
+
+  // peek
+  const peekBtn = document.getElementById('peekBtn');
+  if(peekBtn){
+    peekBtn.addEventListener('click', (e)=>{
+      const p = document.getElementById('purpose');
+      p.classList.toggle('show');
+      e.currentTarget.classList.toggle('active');
+    });
+  }
+  // prev
+  document.getElementById('prevBtn').addEventListener('click', ()=>{
+    if(idx===0) return;
+    const card = document.getElementById('card');
+    card.classList.add('flip');
+    setTimeout(()=>{ idx--; render(); }, 250);
+  });
+  // next
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    const card = document.getElementById('card');
+    card.classList.add('flip');
+    setTimeout(()=>{ advanceQuestion(); }, 250);
+  });
+  // overlay buttons
+  document.getElementById('swapBtn').addEventListener('click', ()=>{
+    hideOverlay();
+    render(true); // 同一題，重新倒數，這次倒數完不再彈遮罩
+  });
+  document.getElementById('goBtn').addEventListener('click', ()=>{
+    hideOverlay();
+    const card = document.getElementById('card');
+    card.classList.add('flip');
+    setTimeout(()=>{ advanceQuestion(); }, 250);
+  });
+
+  startTimer(secondRound);
+}
+
+// 前進到下一題前，先擲骰判斷是否觸發隨機事件
+function advanceQuestion(){
+  clearTimer();
+  idx++;
+  if(idx >= queue.length){ render(); return; }   // 抵達終點，顯示完成頁
+  const r = Math.random();
+  if(r < 0.015) showEmergency();       // 約 1.5% 突發狀況
+  else if(r < 0.03) showTreasure();    // 約 1.5% 寶藏／沈船
+  else render();                        // 其餘直接進下一題
+}
+
+function startTimer(secondRound){
+  let remain = ROUND_SECONDS;
+  const el = document.getElementById('timer');
+  el.classList.remove('done-flash');
+  el.textContent = fmt(remain);
+  timerId = setInterval(()=>{
+    remain--;
+    if(remain <= 0){
+      clearTimer();
+      el.textContent = '00:00';
+      el.classList.add('done-flash');
+      if(!secondRound) showOverlay();
+      return;
+    }
+    el.textContent = fmt(remain);
+    if(remain <= 10) el.classList.add('warn'); // 最後十秒提醒
+  }, 1000);
+}
+
+function showOverlay(){ const o=document.getElementById('overlay'); if(o) o.classList.add('show'); }
+function hideOverlay(){ const o=document.getElementById('overlay'); if(o) o.classList.remove('show'); }
+
+// ---------- 隨機事件 ----------
+let eventTimerId = null;
+function clearEventTimer(){ if(eventTimerId){ clearInterval(eventTimerId); eventTimerId=null; } }
+
+const EMERGENCIES = [
+  { icon:'🪟', title:'舷窗出現裂痕！', desc:'海水正在滲入船艙，必須立刻處理，否則我們只能緊急返航。', btn:'緊急堵漏' },
+  { icon:'📡', title:'偵測到敵國潛艇追蹤！', desc:'對方正在鎖定我們的座標，必須立刻關掉聲響、保持靜默。', btn:'靜默十秒' },
+  { icon:'💥', title:'魚雷來襲！', desc:'一枚魚雷正朝我們直衝而來，必須立刻做出迴避動作。', btn:'緊急迴避' }
+];
+const TREASURE_FINDS = [
+  '前方海床有一艘可疑的沈船', '聲納偵測到一只發亮的寶箱', '礁石間卡著一個古老的密封罐', '海溝深處閃著不尋常的微光'
+];
+const TREASURE_CARDS = [
+  '找出手機裡你最醜的一張照片，現在給對方看。',
+  '放下卡片，現在一起自拍一張照片。',
+  '自拍一張合照，傳給一位你們的共同好友。',
+  '叫住店員，問一個無厘頭的問題。例如：你們有醬油嗎？我想加在提拉米蘇上。',
+  '接下來這頓飯，由對方幫你決定要吃什麼，不能拒絕。',
+  '翻出手機相簿裡最近的一張照片，跟對方說它背後的故事。',
+  '互看對方的手機桌布，猜猜對方當初為什麼選它。',
+  '給對方看你手機裡最近存的一張迷因或截圖。',
+  '一起拍一張「假裝已經是老夫老妻」的厭世合照。',
+  '用三個 emoji 形容對方，現在傳到對方手機上。',
+  '模仿對方一個最近常做的小動作，讓他猜你在學他。',
+  '打開你最近在聽的歌單，放一首歌給對方聽三十秒。',
+  '翻出包包或錢包裡最意外的一樣東西，給對方看。',
+  '現在拍一張只拍「你們兩雙手」的照片，留作紀念。',
+  '對著對方，用最浮誇的語氣念出菜單上某一道菜的名字。',
+  '由對方指定一個小任務給你，在合理範圍內你要照做。'
+];
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function hideEvent(){ clearEventTimer(); const l=document.getElementById('eventLayer'); l.className='event-layer'; l.innerHTML=''; }
+
+function failReturnHome(){
+  clearEventTimer();
+  const l = document.getElementById('eventLayer');
+  l.className = 'event-layer alert show';
+  l.innerHTML = `
+    <div class="event-card alert">
+      <div class="event-icon">🌀</div>
+      <h2 class="event-title">任務中斷</h2>
+      <p class="event-desc">我們被迫緊急上浮、返回母港。<br>稍作整補後，隨時能再次啟航。</p>
+    </div>`;
+  setTimeout(()=>{
+    hideEvent();
+    clearTimer();
+    document.getElementById('stage').classList.remove('show');
+    document.getElementById('home').style.display='block';
+  }, 2000);
+}
+
+function showEmergency(){
+  const e = pick(EMERGENCIES);
+  let remain = 10;
+  const l = document.getElementById('eventLayer');
+  l.className = 'event-layer alert show';
+  l.innerHTML = `
+    <div class="event-card alert">
+      <div class="event-icon">${e.icon}</div>
+      <div class="event-count" id="evtCount">${remain}</div>
+      <h2 class="event-title">${e.title}</h2>
+      <p class="event-desc">${e.desc}</p>
+      <button class="event-btn danger" id="evtAct">${e.btn}</button>
+    </div>`;
+  document.getElementById('evtAct').addEventListener('click', ()=>{
+    clearEventTimer();
+    l.innerHTML = `
+      <div class="event-card alert">
+        <div class="event-icon">✅</div>
+        <h2 class="event-title">化險為夷</h2>
+        <p class="event-desc">危機解除，我們繼續潛航。</p>
+        <button class="event-btn" id="evtGo">繼續潛航</button>
+      </div>`;
+    document.getElementById('evtGo').addEventListener('click', ()=>{ hideEvent(); render(); });
+  });
+  const cnt = document.getElementById('evtCount');
+  eventTimerId = setInterval(()=>{
+    remain--;
+    if(cnt) cnt.textContent = remain;
+    if(remain <= 3 && cnt) cnt.classList.add('flash');
+    if(remain <= 0){ failReturnHome(); }
+  }, 1000);
+}
+
+function showTreasure(){
+  const find = pick(TREASURE_FINDS);
+  const l = document.getElementById('eventLayer');
+  l.className = 'event-layer treasure show';
+  l.innerHTML = `
+    <div class="event-card treasure">
+      <div class="event-icon">🧭</div>
+      <h2 class="event-title">${find}</h2>
+      <p class="event-desc">要不要停下來，挖掘看看？</p>
+      <div class="event-btns">
+        <button class="event-btn ghost" id="evtSkip">先不要，繼續潛航</button>
+        <button class="event-btn gold" id="evtDig">挖掘看看</button>
+      </div>
+    </div>`;
+  document.getElementById('evtSkip').addEventListener('click', ()=>{ hideEvent(); render(); });
+  document.getElementById('evtDig').addEventListener('click', ()=>{
+    const prompt = pick(TREASURE_CARDS);
+    l.innerHTML = `
+      <div class="event-card treasure">
+        <div class="event-icon">💎</div>
+        <p class="event-tasklabel">寶箱裡是一張任務卡</p>
+        <p class="event-q">${prompt}</p>
+        <button class="event-btn gold" id="evtDone">完成了，繼續潛航</button>
+      </div>`;
+    document.getElementById('evtDone').addEventListener('click', ()=>{ hideEvent(); render(); });
+  });
+}
+
+// bubbles
+function spawnBubble(){
+  const b = document.createElement('div');
+  b.className='bubble';
+  const size = 4 + Math.random()*10;
+  b.style.width = b.style.height = size+'px';
+  b.style.left = Math.random()*100+'vw';
+  b.style.animationDuration = (8+Math.random()*10)+'s';
+  b.style.opacity = 0.1+Math.random()*0.4;
+  document.body.appendChild(b);
+  setTimeout(()=>b.remove(), 20000);
+}
+setInterval(spawnBubble, 1400);
+for(let i=0;i<6;i++) setTimeout(spawnBubble, i*400);
+</script>
+</body>
+</html>
