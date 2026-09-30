@@ -1148,7 +1148,6 @@
       <div class="modes">
         <button class="mode-tab on" data-mode="mine">Logan領航員的科技海圖</button>
         <button class="mode-tab" data-mode="aron">Aron教授的古老六分儀</button>
-        <button class="mode-tab" data-mode="quiz">心理師的依戀羅盤</button>
       </div>
 
       <p class="chart-label" id="chartLabel">航海圖・選擇下一片要探索的海域</p>
@@ -1157,6 +1156,7 @@
       <button class="start-btn" id="startBtn" disabled>選擇一片海域啟航</button>
       <button class="locate-btn" id="locateBtn" style="display:none;">🧭 線索已集滿・標定亞特蘭提斯</button>
       <button class="rules-btn" id="journalBtn">📜 航海日誌（線索 <span id="clueCount">0</span>/8）</button>
+      <button class="rules-btn" id="quizBtn">💗 戀愛依戀類型測驗</button>
       <button class="rules-btn" id="rulesBtn">任務說明 ・ 怎麼進行？</button>
     </div>
 
@@ -1280,7 +1280,6 @@ const CLUES = {
 const SEA_ORDER = ['value','life','scene','love','us','macro','career','ifs'];
 const COUPLE_Q = ["親密時刻裡，有沒有什麼是你想要、卻還沒說出口的？", "和剛在一起時比，你覺得我們的身體親密有什麼變化？", "怎樣的氛圍或前奏，最能讓你放鬆、有感覺？", "有沒有哪個小舉動，我一做你就會瞬間心動？", "你喜歡我在耳邊怎麼稱呼你、說什麼？", "過去哪一段感情，最深刻地改變了你？", "有沒有哪一次你其實受傷了，卻沒告訴我？", "你心裡有沒有對我還沒完全放下的小心結？", "在我們之間，什麼會讓你覺得「被信任」？", "你會吃醋嗎？通常是因為什麼？", "我們上一次吵架，事後你真正的感受是什麼？", "吵架時，我哪一種反應最讓你受不了？", "有沒有一句話，是你希望我吵架時永遠別說的？", "冷戰時，你其實希望我先做什麼？", "意見不同時，你希望我先聽，還是先一起想辦法？", "我做過哪件小事，你到現在還記得？", "最近我有哪裡，把你照顧得很好？", "有沒有什麼是你想要更多、卻不好意思一直開口的？", "一天之中，你最珍惜我們相處的哪個時刻？", "我怎麼做，會讓平凡的一天變得不一樣？", "你心裡，我們的下一步是什麼？", "你想像中我們的家，是什麼樣子？", "對「結婚」這件事，你現在真實的想法是什麼？", "你希望我們幾年內，一起完成哪件大事？", "如果要設一個共同目標或帳戶，你想先一起存什麼？", "你希望我和你的家人，維持什麼樣的距離？", "我們的錢，你理想中怎麼分配與決定？", "對於生小孩，你現在的想法和一年前比有變嗎？", "逢年過節，你希望我們怎麼安排兩邊家人？", "未來若要照顧長輩，你希望我們怎麼分工？", "有沒有一個夢想，你還沒跟我說過？", "在我們的關係裡，你最怕失去的是什麼？", "五年後，你最希望我們還保有現在的什麼？", "如果可以重來，我們哪一段你會想改變？", "你覺得我們最該一起守護的是什麼？", "到現在為止，你覺得跟我在一起，最大的成長是什麼？"];
 const DATE_ACTS = [{"t": "象山步道看台北夜景", "w": "sun", "v": "out"}, {"t": "虎山步道看夜景", "w": "sun", "v": "out"}, {"t": "河濱騎 YouBike", "w": "sun", "v": "out"}, {"t": "大稻埕碼頭看夕陽", "w": "sun", "v": "out"}, {"t": "陽明山擎天崗散步", "w": "sun", "v": "out"}, {"t": "貓空纜車上山泡茶", "w": "sun", "v": "out"}, {"t": "貓空步道健行", "w": "sun", "v": "out"}, {"t": "淡水漁人碼頭散步", "w": "sun", "v": "out"}, {"t": "淡水老街漫遊", "w": "sun", "v": "out"}, {"t": "九份老街", "w": "sun", "v": "out"}, {"t": "金瓜石黃金博物館園區", "w": "sun", "v": "out"}, {"t": "平溪放天燈", "w": "sun", "v": "out"}, {"t": "十分瀑布", "w": "sun", "v": "out"}, {"t": "大安森林公園野餐", "w": "sun", "v": "out"}, {"t": "北投地熱谷", "w": "sun", "v": "out"}, {"t": "福隆海邊", "w": "sun", "v": "out"}, {"t": "北海岸老梅石槽", "w": "sun", "v": "out"}, {"t": "野柳地質公園", "w": "sun", "v": "out"}, {"t": "建國花市玉市", "w": "sun", "v": "out"}, {"t": "木柵動物園", "w": "sun", "v": "out"}, {"t": "烏來老街", "w": "sun", "v": "out"}, {"t": "烏來內洞森林步道", "w": "sun", "v": "out"}, {"t": "關渡賞鳥", "w": "sun", "v": "out"}, {"t": "內湖採草莓", "w": "sun", "v": "out"}, {"t": "碧潭踩天鵝船", "w": "sun", "v": "out"}, {"t": "碧潭吊橋散步", "w": "sun", "v": "out"}, {"t": "大佳河濱放風箏", "w": "sun", "v": "out"}, {"t": "士林官邸賞花", "w": "sun", "v": "out"}, {"t": "竹子湖海芋季", "w": "sun", "v": "out"}, {"t": "劍潭山看 101", "w": "sun", "v": "out"}, {"t": "福州山公園看夜景", "w": "sun", "v": "out"}, {"t": "仙跡岩看夜景", "w": "sun", "v": "out"}, {"t": "八里左岸騎單車", "w": "sun", "v": "out"}, {"t": "新店溪畔散步", "w": "sun", "v": "out"}, {"t": "寶藏巖聚落看河", "w": "sun", "v": "out"}, {"t": "中正紀念堂自由廣場散步", "w": "sun", "v": "out"}, {"t": "觀音山健行", "w": "sun", "v": "out"}, {"t": "桃源谷草原", "w": "sun", "v": "out"}, {"t": "鼻頭角步道", "w": "sun", "v": "out"}, {"t": "龍洞看海", "w": "sun", "v": "out"}, {"t": "白沙灣戲水", "w": "sun", "v": "out"}, {"t": "基隆和平島公園", "w": "sun", "v": "out"}, {"t": "望幽谷潮境公園", "w": "sun", "v": "out"}, {"t": "草嶺古道健行", "w": "sun", "v": "out"}, {"t": "高級野餐約會", "w": "sun", "v": "out"}, {"t": "一起放風箏", "w": "sun", "v": "out"}, {"t": "海邊打水漂", "w": "sun", "v": "out"}, {"t": "夜衝看海聊天", "w": "sun", "v": "out"}, {"t": "屋頂看星星", "w": "sun", "v": "out"}, {"t": "河濱看煙火", "w": "sun", "v": "out"}, {"t": "四四南村散步", "w": "sun", "v": "out"}, {"t": "信義區街拍", "w": "sun", "v": "out"}, {"t": "軍艦岩步道", "w": "sun", "v": "out"}, {"t": "劍南山看夜景", "w": "sun", "v": "out"}, {"t": "翠湖步道", "w": "sun", "v": "out"}, {"t": "內溝溪步道", "w": "sun", "v": "out"}, {"t": "虎山溪步道", "w": "sun", "v": "out"}, {"t": "茶壺山步道", "w": "sun", "v": "out"}, {"t": "報時山步道", "w": "sun", "v": "out"}, {"t": "不厭亭看山景", "w": "sun", "v": "out"}, {"t": "猴硐貓村", "w": "sun", "v": "out"}, {"t": "菁桐老街", "w": "sun", "v": "out"}, {"t": "十分老街", "w": "sun", "v": "out"}, {"t": "三芝淺水灣", "w": "sun", "v": "out"}, {"t": "石門洞看海", "w": "sun", "v": "out"}, {"t": "富貴角燈塔", "w": "sun", "v": "out"}, {"t": "深澳象鼻岩", "w": "sun", "v": "out"}, {"t": "水湳洞陰陽海", "w": "sun", "v": "out"}, {"t": "南雅奇岩", "w": "sun", "v": "out"}, {"t": "滿月圓森林步道", "w": "sun", "v": "out"}, {"t": "三峽大板根森林", "w": "sun", "v": "out"}, {"t": "林本源園邸", "w": "sun", "v": "out"}, {"t": "石碇千島湖", "w": "sun", "v": "out"}, {"t": "大湖公園散步", "w": "sun", "v": "out"}, {"t": "美堤河濱騎車", "w": "sun", "v": "out"}, {"t": "古亭河濱散步", "w": "sun", "v": "out"}, {"t": "圓山花博公園", "w": "sun", "v": "out"}, {"t": "士林平菁街櫻花", "w": "sun", "v": "out"}, {"t": "花蓮一日來回", "w": "sun", "v": "out"}, {"t": "宜蘭一日小旅行", "w": "sun", "v": "out"}, {"t": "台中一日來回", "w": "sun", "v": "out"}, {"t": "台南一日吃透透", "w": "sun", "v": "out"}, {"t": "嘉義一日", "w": "sun", "v": "out"}, {"t": "九份金瓜石一日", "w": "sun", "v": "out"}, {"t": "平溪線一日鐵道", "w": "sun", "v": "out"}, {"t": "淡水一日", "w": "sun", "v": "out"}, {"t": "鶯歌三峽老街一日", "w": "sun", "v": "out"}, {"t": "大溪老街一日", "w": "sun", "v": "out"}, {"t": "基隆廟口一日", "w": "sun", "v": "out"}, {"t": "南投日月潭一日", "w": "sun", "v": "out"}, {"t": "墾丁海邊一日", "w": "sun", "v": "out"}, {"t": "小琉球一日浮潛", "w": "sun", "v": "out"}, {"t": "旗津台南一日", "w": "sun", "v": "out"}, {"t": "阿里山一日", "w": "sun", "v": "out"}, {"t": "清境武嶺一日", "w": "sun", "v": "out"}, {"t": "太魯閣一日", "w": "sun", "v": "out"}, {"t": "龜山島賞鯨一日", "w": "sun", "v": "out"}, {"t": "東北角海岸一日", "w": "sun", "v": "out"}, {"t": "客家桐花一日", "w": "sun", "v": "out"}, {"t": "宜蘭傳藝中心一日", "w": "sun", "v": "out"}, {"t": "高雄駁二旗津愛河一日", "w": "sun", "v": "out"}, {"t": "苗栗一日", "w": "sun", "v": "out"}, {"t": "北海岸一日", "w": "sun", "v": "out"}, {"t": "金瓜石水湳洞一日", "w": "sun", "v": "out"}, {"t": "集集鐵道一日", "w": "sun", "v": "out"}, {"t": "谷關泡湯一日", "w": "sun", "v": "out"}, {"t": "三義木雕老街一日", "w": "sun", "v": "out"}, {"t": "北投陽明山一日", "w": "sun", "v": "out"}, {"t": "撐傘逛迪化街騎樓", "w": "any", "v": "out"}, {"t": "逛饒河街夜市", "w": "any", "v": "out"}, {"t": "逛士林夜市", "w": "any", "v": "out"}, {"t": "逛寧夏夜市", "w": "any", "v": "out"}, {"t": "逛師大夜市", "w": "any", "v": "out"}, {"t": "逛公館夜市", "w": "any", "v": "out"}, {"t": "北投泡湯", "w": "any", "v": "out"}, {"t": "烏來泡湯", "w": "any", "v": "out"}, {"t": "陽明山泡湯", "w": "any", "v": "out"}, {"t": "金山溫泉", "w": "any", "v": "out"}, {"t": "永康街散步覓食", "w": "any", "v": "out"}, {"t": "赤峰街逛選物店", "w": "any", "v": "out"}, {"t": "富錦街散步", "w": "any", "v": "out"}, {"t": "迪化街選物", "w": "any", "v": "out"}, {"t": "大稻埕碼頭看船", "w": "any", "v": "out"}, {"t": "夜市射氣球套圈圈", "w": "any", "v": "out"}, {"t": "南機場夜市覓食", "w": "any", "v": "out"}, {"t": "景美夜市", "w": "any", "v": "out"}, {"t": "延三夜市", "w": "any", "v": "out"}, {"t": "東門市場覓食", "w": "any", "v": "out"}, {"t": "誠品信義店窩一下午", "w": "any", "v": "in"}, {"t": "華山文創看展", "w": "any", "v": "in"}, {"t": "松山文創看展", "w": "any", "v": "in"}, {"t": "北美館看展", "w": "any", "v": "in"}, {"t": "故宮博物院", "w": "any", "v": "in"}, {"t": "科教館", "w": "any", "v": "in"}, {"t": "天文館", "w": "any", "v": "in"}, {"t": "當代藝術館", "w": "any", "v": "in"}, {"t": "鶯歌陶瓷博物館", "w": "any", "v": "in"}, {"t": "桌遊店玩一下午", "w": "any", "v": "in"}, {"t": "密室逃脫", "w": "any", "v": "in"}, {"t": "VR 體驗館", "w": "any", "v": "in"}, {"t": "保齡球", "w": "any", "v": "in"}, {"t": "撞球館", "w": "any", "v": "in"}, {"t": "夾娃娃機店", "w": "any", "v": "in"}, {"t": "電玩遊樂場", "w": "any", "v": "in"}, {"t": "室內溜冰場", "w": "any", "v": "in"}, {"t": "彈跳床公園", "w": "any", "v": "in"}, {"t": "KTV 唱歌", "w": "any", "v": "in"}, {"t": "live house 聽團", "w": "any", "v": "in"}, {"t": "爵士酒吧", "w": "any", "v": "in"}, {"t": "屋頂酒吧小酌", "w": "any", "v": "in"}, {"t": "調酒吧試酒", "w": "any", "v": "in"}, {"t": "看脫口秀", "w": "any", "v": "in"}, {"t": "開放麥之夜", "w": "any", "v": "in"}, {"t": "看戲或音樂劇", "w": "any", "v": "in"}, {"t": "看現場樂團表演", "w": "any", "v": "in"}, {"t": "水族館幫魚編故事", "w": "any", "v": "in"}, {"t": "二手店試穿最浮誇的衣服", "w": "any", "v": "in"}, {"t": "古董店幫舊物編身世", "w": "any", "v": "in"}, {"t": "大頭貼巡禮", "w": "any", "v": "in"}, {"t": "圖書館用角色聲音念書", "w": "any", "v": "in"}, {"t": "看一部電影", "w": "any", "v": "in"}, {"t": "二輪戲院看片", "w": "any", "v": "in"}, {"t": "IMAX 看大片", "w": "any", "v": "in"}, {"t": "室內攀岩館", "w": "any", "v": "in"}, {"t": "陶藝體驗課", "w": "any", "v": "in"}, {"t": "手沖咖啡課", "w": "any", "v": "in"}, {"t": "調香課", "w": "any", "v": "in"}, {"t": "皮件手作", "w": "any", "v": "in"}, {"t": "烘焙課", "w": "any", "v": "in"}, {"t": "拉花課", "w": "any", "v": "in"}, {"t": "畫室速寫", "w": "any", "v": "in"}, {"t": "漫畫店窩一下午", "w": "any", "v": "in"}, {"t": "唱片行挖黑膠", "w": "any", "v": "in"}, {"t": "百貨美食街吃透透", "w": "any", "v": "in"}, {"t": "超市約會買菜", "w": "any", "v": "in"}, {"t": "飛鏢吧", "w": "any", "v": "in"}, {"t": "室內高爾夫", "w": "any", "v": "in"}, {"t": "美甲一起做", "w": "any", "v": "in"}, {"t": "情侶 SPA 按摩", "w": "any", "v": "in"}, {"t": "三溫暖放鬆", "w": "any", "v": "in"}, {"t": "文創市集逛逛", "w": "any", "v": "in"}, {"t": "看一場展覽", "w": "any", "v": "in"}, {"t": "桌遊咖啡廳", "w": "any", "v": "in"}, {"t": "一起做一道沒做過的甜點", "w": "any", "v": "in"}, {"t": "新食物試吃之夜", "w": "any", "v": "in"}, {"t": "華麗速食盛宴（盛裝吃速食）", "w": "any", "v": "in"}, {"t": "自製莎莎醬配調酒", "w": "any", "v": "in"}, {"t": "在家調酒實驗", "w": "any", "v": "in"}, {"t": "停電燭光之夜", "w": "any", "v": "in"}, {"t": "成人版兒童生日派對", "w": "any", "v": "in"}, {"t": "在客廳蓋枕頭堡", "w": "any", "v": "in"}, {"t": "童年電影馬拉松", "w": "any", "v": "in"}, {"t": "做一件情侶 T 恤", "w": "any", "v": "in"}, {"t": "接力畫一幅畫", "w": "any", "v": "in"}, {"t": "兩句接龍寫一個故事", "w": "any", "v": "in"}, {"t": "列人生願望清單互相分享", "w": "any", "v": "in"}, {"t": "規劃一趟完美假期", "w": "any", "v": "in"}, {"t": "學一個近距離魔術", "w": "any", "v": "in"}, {"t": "學書法", "w": "any", "v": "in"}, {"t": "學摺紙", "w": "any", "v": "in"}];
-const DATE_ACTS_KH = [{"t": "西子灣看夕陽", "w": "sun", "v": "out"}, {"t": "旗津渡輪加海邊散步", "w": "sun", "v": "out"}, {"t": "旗津風車公園", "w": "sun", "v": "out"}, {"t": "蓮池潭龍虎塔", "w": "sun", "v": "out"}, {"t": "愛河畔散步", "w": "sun", "v": "out"}, {"t": "柴山步道看猴子", "w": "sun", "v": "out"}, {"t": "壽山動物園", "w": "sun", "v": "out"}, {"t": "中央公園散步", "w": "sun", "v": "out"}, {"t": "衛武營榕園野餐", "w": "sun", "v": "out"}, {"t": "駁二大義倉庫戶外", "w": "sun", "v": "out"}, {"t": "高雄港搭船遊港", "w": "sun", "v": "out"}, {"t": "鼓山渡輪", "w": "sun", "v": "out"}, {"t": "哈瑪星鐵道園區", "w": "sun", "v": "out"}, {"t": "蚵仔寮漁港", "w": "sun", "v": "out"}, {"t": "興達港情人碼頭", "w": "sun", "v": "out"}, {"t": "茄萣濕地賞鳥", "w": "sun", "v": "out"}, {"t": "田寮月世界", "w": "sun", "v": "out"}, {"t": "佛陀紀念館", "w": "sun", "v": "out"}, {"t": "美濃客家村騎單車", "w": "sun", "v": "out"}, {"t": "美濃湖環湖", "w": "sun", "v": "out"}, {"t": "旗山老街", "w": "sun", "v": "out"}, {"t": "茂林谷瀑布", "w": "sun", "v": "out"}, {"t": "澄清湖環湖", "w": "sun", "v": "out"}, {"t": "永安濕地", "w": "sun", "v": "out"}, {"t": "彌陀漁港看夕陽", "w": "sun", "v": "out"}, {"t": "中都濕地公園", "w": "sun", "v": "out"}, {"t": "旗津燈塔步道", "w": "sun", "v": "out"}, {"t": "中山大學海堤看海", "w": "sun", "v": "out"}, {"t": "壽山忠烈祠看夜景", "w": "sun", "v": "out"}, {"t": "鳳儀書院", "w": "sun", "v": "out"}, {"t": "大東文化藝術中心", "w": "sun", "v": "out"}, {"t": "衛武營戶外草坪", "w": "sun", "v": "out"}, {"t": "蓮池潭騎單車", "w": "sun", "v": "out"}, {"t": "駁二看夕陽", "w": "sun", "v": "out"}, {"t": "旗后砲台", "w": "sun", "v": "out"}, {"t": "高雄流行音樂中心海邊", "w": "sun", "v": "out"}, {"t": "凹子底森林公園", "w": "sun", "v": "out"}, {"t": "原生植物園", "w": "sun", "v": "out"}, {"t": "左營舊城牆", "w": "sun", "v": "out"}, {"t": "橋頭糖廠騎車", "w": "sun", "v": "out"}, {"t": "岡山之眼天空步道", "w": "sun", "v": "out"}, {"t": "阿公店水庫", "w": "sun", "v": "out"}, {"t": "崗山仔登山步道", "w": "sun", "v": "out"}, {"t": "大社觀音山", "w": "sun", "v": "out"}, {"t": "半屏山步道", "w": "sun", "v": "out"}, {"t": "小港淨園農場看飛機", "w": "sun", "v": "out"}, {"t": "紅毛港文化園區", "w": "sun", "v": "out"}, {"t": "旗津貝殼館海邊", "w": "sun", "v": "out"}, {"t": "援中港濕地", "w": "sun", "v": "out"}, {"t": "愛河之心夜景", "w": "sun", "v": "out"}, {"t": "墾丁海邊一日來回", "w": "sun", "v": "out"}, {"t": "台南一日吃透透", "w": "sun", "v": "out"}, {"t": "台東一日來回", "w": "sun", "v": "out"}, {"t": "小琉球一日浮潛", "w": "sun", "v": "out"}, {"t": "嘉義阿里山一日", "w": "sun", "v": "out"}, {"t": "屏東海生館一日", "w": "sun", "v": "out"}, {"t": "恆春古城一日", "w": "sun", "v": "out"}, {"t": "佛光山一日", "w": "sun", "v": "out"}, {"t": "美濃旗山一日", "w": "sun", "v": "out"}, {"t": "台南安平一日", "w": "sun", "v": "out"}, {"t": "四重溪溫泉一日", "w": "sun", "v": "out"}, {"t": "雙流森林一日", "w": "sun", "v": "out"}, {"t": "大鵬灣一日", "w": "sun", "v": "out"}, {"t": "東港漁港一日", "w": "sun", "v": "out"}, {"t": "關子嶺溫泉一日", "w": "sun", "v": "out"}, {"t": "曾文水庫一日", "w": "sun", "v": "out"}, {"t": "奮起湖一日", "w": "sun", "v": "out"}, {"t": "鵝鑾鼻墾丁一日", "w": "sun", "v": "out"}, {"t": "霧台部落一日", "w": "sun", "v": "out"}, {"t": "池上花蓮一日", "w": "sun", "v": "out"}, {"t": "瑞豐夜市", "w": "any", "v": "out"}, {"t": "六合夜市", "w": "any", "v": "out"}, {"t": "凱旋國際觀光夜市", "w": "any", "v": "out"}, {"t": "光華夜市", "w": "any", "v": "out"}, {"t": "南華路商圈逛街", "w": "any", "v": "out"}, {"t": "鹽埕埔老街覓食", "w": "any", "v": "out"}, {"t": "旗津海產街", "w": "any", "v": "out"}, {"t": "鳳山中華街夜市", "w": "any", "v": "out"}, {"t": "興達港觀光漁市", "w": "any", "v": "out"}, {"t": "寶來溫泉", "w": "any", "v": "out"}, {"t": "美濃老街吃粄條", "w": "any", "v": "out"}, {"t": "岡山籃籗會市集", "w": "any", "v": "out"}, {"t": "三民街黃昏市場", "w": "any", "v": "out"}, {"t": "果貿社區拍照", "w": "any", "v": "out"}, {"t": "哈瑪星散步覓食", "w": "any", "v": "out"}, {"t": "駁二藝術特區看展", "w": "any", "v": "in"}, {"t": "高雄市立美術館", "w": "any", "v": "in"}, {"t": "國立科學工藝博物館", "w": "any", "v": "in"}, {"t": "衛武營看一場表演", "w": "any", "v": "in"}, {"t": "大東藝術中心看展", "w": "any", "v": "in"}, {"t": "高雄市立圖書館總館", "w": "any", "v": "in"}, {"t": "棧貳庫 KW2", "w": "any", "v": "in"}, {"t": "MLD 台鋁影城加市集", "w": "any", "v": "in"}, {"t": "大魯閣草衙道", "w": "any", "v": "in"}, {"t": "義享天地逛街", "w": "any", "v": "in"}, {"t": "夢時代逛街", "w": "any", "v": "in"}, {"t": "漢神巨蛋", "w": "any", "v": "in"}, {"t": "SKM Park outlets", "w": "any", "v": "in"}, {"t": "KTV 唱歌", "w": "any", "v": "in"}, {"t": "桌遊店玩一下午", "w": "any", "v": "in"}, {"t": "密室逃脫", "w": "any", "v": "in"}, {"t": "保齡球", "w": "any", "v": "in"}, {"t": "撞球館", "w": "any", "v": "in"}, {"t": "看一部電影", "w": "any", "v": "in"}, {"t": "live house 聽團", "w": "any", "v": "in"}, {"t": "駁二電影館", "w": "any", "v": "in"}, {"t": "高雄電影館", "w": "any", "v": "in"}, {"t": "金馬賓館當代美術館", "w": "any", "v": "in"}, {"t": "內惟藝術中心", "w": "any", "v": "in"}, {"t": "愛河旁咖啡廳跑店", "w": "any", "v": "in"}, {"t": "鹽埕第一公有市場咖啡", "w": "any", "v": "in"}, {"t": "美術館特區咖啡店", "w": "any", "v": "in"}, {"t": "室內攀岩館", "w": "any", "v": "in"}, {"t": "陶藝體驗課", "w": "any", "v": "in"}, {"t": "手沖咖啡課", "w": "any", "v": "in"}, {"t": "一起做一道沒做過的甜點", "w": "any", "v": "in"}, {"t": "新食物試吃之夜", "w": "any", "v": "in"}, {"t": "華麗速食盛宴（盛裝吃速食）", "w": "any", "v": "in"}, {"t": "自製莎莎醬配調酒", "w": "any", "v": "in"}, {"t": "在家調酒實驗", "w": "any", "v": "in"}, {"t": "停電燭光之夜", "w": "any", "v": "in"}, {"t": "在客廳蓋枕頭堡", "w": "any", "v": "in"}, {"t": "童年電影馬拉松", "w": "any", "v": "in"}, {"t": "做一件情侶 T 恤", "w": "any", "v": "in"}, {"t": "接力畫一幅畫", "w": "any", "v": "in"}, {"t": "兩句接龍寫一個故事", "w": "any", "v": "in"}, {"t": "列人生願望清單互相分享", "w": "any", "v": "in"}, {"t": "規劃一趟完美假期", "w": "any", "v": "in"}, {"t": "學一個近距離魔術", "w": "any", "v": "in"}, {"t": "用 Canva 做假電影海報", "w": "any", "v": "in"}, {"t": "一起破關雙人遊戲", "w": "any", "v": "in"}, {"t": "做專屬你們的情侶節日", "w": "any", "v": "in"}, {"t": "外國主題之夜", "w": "any", "v": "in"}, {"t": "在家煮一桌菜", "w": "any", "v": "in"}, {"t": "一起烘焙", "w": "any", "v": "in"}, {"t": "玩一千片拼圖", "w": "any", "v": "in"}, {"t": "翻老照片互相編故事", "w": "any", "v": "in"}, {"t": "一起寫一首歌", "w": "any", "v": "in"}, {"t": "互相畫對方的肖像", "w": "any", "v": "in"}, {"t": "跟著影片一起運動", "w": "any", "v": "in"}, {"t": "在家泡腳放鬆夜", "w": "any", "v": "in"}, {"t": "一起做一頓早午餐", "w": "any", "v": "in"}, {"t": "規劃存錢旅行計畫", "w": "any", "v": "in"}, {"t": "看紀錄片之夜", "w": "any", "v": "in"}, {"t": "一起學一道家鄉菜", "w": "any", "v": "in"}, {"t": "卡丁車競速", "w": "sun", "v": "out"}, {"t": "漆彈對戰", "w": "any", "v": "out"}, {"t": "雷射槍戰", "w": "any", "v": "in"}, {"t": "射箭場", "w": "any", "v": "in"}, {"t": "擲斧體驗", "w": "any", "v": "in"}, {"t": "水槍水球大戰", "w": "sun", "v": "out"}, {"t": "舞蹈體驗課", "w": "any", "v": "in"}, {"t": "試上一堂健身課", "w": "any", "v": "in"}, {"t": "旗津 SUP 立槳", "w": "sun", "v": "out"}, {"t": "獨木舟體驗", "w": "sun", "v": "out"}, {"t": "墾丁浮潛", "w": "sun", "v": "out"}, {"t": "墾丁衝浪課", "w": "sun", "v": "out"}, {"t": "無人機海邊試飛", "w": "sun", "v": "out"}, {"t": "攀樹體驗", "w": "sun", "v": "out"}, {"t": "重機沿海一段", "w": "sun", "v": "out"}, {"t": "飛行傘體驗", "w": "sun", "v": "out"}, {"t": "情侶按摩", "w": "any", "v": "in"}, {"t": "包場看一部電影", "w": "any", "v": "in"}, {"t": "雙人下午茶", "w": "any", "v": "in"}, {"t": "挑一家沒吃過的異國餐廳", "w": "any", "v": "in"}, {"t": "輪流放彼此最愛的歌", "w": "any", "v": "in"}, {"t": "自己煮一頓燭光晚餐", "w": "any", "v": "in"}, {"t": "旗津沙灘看星", "w": "sun", "v": "out"}, {"t": "扮陌生人在酒吧重新搭訕對方", "w": "any", "v": "in"}, {"t": "駁二河岸夜遊", "w": "sun", "v": "out"}, {"t": "西子灣堤防夜聊", "w": "sun", "v": "out"}];
 const DINNERS = ["三媽臭臭鍋", "臭豆腐", "大埔鐵板燒", "小籠包", "麻辣鍋", "海底撈", "蚵仔煎", "蚵仔麵線", "夜市牛排", "肯德基", "麥當勞", "摩斯漢堡", "滷肉飯", "雞肉飯", "池上便當", "排骨便當", "雞腿便當", "牛肉麵", "餛飩麵", "刀削麵", "鍋燒意麵", "炒飯", "炒麵", "燴飯", "咖哩飯", "火雞肉飯", "爌肉飯", "滷味", "鹽酥雞", "鹹水雞", "雞排", "水煎包", "鍋貼", "煎餃", "生煎包", "蔥油餅", "蛋餅", "壽司", "生魚片", "日式定食", "親子丼", "拉麵", "烏龍麵", "天婦羅", "串燒居酒屋", "燒肉", "韓式烤肉", "部隊鍋", "石鍋拌飯", "泰式料理", "打拋豬飯", "綠咖哩", "越南河粉", "義大利麵", "披薩", "燉飯", "美式漢堡", "潛艇堡", "涮涮鍋", "薑母鴨", "羊肉爐", "麻油雞", "藥燉排骨", "酸菜白肉鍋", "肉羹", "魷魚羹", "土魠魚羹", "生炒花枝", "海產攤", "熱炒一百", "客家小炒", "三杯雞", "宮保雞丁", "麻婆豆腐", "糖醋排骨", "烤鴨", "港式燒臘", "叉燒飯", "廣東粥", "清粥小菜", "港式飲茶", "自助餐", "素食自助餐", "鐵板麵", "大腸包小腸", "潤餅", "肉圓", "四神湯", "筒仔米糕", "油飯", "擔仔麵", "米粉湯", "貢丸湯", "牛肉湯", "虱目魚粥", "咖哩烏龍", "鼎泰豐", "沙茶羊肉", "薑絲大腸", "白菜滷", "海產粥", "皮蛋瘦肉粥", "廣式煲仔飯", "臘味飯", "鴨肉飯", "鵝肉飯", "肉燥飯", "香菇赤肉羹飯", "咖哩豬排飯", "日式炸雞定食", "鰻魚飯", "海鮮丼", "牛丼", "海南雞飯", "椰漿飯", "左宗棠雞飯", "鱔魚意麵", "米苔目", "客家粄條", "麵疙瘩", "大腸麵線", "麵線糊", "炸醬麵", "麻醬麵", "擔擔麵", "星洲炒米粉", "叻沙", "越式乾拌麵", "炒泡麵", "鍋燒烏龍", "燒酒雞", "香菇雞湯", "蛤蜊雞湯", "竹筍排骨湯", "苦瓜排骨湯", "酸辣湯餃", "佛跳牆", "起司年糕鍋", "三杯中卷", "椒鹽中卷", "魚香肉絲", "回鍋肉", "蒼蠅頭", "塔香茄子", "菜脯蛋", "番茄炒蛋", "鳳梨蝦球", "清蒸魚", "糖醋魚", "東坡肉", "梅干扣肉", "蒜泥白肉", "胡椒餅", "蔥抓餅", "蚵嗲", "刈包", "碗粿", "蘿蔔糕", "關東煮", "甜不辣", "淡水阿給", "韓式炸雞", "辣炒年糕", "沙威瑪", "墨西哥捲餅", "塔可餅", "雙層牛肉堡", "炸雞桶", "牛肉燴飯", "咖哩雞飯", "泡菜鍋", "壽喜燒", "牛排館", "鐵板燒", "焗烤飯", "焗烤義大利麵", "千層麵", "墨魚麵", "青醬義大利麵", "白醬義大利麵", "拿坡里義大利麵", "牛肉漢堡排", "豬排丼", "唐揚雞定食", "天丼", "握壽司", "手卷", "稻荷壽司", "散壽司", "茶碗蒸", "味噌湯定食", "泰式打拋飯", "綠咖哩雞", "泰式炒河粉", "月亮蝦餅", "涼拌青木瓜", "越式春捲", "海鮮煎餅", "韓式拌飯", "辣牛肉湯飯"];
 const ADULT_Q = ["你最喜歡用什麼方式被挑起慾望？", "高潮的時候，你喜歡安靜，還是放開聲音？", "做的時候，你喜歡慢磨，還是用力的節奏？", "一次裡你想要幾次高潮，還是更在乎過程？", "你喜歡先讓對方高潮，還是想一起？", "哪種體位最容易讓你高潮？", "你喜歡正面看著對方，還是從後面來？", "你比較享受被溫柔疼愛，還是被狠一點地要？", "早晨的慾望和深夜的慾望，對你哪個更強？", "你喜歡計畫好的，還是被突然壓上來的衝動？", "你比較喜歡為對方口，還是被口？", "被口的時候，你喜歡什麼樣的力道和節奏？", "只用手，你喜歡被怎麼愛撫到高潮？", "有沒有一種觸碰方式，能讓你最快有感覺？", "一邊用手、一邊親你其他地方，你會喜歡嗎？", "你喜歡被慢慢挑逗到受不了，還是直接一點？", "你想不想試只用口和手、不進入的一晚？", "在高潮邊緣被停下來、再被推上去，你受得了嗎？", "你最想試、卻還沒試過的體位是哪個？", "你喜歡在上面主導，還是在下面被帶？", "站著、坐著、躺著，哪種讓你最有感覺？", "你想試試在鏡子前看著我們嗎？", "你喜歡綿長的一場，還是激烈快速的一次？", "換地點（沙發、淋浴間、地板）會讓你更興奮嗎？", "你想不想試被抱起來的那種？", "你喜歡中途換姿勢，還是一個節奏到最後？", "你藏最深的一個性幻想是什麼？", "在彼此同意下，你想被強勢一點地對待過嗎？", "你會幻想在有一點被發現風險的地方做嗎？", "一方被矇眼、完全交給對方擺布，你想試嗎？", "你偷偷想過哪個角色扮演的劇本？", "特定的穿著或制服，會挑起你的興致嗎？", "你想不想拍幾張、或錄一段只有我們看的？", "被綁起來、動不了的感覺，你會幻想嗎？", "有沒有一個情境，光想就會讓你有反應？", "如果今晚你能對我下任何命令，你會要我做什麼？", "支配與被支配，你比較被哪一邊吸引？", "打屁股對你是加分嗎？你想要多重的力道？", "你想試被綁住手腳的束縛嗎？", "你喜歡下命令，還是被命令？", "「求饒」或「讓對方求你」這種拉扯，你享受嗎？", "拉頭髮、輕掐脖子、咬，這些你想試哪個？", "一段「主奴」設定的時間，你想當哪一邊？", "懲罰與獎勵的遊戲，你想怎麼玩？", "被當成「只屬於我」的佔有感，你喜歡嗎？", "被支配的時候，什麼最讓你興奮？", "有沒有一樣情趣道具，你一直想一起試？", "你想試震動類的小玩具嗎？想用在哪？", "束縛道具（手銬、眼罩、繩）你對哪個最好奇？", "潤滑或按摩油那種滑順的觸感，你想試嗎？", "你想一起看情慾影片、邊看邊做嗎？", "情趣內衣，你想穿給我看，還是想看我穿？", "冰塊、溫熱、羽毛這類感官玩法，你想試哪個？", "想不想設一個「我們的抽屜」放這些？", "過程中，你最喜歡聽到我說什麼？", "你喜歡被稱讚身體，還是聽更直接露骨的話？", "把你想要的說出口，你會興奮還是害羞？", "有沒有一句很色的話，你其實想聽我對你說？", "你喜歡彼此安靜，還是都很有聲音？", "被要求「說出你想要什麼」，會讓你更興奮嗎？", "你想不想傳一些大膽的訊息或照片給對方？", "哪一種言語上的調情最能撩到你？", "有沒有什麼是你絕對不要、希望我永遠別碰的？", "我們的安全詞要用哪個字？", "嘗試新東西前，你希望我們先講好哪些事？", "想喊停的時候，你會用什麼方式讓我知道？", "說出真實慾望後，你會怕被評價嗎？我想讓你安心。", "結束後，你最想要的擁抱或照顧是什麼？", "有沒有哪次你其實不舒服、卻沒說？我想知道。", "此刻，你最想要我為你做的一件事是什麼？", "你想看我穿哪種風格的情趣內衣？蕾絲、皮革，還是純真款？", "有沒有一種顏色或款式，穿在對方身上會讓你瞬間失守？", "你喜歡若隱若現的，還是更大膽外露的？", "比起全脫，留著薄薄一件，哪種更挑起你？", "高跟鞋、絲襪、吊帶襪，哪個對你最有殺傷力？", "你想不想我們各挑一套，約一個晚上穿給對方看？", "你想要我穿著它從頭到尾，還是中途幫你脫下來？", "你自己想不想穿一套，讓我慢慢解開？", "你想不想一起上網或去店裡，挑一套屬於我們的？", "想不想試試只穿一件襯衫、或我的衣服那種感覺？", "你最想試的一個角色扮演劇本是什麼？", "扮演時，你想當主導的角色，還是被擺布的那個？", "陌生人初遇、在酒吧被搭訕的劇本，你想演嗎？", "上司與下屬、醫生與病人這類設定，哪個吸引你？", "制服類（護士、秘書、學生風等），你想看我扮哪一種？", "你想試試「假裝是第一次」那種青澀的扮演嗎？", "你喜歡有台詞、有劇情，還是有個身份設定就好？", "主人與寵物、馴服與被馴服，你想當哪一邊？", "在彼此同意下，你想試「被俘虜」那種有張力的劇情嗎？", "有沒有一個影視角色，你想我扮成他或她？", "扮演時，你喜歡全程入戲，還是笑場也沒關係？", "你想不想我們各寫一個劇本，輪流實現？"];
 
@@ -1757,7 +1756,6 @@ const subText = {
 };
 document.querySelectorAll('.mode-tab').forEach(tab=>{
   tab.addEventListener('click', ()=>{
-    if(tab.dataset.mode === 'quiz'){ openQuiz(); return; }
     if(tab.classList.contains('on')) return;
     document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('on'));
     tab.classList.add('on');
@@ -2166,57 +2164,22 @@ function drawAdult(){
 }
 
 // ====== 戀愛依戀類型測驗（原創題目）======
-// type 'likert': 同意程度量表; d='anx'/'avo'; rev=true 為反向題（同意代表低分）
-// type 'scenario': 情境題; opts 各自帶 anx/avo 分數
+// dim: 'anx' 焦慮維度, 'avo' 逃避維度
 const ATTACH_Q = [
-  // 直述・焦慮
-  {type:'likert', t:"對方比較慢回訊息時，我很容易開始胡思亂想。", d:"anx"},
-  {type:'likert', t:"我常需要對方明確說在乎我，心裡才會踏實。", d:"anx"},
-  {type:'likert', t:"在一段關係裡，我會擔心自己愛得比對方多。", d:"anx"},
-  {type:'likert', t:"我常隱隱擔心，如果不夠好，對方總有一天會離開。", d:"anx"},
-  // 直述・逃避
-  {type:'likert', t:"當關係變得太親密，我會莫名想拉開一點距離。", d:"avo"},
-  {type:'likert', t:"我習慣自己消化情緒，不太想把心事丟給別人。", d:"avo"},
-  {type:'likert', t:"比起依賴另一半，我更相信凡事靠自己。", d:"avo"},
-  {type:'likert', t:"太多情感上的需索，會讓我本能地想往後退。", d:"avo"},
-  // 反測題（同意代表更安全）
-  {type:'likert', t:"就算對方一時忙、聯絡變少，我也不太會因此焦慮。", d:"anx", rev:true},
-  {type:'likert', t:"即使很愛一個人，我也能自在地保有自己的生活。", d:"anx", rev:true},
-  {type:'likert', t:"我能自在地把脆弱和需要，告訴我信任的人。", d:"avo", rev:true},
-  {type:'likert', t:"親密和獨立，對我來說可以同時存在，不太衝突。", d:"avo", rev:true},
-  {type:'likert', t:"衝突發生時，我能留在現場，好好把話講開。", d:"avo", rev:true},
-  {type:'likert', t:"對方表達需要我時，我感到的是溫暖，而不是壓力。", d:"avo", rev:true},
-  // 情境題
-  {type:'scenario', t:"你傳了訊息給喜歡的人，已讀很久卻沒回。你的第一反應比較接近？", opts:[
-     {label:"應該在忙吧，晚點就會回。", anx:0, avo:0},
-     {label:"開始想，是不是我哪句話說錯了。", anx:3, avo:0},
-     {label:"算了，那我也收起來，不要太主動。", anx:1, avo:2},
-     {label:"無所謂，我本來就不太黏。", anx:0, avo:3},
-  ]},
-  {type:'scenario', t:"交往後，對方想花更多時間黏在一起。你心裡比較像？", opts:[
-     {label:"很開心，正合我意。", anx:0, avo:0},
-     {label:"太好了，但又怕自己變得太依賴。", anx:2, avo:0},
-     {label:"有點透不過氣，想保留一些自己的空間。", anx:0, avo:3},
-     {label:"又想要又怕，心情很矛盾。", anx:2, avo:2},
-  ]},
-  {type:'scenario', t:"你們大吵一架之後，你通常會？", opts:[
-     {label:"想盡快坐下來，把話講開。", anx:0, avo:0},
-     {label:"一直想聯絡，確認對方是不是還愛我。", anx:3, avo:0},
-     {label:"需要先一個人靜一靜，不想被找。", anx:0, avo:3},
-     {label:"既想被安慰，又想躲起來。", anx:2, avo:2},
-  ]},
-  {type:'scenario', t:"對方今天看起來心情很差、有點冷淡。你會？", opts:[
-     {label:"直接關心，問他怎麼了。", anx:0, avo:0},
-     {label:"反覆想，是不是我害的。", anx:3, avo:0},
-     {label:"給彼此空間，不太想介入。", anx:0, avo:2},
-     {label:"表面沒事，心裡其實很不安。", anx:2, avo:1},
-  ]},
-  {type:'scenario', t:"關係越來越穩定、越來越認真，你的感覺是？", opts:[
-     {label:"踏實，又有點期待。", anx:0, avo:0},
-     {label:"開心，但也更怕失去。", anx:3, avo:0},
-     {label:"隱隱有一種被綁住的感覺。", anx:0, avo:3},
-     {label:"又安心又想逃，自己也說不清。", anx:2, avo:2},
-  ]},
+  {t:"對方比較慢回訊息時，我很容易開始胡思亂想。", d:"anx"},
+  {t:"我常需要對方明確說出在乎我，心裡才會踏實。", d:"anx"},
+  {t:"在一段關係裡，我會擔心自己愛得比對方多。", d:"anx"},
+  {t:"只要感覺對方變得冷淡，我整天的心情都會被牽動。", d:"anx"},
+  {t:"我有時會因為怕惹對方不開心，而不敢說出真正的需求。", d:"anx"},
+  {t:"我常隱隱擔心，如果不夠好，對方總有一天會離開。", d:"anx"},
+  {t:"關係出現一點不確定時，我會忍不住反覆確認「我們還好嗎」。", d:"anx"},
+  {t:"當關係變得太親密，我會莫名想要拉開一點距離。", d:"avo"},
+  {t:"我習慣自己消化情緒，不太想把心事丟給別人。", d:"avo"},
+  {t:"比起依賴另一半，我更相信凡事靠自己。", d:"avo"},
+  {t:"對方想更靠近時，我有時會感到壓力，甚至想逃。", d:"avo"},
+  {t:"我不太容易把內心最深的部分，完全交給一個人。", d:"avo"},
+  {t:"關係緊張或吵架時，我傾向先抽離、自己冷靜一下。", d:"avo"},
+  {t:"太多情感上的需索，會讓我本能地想往後退。", d:"avo"},
 ];
 const QUIZ_OPTS = [
   {label:"很不像我", v:0},
@@ -2224,15 +2187,6 @@ const QUIZ_OPTS = [
   {label:"有點像我", v:2},
   {label:"很像我", v:3},
 ];
-// 計算各維度最大可能分（用於正規化）
-const QUIZ_MAX = (()=>{
-  let a=0, v=0;
-  ATTACH_Q.forEach(q=>{
-    if(q.type==='likert'){ if(q.d==='anx') a+=3; else v+=3; }
-    else { a += Math.max(...q.opts.map(o=>o.anx)); v += Math.max(...q.opts.map(o=>o.avo)); }
-  });
-  return {anx:a, avo:v};
-})();
 let quizIdx = 0, quizAnx = 0, quizAvo = 0, quizAnswers = [];
 const quizLayer = document.getElementById('quizLayer');
 function openQuiz(){
@@ -2240,26 +2194,16 @@ function openQuiz(){
   renderQuiz();
 }
 function closeQuiz(){ quizLayer.className='event-layer'; quizLayer.innerHTML=''; }
-function applyAnswer(q, choice){
-  // choice: for likert = {v}; for scenario = {anx,avo}
-  let da=0, dv=0;
-  if(q.type==='likert'){
-    const val = q.rev ? (3 - choice.v) : choice.v;
-    if(q.d==='anx') da = val; else dv = val;
-  } else { da = choice.anx; dv = choice.avo; }
-  return {da, dv};
-}
 function renderQuiz(){
   if(quizIdx >= ATTACH_Q.length){ renderQuizResult(); return; }
   const q = ATTACH_Q[quizIdx];
   const pct = Math.round(quizIdx / ATTACH_Q.length * 100);
-  const isScenario = q.type==='scenario';
   quizLayer.className = 'event-layer show';
   quizLayer.innerHTML = `
     <div class="quiz-wrap">
       <div class="quiz-top">
-        <div class="eyebrow">ATTACHMENT · 依戀羅盤</div>
-        <h2>${quizIdx+1} / ${ATTACH_Q.length}${isScenario?'　情境題':''}</h2>
+        <div class="eyebrow">ATTACHMENT · 依戀類型</div>
+        <h2>${quizIdx+1} / ${ATTACH_Q.length}</h2>
       </div>
       <div class="quiz-prog"><i style="width:${pct}%"></i></div>
       <p class="quiz-q">${q.t}</p>
@@ -2267,15 +2211,13 @@ function renderQuiz(){
       <button class="quiz-back" id="quizBack">${quizIdx===0 ? '離開測驗' : '← 上一題'}</button>
     </div>`;
   const opts = document.getElementById('quizOpts');
-  const list = isScenario ? q.opts : QUIZ_OPTS;
-  list.forEach(o=>{
+  QUIZ_OPTS.forEach(o=>{
     const b = document.createElement('button');
     b.className = 'quiz-opt';
     b.textContent = o.label;
     b.addEventListener('click', ()=>{
-      const {da, dv} = applyAnswer(q, o);
-      quizAnswers[quizIdx] = {da, dv};
-      quizAnx += da; quizAvo += dv;
+      quizAnswers[quizIdx] = {d:q.d, v:o.v};
+      if(q.d==='anx') quizAnx += o.v; else quizAvo += o.v;
       quizIdx++;
       renderQuiz();
     });
@@ -2285,33 +2227,47 @@ function renderQuiz(){
     if(quizIdx===0){ closeQuiz(); return; }
     quizIdx--;
     const prev = quizAnswers[quizIdx];
-    if(prev){ quizAnx -= prev.da; quizAvo -= prev.dv; }
+    if(prev){ if(prev.d==='anx') quizAnx -= prev.v; else quizAvo -= prev.v; }
     renderQuiz();
   });
 }
 function renderQuizResult(){
-  const anxPct = Math.round(quizAnx / QUIZ_MAX.anx * 100);
-  const avoPct = Math.round(quizAvo / QUIZ_MAX.avo * 100);
-  const anxHigh = anxPct > 50;
-  const avoHigh = avoPct > 50;
+  const anxMax = ATTACH_Q.filter(q=>q.d==='anx').length*3;
+  const avoMax = ATTACH_Q.filter(q=>q.d==='avo').length*3;
+  const anxPct = Math.round(quizAnx/anxMax*100);
+  const avoPct = Math.round(quizAvo/avoMax*100);
+  // 顯著門檻：>=60% 才算某維度明顯偏高，<50% 算低，50 到 59 落在邊緣帶（不顯著）
+  const HIGH = 60, LOW = 50;
+  const lvl = p => (p>=HIGH ? 'high' : (p<LOW ? 'low' : 'border'));
+  const aL = lvl(anxPct), vL = lvl(avoPct);
+  const decided = (aL!=='border') && (vL!=='border');
   let type, en, desc;
-  if(!anxHigh && !avoHigh){
+  if(decided && aL==='low' && vL==='low'){
     type='安全型'; en='SECURE';
     desc='你在關係裡相對自在，能靠近、也能保有自己，遇到問題傾向直接溝通。和你相處的人，通常會覺得安心。可以繼續保持的是這份穩定，並學著體諒依戀風格和你不同的伴侶。';
-  } else if(anxHigh && !avoHigh){
+  } else if(decided && aL==='high' && vL==='low'){
     type='焦慮型'; en='ANXIOUS';
     desc='你很重視連結，也很敏感於對方的情緒，容易因為一點疏遠而不安。你的好，是投入而真誠。可以練習的是：不安時先安頓自己，把需求<b>直接說清楚</b>，而不是用試探或猜測。';
-  } else if(!anxHigh && avoHigh){
+  } else if(decided && aL==='low' && vL==='high'){
     type='逃避型'; en='AVOIDANT';
     desc='你重視獨立，習慣靠自己，太親密時會本能地想保留空間。你的好，是穩定、不情緒勒索。可以練習的是：讓信任的人靠近一點，把「我需要一點空間」<b>說出來</b>，而不是默默拉開距離。';
-  } else {
+  } else if(decided && aL==='high' && vL==='high'){
     type='矛盾型'; en='FEARFUL-AVOIDANT';
     desc='你同時渴望親密、又害怕受傷，靠近與逃開常常在心裡拉扯，這往往和過去的經驗有關。你的好，是情感豐富、能同理。可以練習的是：辨識自己的<b>觸發點</b>，和伴侶一起建立明確、可預期的安全感。';
+  } else {
+    type='傾向不明顯'; en='MIXED / BALANCED';
+    let lean;
+    if(Math.abs(anxPct-avoPct) < 8) lean='焦慮與逃避兩種傾向大致相當。';
+    else if(anxPct > avoPct) lean='相對來說，你比較在意連結與親密，但程度還不算強烈。';
+    else lean='相對來說，你比較傾向保有自我空間，但程度還不算強烈。';
+    desc='你的分數落在中間地帶，沒有哪一種依戀風格特別突出。這代表你可能相對平衡、安全感也不錯，也可能在不同對象或狀態下有不同反應。'+lean+'想更認識自己，可以在不同心情下多測幾次，看看結果穩不穩定。';
   }
   quizLayer.className='event-layer show';
   quizLayer.innerHTML = `
     <div class="quiz-wrap result-card">
-      <div class="quiz-top"><div class="eyebrow">你的依戀傾向</div></div>
+      <div class="quiz-top">
+        <div class="eyebrow">你的依戀傾向</div>
+      </div>
       <div class="result-type">${type}</div>
       <div class="result-en">${en}</div>
       <div class="result-bars">
@@ -2325,14 +2281,17 @@ function renderQuizResult(){
         <button class="star-btn" id="quizRetry" style="background:linear-gradient(135deg,#ff8a6b,#ffc7a3);color:#3a1208">再測一次</button>
       </div>
     </div>`;
-  setTimeout(()=>{ quizLayer.querySelectorAll('.bar-fill').forEach(f=>{ f.style.width = f.dataset.w + '%'; }); }, 60);
+  // animate bars
+  setTimeout(()=>{
+    quizLayer.querySelectorAll('.bar-fill').forEach(f=>{ f.style.width = f.dataset.w + '%'; });
+  }, 60);
   document.getElementById('quizClose2').addEventListener('click', closeQuiz);
   document.getElementById('quizRetry').addEventListener('click', openQuiz);
 }
+document.getElementById('quizBtn').addEventListener('click', openQuiz);
 
 // ---- 約會選擇器 ----
-let dateRegion = 'tp', dateWeather = 'sun', dateVenue = 'out';
-function dateDataset(){ return dateRegion === 'kh' ? DATE_ACTS_KH : DATE_ACTS; }
+let dateWeather = 'sun', dateVenue = 'out';
 function openDatePicker(){ renderDatePicker(); }
 function renderDatePicker(resultText){
   starTool.className = 'event-layer show';
@@ -2341,10 +2300,6 @@ function renderDatePicker(resultText){
     <div class="star-panel">
       <div class="eyebrow">約會選擇器</div>
       <h2>今天想去哪？</h2>
-      <div class="filter-group" id="fRegion" style="margin-bottom:10px">
-        <button class="filter-opt ${dateRegion==='tp'?'on':''}" data-r="tp">🏙️ 台北出發</button>
-        <button class="filter-opt ${dateRegion==='kh'?'on':''}" data-r="kh">🌴 高雄出發</button>
-      </div>
       <div class="filter-row">
         <div class="filter-group" id="fWeather">
           <button class="filter-opt ${dateWeather==='sun'?'on':''}" data-w="sun">☀️ 晴天</button>
@@ -2365,16 +2320,15 @@ function renderDatePicker(resultText){
     </div>`;
   document.getElementById('starX').addEventListener('click', closeStarTool);
   document.getElementById('dBack').addEventListener('click', closeStarTool);
-  document.querySelectorAll('#fRegion .filter-opt').forEach(b=>b.addEventListener('click', ()=>{ dateRegion=b.dataset.r; renderDatePicker(resultText); }));
   document.querySelectorAll('#fWeather .filter-opt').forEach(b=>b.addEventListener('click', ()=>{ dateWeather=b.dataset.w; renderDatePicker(resultText); }));
   document.querySelectorAll('#fVenue .filter-opt').forEach(b=>b.addEventListener('click', ()=>{ dateVenue=b.dataset.v; renderDatePicker(resultText); }));
   document.getElementById('dRoll').addEventListener('click', rollDate);
 }
 function rollDate(){
-  const data = dateDataset();
-  let pool = data.filter(d => d.v === dateVenue && (dateWeather==='sun' ? true : d.w==='any'));
-  if(pool.length === 0) pool = data.filter(d => d.w==='any');
+  let pool = DATE_ACTS.filter(d => d.v === dateVenue && (dateWeather==='sun' ? true : d.w==='any'));
+  if(pool.length === 0) pool = DATE_ACTS.filter(d => d.w==='any'); // 後備
   const pick = pickStar(pool);
+  // 短暫洗動效果
   const card = document.querySelector('#starTool .star-card');
   if(card){
     let n = 0;
